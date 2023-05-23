@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Timereporting.Api.Services.Contracts;
-using Timereporting.Infrastructure.Data.Entities;
+using Timereporting.Application.Services.Contracts;
+using Timereporting.Interaction.DTO.Timereport;
 
 namespace Timereporting.Api.Controllers
 {
     [Route("api/v1/reporttype")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ReportTypeController : ControllerBase
     {
         private readonly IReportTypeService _reportTypeService;
@@ -19,17 +18,17 @@ namespace Timereporting.Api.Controllers
 
         // GET: api/v1/reporttype
         [HttpGet]
-        public IActionResult GetReportTypes()
+        public async Task<IActionResult> GetReportTypes()
         {
-            var reportTypes = _reportTypeService.GetAllReportTypes();
+            var reportTypes = await _reportTypeService.GetAllReportTypes();
             return Ok(reportTypes);
         }
 
         // GET: api/v1/reporttype/{id}
         [HttpGet("{id}")]
-        public IActionResult GetReportType(int id)
+        public async Task<IActionResult> GetReportType(int id)
         {
-            var reportType = _reportTypeService.GetReportTypeById(id);
+            var reportType = await _reportTypeService.GetReportTypeById(id);
             if (reportType == null)
             {
                 return NotFound();
@@ -39,7 +38,7 @@ namespace Timereporting.Api.Controllers
 
         // POST: api/v1/reporttype
         [HttpPost]
-        public IActionResult CreateReportType([FromBody] ReportType reportType)
+        public IActionResult CreateReportType([FromBody] ReportTypeDto reportType)
         {
             if (!ModelState.IsValid)
             {
@@ -53,9 +52,9 @@ namespace Timereporting.Api.Controllers
 
         // PUT: api/v1/reporttype/{id}
         [HttpPut("{id}")]
-        public IActionResult UpdateReportType(int id, [FromBody] ReportType updatedReportType)
+        public async Task<IActionResult> UpdateReportType(int id, [FromBody] ReportTypeDto updatedReportType)
         {
-            var reportType = _reportTypeService.GetReportTypeById(id);
+            var reportType = await _reportTypeService.GetReportTypeById(id);
             if (reportType == null)
             {
                 return NotFound();
@@ -68,9 +67,9 @@ namespace Timereporting.Api.Controllers
 
         // DELETE: api/v1/reporttype/{id}
         [HttpDelete("{id}")]
-        public IActionResult DeleteReportType(int id)
+        public async Task<IActionResult> DeleteReportType(int id)
         {
-            var reportType = _reportTypeService.GetReportTypeById(id);
+            var reportType = await _reportTypeService.GetReportTypeById(id);
             if (reportType == null)
             {
                 return NotFound();

@@ -7,7 +7,6 @@ using System.Data;
 using Timereporting.Infrastructure.Configuration.Database.Connection.Contracts;
 using Timereporting.Infrastructure.Configuration.Database.Models;
 using Timereporting.Infrastructure.Configuration.Database.Models.Contracts;
-using Timereporting.Infrastructure.Configuration.Database.Models.Database;
 using Timereporting.Infrastructure.Configuration.Database.Services.Contracts;
 using Timereporting.Infrastructure.Configuration.Database.ValueObjects.Enums;
 

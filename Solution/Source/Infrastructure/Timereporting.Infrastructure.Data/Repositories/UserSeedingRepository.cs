@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Timereporting.Infrastructure.Data.Entities;
+using Timereporting.Infrastructure.Data.Entities.Application;
 
 namespace Timereporting.Infrastructure.Data.Repositories
 {
@@ -9,9 +9,9 @@ namespace Timereporting.Infrastructure.Data.Repositories
         {
             if (!context.Users.Any())
             {
-                var adminUser = new AppUser
+                var adminUser = new AppUserEntity
                 {
-                    UserUUID = Guid.NewGuid(),
+                    Id = 1,
                     UserName = "admin@example.com",
                     NormalizedUserName = "admin@example.com",
                     Email = "admin@example.com",
@@ -24,9 +24,9 @@ namespace Timereporting.Infrastructure.Data.Repositories
                     AccessFailedCount = 0
                 };
 
-                var normalUser = new AppUser
+                var normalUser = new AppUserEntity
                 {
-                    UserUUID = Guid.NewGuid(),
+                    Id = 2,
                     UserName = "user@example.com",
                     NormalizedUserName = "user@example.com",
                     Email = "user@example.com",
@@ -39,7 +39,7 @@ namespace Timereporting.Infrastructure.Data.Repositories
                     AccessFailedCount = 0
                 };
 
-                var passwordHasher = new PasswordHasher<AppUser>();
+                var passwordHasher = new PasswordHasher<AppUserEntity>();
 
                 var adminPassword = "Admin123"; // Password for admin user
                 var normalUserPassword = "User123"; // Password for normal user

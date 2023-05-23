@@ -12,4 +12,9 @@
     <Folder Include="QueryModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Timereporting.Infrastructure.Data\Timereporting.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\..\Interaction\Timereporting.Interaction.DTO\Timereporting.Interaction.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

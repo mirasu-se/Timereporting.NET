@@ -1,6 +1,6 @@
-﻿using Timereporting.Infrastructure.Models.Metadata.Element;
-using Timereporting.Infrastructure.Models.Metadata.Icon;
-using Timereporting.Infrastructure.Models.Metadata.Image;
+﻿using Timereporting.Infrastructure.Configuration.FileSystem.Models.HTML.Element;
+using Timereporting.Infrastructure.Configuration.FileSystem.Models.HTML.Icon;
+using Timereporting.Infrastructure.Configuration.FileSystem.Models.HTML.Image;
 
 namespace Timereporting.Infrastructure.TagHelpers.Metadata.Repositories
 {

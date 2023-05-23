@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Timereporting.Api.Services.Contracts;
-using Timereporting.Infrastructure.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using Timereporting.Application.Services.Contracts;
+using Timereporting.Interaction.DTO.Workplace;
 
 namespace Timereporting.Api.Controllers
 {
     [Route("api/v1/workplace")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WorkplaceController : ControllerBase
     {
         private readonly IWorkplaceService _workplaceService;
@@ -17,19 +16,19 @@ namespace Timereporting.Api.Controllers
             _workplaceService = workplaceService;
         }
 
-        // GET: api/v1/workplaces
+        // GET: api/v1/workplace
         [HttpGet]
-        public ActionResult<IEnumerable<Workplace>> GetWorkplaces()
+        public async Task<ActionResult<IEnumerable<WorkplaceDto>>> GetWorkplaces()
         {
-            var workplaces = _workplaceService.GetAllWorkplacesAsync();
+            var workplaces = await _workplaceService.GetAllWorkplacesAsync();
             return Ok(workplaces);
         }
 
-        // GET: api/v1/workplaces/{id}
+        // GET: api/v1/workplace/{id}
         [HttpGet("{id}")]
-        public ActionResult<Workplace> GetWorkplace(int id)
+        public async Task<ActionResult<WorkplaceDto>> GetWorkplace(Guid id)
         {
-            var workplace = _workplaceService.GetWorkplaceByIdAsync(id);
+            var workplace = await _workplaceService.GetWorkplaceByIdAsync(id);
             if (workplace == null)
             {
                 return NotFound();
@@ -37,46 +36,52 @@ namespace Timereporting.Api.Controllers
             return Ok(workplace);
         }
 
-        // POST: api/v1/workplaces
+        // POST: api/v1/workplace
         [HttpPost]
-        public ActionResult<Workplace> CreateWorkplace([FromBody] Workplace workplace)
+        public async Task<ActionResult<WorkplaceDto>> CreateWorkplace([FromBody] WorkplaceDto workplace)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var createdWorkplaceId = _workplaceService.CreateWorkplaceAsync(workplace);
+            workplace.WorkplaceUUID = Guid.NewGuid();
+            workplace.TimeCreated = DateTime.UtcNow;
+
+            var createdWorkplaceId = await _workplaceService.CreateWorkplaceAsync(workplace);
 
             return CreatedAtAction(nameof(GetWorkplace), new { id = createdWorkplaceId }, workplace);
         }
 
-        // PUT: api/v1/workplaces/{id}
+        // PUT: api/v1/workplace/{id}
         [HttpPut("{id}")]
-        public IActionResult UpdateWorkplace(int id, [FromBody] Workplace updatedWorkplace)
+        public async Task<IActionResult> UpdateWorkplace(Guid id, [FromBody] WorkplaceDto updatedWorkplace)
         {
-            var workplace = _workplaceService.GetWorkplaceByIdAsync(id);
+            var workplace = await _workplaceService.GetWorkplaceByIdAsync(id);
             if (workplace == null)
             {
                 return NotFound();
             }
+
+            updatedWorkplace.WorkplaceUUID = id;
+            updatedWorkplace.LastTimeUpdated = DateTime.UtcNow;
 
             _workplaceService.UpdateWorkplaceAsync(updatedWorkplace);
 
             return NoContent();
         }
 
-        // DELETE: api/v1/workplaces/{id}
+        // DELETE: api/v1/workplace/{id}
         [HttpDelete("{id}")]
-        public IActionResult DeleteWorkplace(int id)
+        public async Task<IActionResult> DeleteWorkplace(Guid id)
         {
-            var workplace = _workplaceService.GetWorkplaceByIdAsync(id);
+            var workplace = await _workplaceService.GetWorkplaceByIdAsync(id);
             if (workplace == null)
             {
                 return NotFound();
             }
 
-            _workplaceService.DeleteWorkplaceAsync(id);
+            await _workplaceService.DeleteWorkplaceAsync(id);
 
             return NoContent();
         }

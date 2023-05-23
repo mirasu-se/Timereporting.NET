@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Timereporting.Api.Services.Contracts;
-using Timereporting.Infrastructure.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using Timereporting.Application.Services.Contracts;
+using Timereporting.Interaction.DTO;
 
 namespace Timereporting.Api.Controllers
 {
     [Route("api/v1/timereport")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TimereportController : ControllerBase
     {
         private readonly ITimereportService _timereportService;
@@ -17,19 +16,19 @@ namespace Timereporting.Api.Controllers
             _timereportService = timereportService;
         }
 
-        // GET: api/v1/timereports
+        // GET: api/v1/timereport
         [HttpGet]
-        public IActionResult GetTimereports()
+        public async Task<IActionResult> GetTimereports()
         {
-            var timereports = _timereportService.GetAllTimereportsAsync().Result;
+            var timereports = await _timereportService.GetAllTimereportsAsync();
             return Ok(timereports);
         }
 
-        // GET: api/v1/timereports/{id}
+        // GET: api/v1/timereport/{id}
         [HttpGet("{id}")]
-        public IActionResult GetTimereport(int id)
+        public async Task<IActionResult> GetTimereport(Guid id)
         {
-            var timereport = _timereportService.GetTimereportByIdAsync(id).Result;
+            var timereport = await _timereportService.GetTimereportByIdAsync(id);
             if (timereport == null)
             {
                 return NotFound();
@@ -37,25 +36,25 @@ namespace Timereporting.Api.Controllers
             return Ok(timereport);
         }
 
-        // POST: api/v1/timereports
+        // POST: api/v1/timereport
         [HttpPost]
-        public IActionResult CreateTimereport([FromBody] Timereport timereport)
+        public async Task<IActionResult> CreateTimereport([FromBody] TimereportDto timereport)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var createdTimereportId = _timereportService.CreateTimereportAsync(timereport).Result;
+            var createdTimereportId = await _timereportService.CreateTimereportAsync(timereport);
 
             return CreatedAtAction(nameof(GetTimereport), new { id = createdTimereportId }, timereport);
         }
 
-        // PUT: api/v1/timereports/{id}
+        // PUT: api/v1/timereport/{id}
         [HttpPut("{id}")]
-        public IActionResult UpdateTimereport(int id, [FromBody] Timereport updatedTimereport)
+        public async Task<IActionResult> UpdateTimereport(Guid id, [FromBody] TimereportDto updatedTimereport)
         {
-            var timereport = _timereportService.GetTimereportByIdAsync(id).Result;
+            var timereport = await _timereportService.GetTimereportByIdAsync(id);
             if (timereport == null)
             {
                 return NotFound();
@@ -65,22 +64,22 @@ namespace Timereporting.Api.Controllers
             timereport.LastTimeUpdated = DateTime.UtcNow;
             timereport.UserUpdated = updatedTimereport.UserUpdated;
 
-            _timereportService.UpdateTimereportAsync(timereport).Wait();
+            await _timereportService.UpdateTimereportAsync(timereport);
 
             return NoContent();
         }
 
-        // DELETE: api/v1/timereports/{id}
+        // DELETE: api/v1/timereport/{id}
         [HttpDelete("{id}")]
-        public IActionResult DeleteTimereport(int id)
+        public async Task<IActionResult> DeleteTimereport(Guid id)
         {
-            var timereport = _timereportService.GetTimereportByIdAsync(id).Result;
+            var timereport = await _timereportService.GetTimereportByIdAsync(id);
             if (timereport == null)
             {
                 return NotFound();
             }
 
-            _timereportService.DeleteTimereportAsync(timereport).Wait();
+            await _timereportService.DeleteTimereportAsync(timereport);
 
             return NoContent();
         }

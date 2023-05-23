@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
+using System.Net.Http.Headers;
+using Timereporting.Infrastructure.Data;
 using Timereporting.Infrastructure.TagHelpers.Metadata.Services;
 
 namespace Timereporting.Web
@@ -18,6 +23,8 @@ namespace Timereporting.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery();
+
             // HostOptions Configuration: Configure the application host context from configuration file.
             services.Configure<HostOptions>(Configuration.GetSection("HostOptions"));
             var hostOptions = services.BuildServiceProvider().GetService<IOptions<HostOptions>>().Value;
@@ -83,37 +90,37 @@ namespace Timereporting.Web
                 // Mapping the documentation database route to the DocumentationController's DatabaseWorks action
                 endpoints.MapControllerRoute(
                     name: "documentation-database",
-                    pattern: "/documentation/database",
+                    pattern: "/docs/database",
                     defaults: new { controller = "Documentation", action = "DatabaseWorks" });
 
                 // Mapping the documentation API route to the DocumentationController's ApiDocumentation action
                 endpoints.MapControllerRoute(
                     name: "documentation-api",
-                    pattern: "/documentation/api",
+                    pattern: "/docs/api",
                     defaults: new { controller = "Documentation", action = "ApiDocumentation" });
 
                 // Mapping the documentation Docker route to the DocumentationController's DockerCompose action
                 endpoints.MapControllerRoute(
                     name: "documentation-docker",
-                    pattern: "/documentation/docker",
+                    pattern: "/docs/docker",
                     defaults: new { controller = "Documentation", action = "DockerCompose" });
 
                 // Mapping the documentation metadata route to the DocumentationController's MetadataInjection action
                 endpoints.MapControllerRoute(
                     name: "documentation-metadata",
-                    pattern: "/documentation/metadata",
+                    pattern: "/docs/metadata",
                     defaults: new { controller = "Documentation", action = "MetadataInjection" });
 
                 // Mapping the documentation performance route to the DocumentationController's PerformanceOptimization action
                 endpoints.MapControllerRoute(
                     name: "documentation-performance",
-                    pattern: "/documentation/performance",
+                    pattern: "/docs/performance",
                     defaults: new { controller = "Documentation", action = "PerformanceOptimization" });
 
                 // Mapping the documentation Webpack route to the DocumentationController's WebpackBundling action
                 endpoints.MapControllerRoute(
                     name: "documentation-webpack",
-                    pattern: "/documentation/webpack",
+                    pattern: "/docs/webpack",
                     defaults: new { controller = "Documentation", action = "WebpackBundling" });
 
                 // Default route for other controllers and actions

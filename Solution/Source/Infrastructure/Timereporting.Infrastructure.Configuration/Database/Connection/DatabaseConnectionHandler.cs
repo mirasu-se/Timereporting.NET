@@ -1,5 +1,5 @@
 ﻿using Timereporting.Infrastructure.Configuration.Database.Connection.Contracts;
-using Timereporting.Infrastructure.Configuration.Database.Models.Database;
+using Timereporting.Infrastructure.Configuration.Database.Models;
 
 namespace Timereporting.Infrastructure.Configuration.Database.Connection
 {

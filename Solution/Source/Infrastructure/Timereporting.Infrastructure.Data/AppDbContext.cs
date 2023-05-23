@@ -1,29 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Timereporting.Infrastructure.Data.Entities;
+using Timereporting.Infrastructure.Data.Entities.Application;
+using Timereporting.Infrastructure.Data.Entities.Timereport;
+using Timereporting.Infrastructure.Data.Entities.Workplace;
 
 namespace Timereporting.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-                string connectionString = configuration.GetConnectionString("DefaultConnection");
-
-                optionsBuilder.UseMySQL(connectionString, b => b.MigrationsAssembly("Timereporting.Infrastructure.Data"));
-            }
         }
 
-        public DbSet<AppUser> Users { get; set; }
-        public DbSet<ReportType> ReportTypes { get; set; }
-        public DbSet<Timereport> Timereports { get; set; }
-        public DbSet<Workplace> Workplaces { get; set; }
+        public DbSet<AppUserEntity> Users { get; set; }
+        public DbSet<ReportTypeEntity> ReportTypes { get; set; }
+        public DbSet<TimereportEntity> Timereports { get; set; }
+        public DbSet<WorkplaceEntity> Workplaces { get; set; }
     }
 }

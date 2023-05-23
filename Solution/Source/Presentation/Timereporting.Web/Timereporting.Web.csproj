@@ -10,16 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="10.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Timereporting.Infrastructure.Data\Timereporting.Infrastructure.Data.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Timereporting.Infrastructure.TagHelpers\Timereporting.Infrastructure.TagHelpers.csproj" />
+    <ProjectReference Include="..\..\Interaction\Timereporting.Interaction.ViewModels\Timereporting.Interaction.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

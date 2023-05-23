@@ -1,4 +1,4 @@
-﻿using Timereporting.Infrastructure.Data.Entities;
+﻿using Timereporting.Infrastructure.Data.Entities.Timereport;
 
 namespace Timereporting.Infrastructure.Data.Repositories
 {
@@ -8,16 +8,16 @@ namespace Timereporting.Infrastructure.Data.Repositories
         {
             if (!context.ReportTypes.Any())
             {
-                var reportTypes = new List<ReportType>
+                var reportTypes = new List<ReportTypeEntity>
                     {
-                        new ReportType
+                        new ReportTypeEntity
                         {
                             Name = "Report Type 1",
                             IsActive = true,
                             UserCreated = Guid.NewGuid(),
                             TimeCreated = DateTime.Now
                         },
-                        new ReportType
+                        new ReportTypeEntity
                         {
                             Name = "Report Type 2",
                             IsActive = true,

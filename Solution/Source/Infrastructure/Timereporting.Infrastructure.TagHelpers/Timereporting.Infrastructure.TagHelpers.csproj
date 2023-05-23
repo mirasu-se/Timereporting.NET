@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Timereporting.Infrastructure.Models\Timereporting.Infrastructure.Models.csproj" />
+    <ProjectReference Include="..\Timereporting.Infrastructure.Configuration\Timereporting.Infrastructure.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

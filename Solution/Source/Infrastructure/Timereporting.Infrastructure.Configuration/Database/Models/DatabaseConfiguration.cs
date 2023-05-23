@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Timereporting.Infrastructure.Configuration.Database.Models.Database;
 
 namespace Timereporting.Infrastructure.Configuration.Database.Models
 {

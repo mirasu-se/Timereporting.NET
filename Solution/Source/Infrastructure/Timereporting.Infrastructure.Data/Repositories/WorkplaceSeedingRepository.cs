@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Timereporting.Infrastructure.Data.Entities;
+using Timereporting.Infrastructure.Data.Entities.Workplace;
 
 namespace Timereporting.Infrastructure.Data.Repositories
 {
@@ -13,9 +13,9 @@ namespace Timereporting.Infrastructure.Data.Repositories
         {
             if (!context.Workplaces.Any())
             {
-                var workplaces = new List<Workplace>
+                var workplaces = new List<WorkplaceEntity>
                     {
-                        new Workplace
+                        new WorkplaceEntity
                         {
                             Name = "Workplace 1",
                             WorkplaceUUID = Guid.NewGuid(),
@@ -26,7 +26,7 @@ namespace Timereporting.Infrastructure.Data.Repositories
                             UserCreated = Guid.NewGuid(),
                             TimeCreated = DateTime.Now
                         },
-                        new Workplace
+                        new WorkplaceEntity
                         {
                             Name = "Workplace 2",
                             WorkplaceUUID = Guid.NewGuid(),

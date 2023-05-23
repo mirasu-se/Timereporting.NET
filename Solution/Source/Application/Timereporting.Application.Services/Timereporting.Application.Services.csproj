@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interaction\Timereporting.Interaction.DTO\Timereporting.Interaction.DTO.csproj" />
+    <ProjectReference Include="..\Timereporting.Application.Repositories\Timereporting.Application.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
