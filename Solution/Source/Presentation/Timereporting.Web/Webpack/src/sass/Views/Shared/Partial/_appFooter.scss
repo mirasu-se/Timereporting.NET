@@ -1,0 +1,183 @@
+/*--------------------------------------------------------------==
+    # Footer
+    --------------------------------------------------------------*/
+    $black: #111111;
+    $white: #FFFFFF;
+    $gray-7: #777777;
+    $gray-9: lightgray;
+
+    $brand-color: #DD2743;
+
+    $footer-bg-color: #F2F2F2;
+    $footer-fg-color: #FFFFFF;
+    $link-color: $black;
+    $link-hover-color: $brand-color;
+
+    
+    .footer {
+      background-color: $footer-bg-color;
+      padding-top: 60px;
+      border-top: .5px solid $gray-9;
+    
+      &-contact-cards {
+        border-bottom: 1px solid $footer-bg-color;
+    
+        .row {
+          margin: 0;
+          padding: 0;
+    
+          div {
+            margin-bottom: 10px;
+          }
+    
+          span {
+            color: $footer-fg-color;
+            margin-left: 0;
+          }
+    
+          i:hover {
+            transform: scale(1.1);
+            color: $link-hover-color;
+          }
+        }
+      }
+    
+      &-single-card i {
+        color: $link-hover-color;
+        font-size: 26px;
+        float: left;
+        margin-top: 10px;
+      }
+    
+      &-single-card-text {
+        padding-left: 15px;
+        display: inline-block;
+    
+        span {
+          color: $link-color !important;
+          font-weight: 200;
+          letter-spacing: 1px;
+          font-size: 14px;
+        }
+      }
+    
+      &-single-card-text-heading {
+        display: block;
+        color: $brand-color;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 2px;
+    
+        p {
+          margin-bottom: 14px;
+          font-size: 14px;
+          line-height: 28px;
+        }
+      }
+    
+      &-link-cards {
+        padding: 40px 15px 60px;
+        position: relative;
+        z-index: 2;
+    
+        .single-card {
+            text-align: left !important;
+        p {
+            color: $brand-color;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            position: relative;
+
+            &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -15px;
+            height: 2px;
+            width: 50px;
+            background: $link-hover-color;
+            }
+        }
+    
+          ul {
+            li {
+              width: 50%;
+              margin-bottom: 12px;
+    
+              a {
+                color: $footer-fg-color;
+                text-transform: capitalize;
+                color: $link-color;
+    
+                &:hover {
+                  color: $link-hover-color;
+                }
+              }
+            }
+          }
+        }
+      }
+    
+      &-subscribe-form {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 20px;
+        color: $gray-7;
+    
+        input {
+          width: 100%;
+          padding: 14px;
+          background:  $white;
+          border: 1px solid $footer-bg-color;
+          margin-bottom: 30px;
+        }
+    
+        button {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          height: 50px;
+          background: $footer-bg-color;
+          padding: 10px 15px;
+          border: 1px solid $link-hover-color;
+          font-size: 18px;
+          border: none;
+          outline: none;
+          cursor: pointer;
+    
+          &:hover {
+            background-color: $link-hover-color;
+            color:  $white;     
+              i {
+                transform: rotate(-6deg);
+              }
+            }
+          }
+        }
+      }
+    
+      .copyright-text{
+          margin: 0;
+          font-size: 14px;
+          color:  $black;
+      }
+
+      .footer-menu {
+        margin: 0;
+        text-align: left;
+        
+        li {
+          display: inline-flex;
+          padding: 10px;
+          
+          a {
+            font-size: 14px;
+            color:  $link-color;
+            
+            &:hover {
+              color: $link-hover-color;
+            }
+          }
+        }
+      }

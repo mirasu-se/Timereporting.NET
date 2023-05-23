@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <!-- Include header reference -->
+        <partial name="~/Views/Shared/Scripts/_HeaderReference.cshtml" />
+    </head>
+    <body>
+        <!-- Include App header -->
+        <partial name="~/Views/Shared/Structure/_AppHeader.cshtml" />
+        <!-- App root -->
+        <div class="container footer-container pb-5 pt-5">
+            <main role="main" class="content">
+                <!--Render view compnents-->
+                @RenderBody()
+                <!--Include login modal window -->
+                <partial name="~/Views/Shared/Modals/_UserLoginModal.cshtml" />
+            </main>
+        </div>
+        <!-- Include App footer -->
+        <partial name="~/Views/Shared/Structure/_AppFooter.cshtml" />
+        <!-- Include footer reference -->
+        <partial name="~/Views/Shared/Scripts/_FooterReference.cshtml" />
+    </body>
+</html>

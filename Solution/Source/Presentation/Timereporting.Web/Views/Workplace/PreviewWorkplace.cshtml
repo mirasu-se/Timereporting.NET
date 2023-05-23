@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Workplaces";
+}
+
+
+<div class="text-left mt-5">
+    <h1 class="display-6">Workplaces</h1>
+    <p>This page displays an overview of all the workplaces that have been added to the system. You can easily browse and search for previously added workplaces to get an overview of completed projects or find relevant information about specific workplaces.</p>
+    <p>This page allows you to add new workplaces to the system. If you click on action button additional information will be diplayed about each workplace including the image and information that you have provided while adding selected workplace. By clicking the "ADD WORKPLACE" button, you will be redirected to the form for adding workplaces, after you submit your form the new workplace will be added to the list in this table.</p>
+</div>
+
+<div class="text-right mt-4 mb-4">
+    <a class="btn btn-secondary" asp-controller="Workplace" asp-action="CreateWorkplace">
+        <span>ADD WORKPLACE</span>
+        <i class="bi bi-building-add"></i>
+    </a>
+</div>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th scope="col" class="col-2">Id</th>
+            <th scope="col" class="col-4">Name</th>
+            <th scope="col" class="col-4">Time</th>
+            <th scope="col" class="col-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Köksrenovering Kungsgatan 19</td>
+            <td>2017-11-05 20:52:49</td>
+            <td>
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createWorkplaceModal">
+                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Takläggning Skolgatan 8</td>
+            <td>2017-11-05 20:52:49</td>
+            <td>
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createWorkplaceModal">
+                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Målning Havsutsikt 12</td>
+            <td>2022-09-18 15:30:10</td>
+            <td>
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createWorkplaceModal">
+                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!--Include add new workplace modal window -->
+<partial name="~/Views/Workplace/Modals/_ViewWorkplaceModal.cshtml" />
+
+
+
+<!--Include required JS modules based on environment-->
+<environment include="Development">
+    <script src="~/js/previewWorkplaceModule/previewWorkplaceModule.js" asp-append-version="true"></script>
+</environment>
+
+<environment exclude="Development">
+    <script src="~/js/previewWorkplaceModule/previewWorkplaceModule.min.js" asp-append-version="true"></script>
+</environment>

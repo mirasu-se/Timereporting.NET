@@ -1,0 +1,40 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "timereporting.web",
+      "composeLaunchUrl": "http://localhost:5001",
+      "serviceActions": {
+        "timereporting.api": "StartDebugging",
+        "timereporting.database": "StartWithoutDebugging",
+        "timereporting.web": "StartDebugging"
+      }
+    },
+    "Timereporting.Web": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "timereporting.web",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/{Scheme}://{ServiceHost}:{ServicePort}",
+      "serviceActions": {
+        "timereporting.api": "DoNotStart",
+        "timereporting.database": "DoNotStart",
+        "timereporting.web": "StartDebugging"
+      }
+    },
+    "Timereports.Web.API": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "timereporting.api",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "serviceActions": {
+        "timereporting.api": "StartDebugging",
+        "timereporting.database": "StartWithoutDebugging",
+        "timereporting.web": "DoNotStart"
+      }
+    }
+  }
+}

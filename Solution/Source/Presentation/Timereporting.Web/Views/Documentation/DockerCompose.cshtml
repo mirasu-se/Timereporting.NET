@@ -1,0 +1,94 @@
+﻿<h3 class ="mt-5">Docker Compose Setup Documentation</h3>
+
+<p>This documentation provides instructions on how to setup Docker and Docker Compose on your machine.</p>
+
+<h5>Prerequisites</h5>
+<ul>
+    <li>Docker</li>
+    <li>Docker Compose</li>
+</ul>
+
+<h5>Step 1: Download Docker Desktop</h5>
+<ol>
+    <li>Go to the Docker website: <a href="https://www.docker.com/products/docker-desktop" target="_blank">https://www.docker.com/products/docker-desktop</a></li>
+    <li>Click on the "Get Docker Desktop" button.</li>
+    <li>On the following page, click on the "Download Docker Desktop for Windows" button.</li>
+    <li>The download will start automatically. Once it's complete, locate the installer file.</li>
+</ol>
+
+<h5>Step 2: Install Docker Desktop</h5>
+<ol>
+    <li>Double-click the installer file you downloaded.</li>
+    <li>If prompted, grant the necessary permissions for the installer to make changes on your system.</li>
+    <li>Follow the installation wizard's instructions to complete the installation.</li>
+    <li>During the installation process, Docker Desktop may require enabling certain features or services. Allow it to make any necessary changes.</li>
+</ol>
+
+<h5>Step 3: Verify Docker Installation</h5>
+<ol>
+    <li>After the installation is complete, Docker Desktop will launch automatically.</li>
+    <li>Look for the Docker icon in your system tray (usually located in the bottom right corner of the desktop).</li>
+    <li>Right-click on the Docker icon and select "About Docker" to verify that Docker is running and properly installed.</li>
+</ol>
+
+<h5>Step 4: Download Docker Compose</h5>
+<ol>
+    <li>Docker Desktop includes Docker Compose, so you don't need to download it separately. However, it's essential to ensure that Docker Compose is installed and available on your system.</li>
+    <li>Open a command prompt or PowerShell window.</li>
+</ol>
+
+<h5>Step 5: Verify Docker Compose Installation</h5>
+
+<p>In the command prompt or PowerShell window, type the following command and press Enter:</p>
+<pre><code>docker-compose version</code></pre>
+<p>If Docker Compose is installed correctly, you will see the version information displayed in the output.</p>
+
+
+<p>Congratulations! You have successfully downloaded and installed Docker and Docker Compose on your Windows machine. You can now proceed with using Docker to manage your containers and Docker Compose to orchestrate multi-container applications.</p>
+
+<h3 class="mt-5">Docker Compose Configuration Instructions</h3>
+
+<p>This documentation provides instructions for running the application using Docker Compose.</p>
+
+<h5>Step 1: Download the Docker Compose File</h5>
+<p>Download the following <a href="~/docker-compose.zip" download>docker-compose.zip</a> file.</p>
+<p>You should extract docker files to the Timereporting.NET directory</p>
+
+<h5>Step 2: Start the Application</h5>
+<p>Open a terminal or command prompt and navigate to the directory where the docker-compose.yml file should be located [Timereporting.NET directory].</p>
+<p>Run the following command to start the application:</p>
+<pre><code>docker-compose up</code></pre>
+<p>This command will pull the required Docker images and start the containers for the application services.</p>
+<p>Please notice that you must set Docker Compose as a startup project so everything can work as needed.</p>
+
+<h5>Step 3: Access the Application</h5>
+<p>Once the containers are running, you can access the application using the following URLs:</p>
+<ul>
+    <li>API Service: <a href="http://localhost:5000/swagger/" target="_blank">http://localhost:5000/swagger/</a></li>
+    <li>Web Service: <a href="http://localhost:5001" target="_blank">http://localhost:5001</a></li>
+</ul>
+
+<h5>Step 4: Clean Up</h5>
+<p>To stop and remove the containers, run the following command:</p>
+<pre><code>docker-compose down</code></pre>
+<p>This command will stop and remove the containers while preserving the data volume for the database.</p>
+
+<h5>ADDITIONAL DOCKER COMMANDS:</h5>
+
+<p>To list all running containers:</p>
+<pre><code>docker ps</code></pre>
+
+<p>To stop a specific container:</p>
+<pre><code>docker stop [container_name_or_id]</code></pre>
+
+<p>To remove a specific container:</p>
+<pre><code>docker rm [container_name_or_id]</code></pre>
+
+<p>To list all Docker images on your system:</p>
+<pre><code>docker images</code></pre>
+
+<p>To remove a specific Docker image:</p>
+<pre><code>docker rmi [image_name_or_id]</code></pre>
+
+<p>To remove all unused Docker images:</p>
+<pre><code>docker image prune</code></pre>

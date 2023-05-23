@@ -1,0 +1,21 @@
+# Specifies the version of the Docker Compose file format.
+version: '3.4'
+
+# Defines the services that comprise this Docker Compose application.
+services:
+
+  # Configures the API container that will host the Timereporting.Api application.
+  timereporting.api:
+    container_name: timereporting-api
+    image: milenkoraic/timereporting:1.0.0
+    build:
+      context: .
+      dockerfile: Solution/Source/Interface/Timereporting.Api/Dockerfile
+
+  # Configures the web container that will host the Timereporting.Web application.
+  timereporting.web:
+    container_name: timereporting-web
+    image: milenkoraic/timereporting:1.0.0
+    build:
+      context: .
+      dockerfile: Solution/Source/Presentation/Timereporting.Web/Dockerfile

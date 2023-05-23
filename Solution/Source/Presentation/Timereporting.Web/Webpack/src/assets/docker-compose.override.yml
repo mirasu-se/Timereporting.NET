@@ -1,0 +1,38 @@
+version: '3.4'
+
+# Define the services for the application
+services:
+
+  # Define the database service
+  timereporting.database:
+    container_name: timereporting-database
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=timereporting
+    volumes:
+      - timereporting-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # Define the API service
+  timereporting.api:
+    container_name: timereporting-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:80"
+    #command: sh -c 'dotnet ef database update && dotnet run'
+
+  # Define the web service
+  timereporting.web:
+    container_name: timereporting-web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5001:80"
+
+# Define volumes for the database and data protection keys
+volumes:
+  timereporting-data:
+    name: timereporting-data

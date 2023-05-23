@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "New Workplace";
+}
+
+@model CreateWorkplaceModel;
+
+<form id="create-workplace-form" method="post" enctype="multipart/form-data">
+    <div class="text-center mt-5">
+        <h1 class="display-6">Create Workplace</h1>
+        <p>Fill in the form below to add a new workplace.</p>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Name">Name:</label>
+        <input asp-for="@Model.Name" class="form-control" id="name">
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Address">Address:</label>
+        <input asp-for="@Model.Address" type="text" class="form-control" id="address">
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Description">Info:</label>
+        <textarea asp-for="@Model.Description" class="form-control" id="info"></textarea>
+    </div>
+    <div class="form-group">
+        <img id="image-preview" src="~/img/default/workplace/default_workplace_image.png" class="" onclick="openImageFileDialog()">
+    </div>
+    <div class="form-group">
+        <label class="file-input invisible">
+            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" name="ImageFile" onchange="previewImage(event)">
+        </label>
+        <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitWorkplaceForm(event, 'http://localhost:5001')">
+            <span class="m-2">SUBMIT NEW WORKPLACE</span>
+            <i class="bi bi-building-add"></i>
+        </button>
+    </div>
+</form>
+
+
+<!--Include form submission validation modals -->
+<partial name="~/Views/Shared/Modals/_SubmissionSucessModal.cshtml" />
+<partial name="~/Views/Shared/Modals/_SubmissionFailedModal.cshtml" />
+
+<!--Include required JS modules based on environment-->
+<environment include="Development">
+    <script src="~/js/createWorkplaceModule/createWorkplaceModule.js" asp-append-version="true"></script>
+</environment>
+
+<environment exclude="Development">
+    <script src="~/js/createWorkplaceModule/createWorkplaceModule.min.js" asp-append-version="true"></script>
+</environment>
+

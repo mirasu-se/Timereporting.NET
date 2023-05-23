@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg2676"
+   inkscape:export-filename="C:\Users\Administrator\Documents\GitHub\WebDevelopment\MilenkoRaic\Source\MilenkoRaic\Webpack\public\pwa\icon\apple\apple-touch-icon-57x57.png"
+   inkscape:export-xdpi="10.687501"
+   inkscape:export-ydpi="10.687501"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="app-icon.svg">
+  <defs
+     id="defs2670" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="385.91981"
+     inkscape:cy="555.71078"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1600"
+     inkscape:window-height="837"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2673">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       cy="67.886459"
+       cx="67.886459"
+       id="path2609"
+       style="fill:#070704;fill-opacity:1;stroke:#ad2424;stroke-width:6.55036;stroke-linejoin:round;stroke-miterlimit:14.5;stroke-dasharray:none;stroke-dashoffset:0.299339;stroke-opacity:1"
+       r="64.51413" />
+    <path
+       style="fill:#ad2424;fill-opacity:1;stroke:none;stroke-width:2.05704;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 23.410742,93.835807 H 42.809436 L 53.123915,71.155357 50.559547,65.570727 39.891511,89.732801 H 30.623592 L 48.84997,49.880402 66.601134,88.593084 75.063587,71.155357 71.986335,65.570727 66.601134,77.110391 48.84997,38.217376 Z"
+       id="path897" />
+    <path
+       style="fill:#ad2424;fill-opacity:1;stroke:none;stroke-width:2.05704;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 58.447492,47.321644 2.711467,6.054054 5.442175,-12.451464 24.133631,52.911573 h 19.489255 l -25.383137,-55.618431 -4.382071,9.587821 2.468853,5.570501 1.913218,-3.547382 18.188657,39.904485 H 94.125412 L 66.601134,29.108182 Z"
+       id="path899" />
+  </g>
+</svg>

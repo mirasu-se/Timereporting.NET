@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "New Time Report";
+}
+
+@model CreateTimereportModel
+
+<form id="create-time-report-form" method="post" enctype="multipart/form-data">
+    <div class="text-left m-5">
+        <h1 class="display-6">Create Time Report</h1>
+        <p>Step into the time-traveling world of time reports!</p>
+        <p>Unleash your imagination and fill in the form below to add a new time report.</p>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.SubFilterId">Select Report Type:</label>
+        <select asp-for="@Model.SubFilterId" class="form-control" id="SubFilterId">
+            <option value="1">Working Time Start Report</option>
+            <option value="2">Working Time Ending Report</option>
+        </select>
+        <span asp-validation-for="@Model.SubFilterId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.WorkplaceUUID">Select workplace:</label>
+        <select asp-for="@Model.WorkplaceUUID" class="form-control" id="WorkplaceId">
+            <option value="1">Workplace 1</option>
+            <option value="2">Workplace 2</option>
+        </select>
+        <span asp-validation-for="@Model.WorkplaceUUID" class="text-danger"></span>
+    </div>
+    <div class="form-group hidden">
+        <label asp-for="@Model.UserUUID">User UUID:</label>
+        <input asp-for="@Model.UserUUID" class="form-control" id="UserUUID">
+        <span asp-validation-for="@Model.UserUUID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Description">Description:</label>
+        <textarea asp-for="@Model.Description" class="form-control" id="Description"></textarea>
+        <span asp-validation-for="@Model.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.TimeStarted">Time Started:</label>
+        <input type="time" asp-for="@Model.TimeStarted" class="form-control" id="TimeStarted">
+        <span asp-validation-for="@Model.TimeStarted" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.TimeEnded">Time Ended:</label>
+        <input type="time" asp-for="@Model.TimeEnded" class="form-control" id="TimeEnded">
+        <span asp-validation-for="@Model.TimeEnded" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <img id="image-preview" src="~/img/default/timereport/default_time_report_image.png" onclick="openImageFileDialog()">
+    </div>
+    <div class="form-group">
+        <label class="file-input invisible">
+            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" name="ImageFile" onchange="previewImage(event)">
+        </label>
+        <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimeReport(event, 'http://localhost:5001')">
+            <span class="m-2">SUBMIT TIME REPORT</span>
+            <i class="bi bi-send"></i>
+        </button>
+    </div>
+</form>
+
+<!--Include form submission validation modals -->
+<partial name="~/Views/Shared/Modals/_SubmissionSucessModal.cshtml" />
+<partial name="~/Views/Shared/Modals/_SubmissionFailedModal.cshtml" />
+
+<!--Include required JS modules based on environment-->
+<environment include="Development">
+    <script src="~/js/createTimeReportModule/createTimeReportModule.js" asp-append-version="true"></script>
+</environment>
+
+<environment exclude="Development">
+    <script src="~/js/createTimeReportModule/createTimeReportModule.min.js" asp-append-version="true"></script>
+</environment>

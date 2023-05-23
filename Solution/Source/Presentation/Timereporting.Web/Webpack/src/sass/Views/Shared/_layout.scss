@@ -1,0 +1,85 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -50px;
+}
+
+.footer,
+.push {
+    height: 50px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+body.disable-scroll {
+    overflow: hidden;
+}
+
+.hidden{
+    display: none;
+}
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently */
+}
+
+a {
+  color: #DD2743;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #01D8E0;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Raleway", sans-serif;
+}
+
+.container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+.nav-link {
+    display: flex !important;
+    align-items: center !important;
+    color: #000000 !important;
+    text-decoration: none !important;
+    transition: color 0.3s !important;
+}
+
+.nav-link:hover {
+    color: #DD2743 !important;
+}
+
+.link-text {
+    margin-left: 8px !important;
+}

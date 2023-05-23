@@ -1,0 +1,28 @@
+// Cutom controls
+@import "Views/Custom/Controls/buttons";
+
+// Shared Views
+@import "Views/Shared/layout.scss";
+@import "Views/Shared/error.scss";
+
+// Shared Partial Views
+@import "Views/Shared/Partial/appHeader.scss";
+@import "Views/Shared/Partial/appFooter.scss";
+
+// Shared Partial View Modal
+@import "Views/Shared/Modals/appLoginModal";
+
+//Application Features
+@import "Views/Shared/Features/backToTopButton";
+@import "Views/Shared/Features/fileUploadInput";
+
+// Application View
+@import "Views/Home/index.scss";
+
+// TimeReport View
+@import "Views/TimeReport/createTimeReport.scss";
+@import "Views/TimeReport/previewTimeReport.scss";
+
+// Workplace View
+@import "Views/Workplace/createWorkplace.scss";
+@import "Views/Workplace/previewWorkPlace.scss";

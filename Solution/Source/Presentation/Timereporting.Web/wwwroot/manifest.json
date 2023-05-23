@@ -1,0 +1,58 @@
+{
+    "name": "DSTX Timereporting",
+    "lang": "en-us",
+    "short_name": "DSTX Timereporting",
+    "description": "ASP .Net Core 7 - MVC Web App",
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#DD2743",
+    "background_color": "#DD2743",
+    "icons":[   
+        {
+        "src": "/favicon/android/android-icon-72.png",
+        "sizes": "72x72",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-96.png",
+        "sizes": "96x96",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-128.png",
+        "sizes": "128x128",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-152.png",
+        "sizes": "152x152",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+        },        
+        {
+        "src": "/favicon/android/android-icon-384.png",
+        "sizes": "384x384",
+        "type": "image/png"
+        },
+        {
+        "src": "/favicon/android/android-icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+        }    
+    ] 
+}

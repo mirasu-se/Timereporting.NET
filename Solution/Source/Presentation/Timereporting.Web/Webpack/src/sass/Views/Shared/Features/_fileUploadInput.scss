@@ -1,0 +1,48 @@
+// Shared style for
+#image-preview {
+    height: auto !important;
+    width: 100% !important;
+    border: 1px solid lightgray;
+}
+
+.file-input {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-input input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-input-label {
+    display: inline-block;
+    background-color: #007bff !important;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.file-input-label:hover {
+    background-color: #0069d9 !important;
+    cursor: pointer;
+}
+
+.file-input-label:active {
+    background-color: #0056b3 !important;
+}
+
+.file-input-icon {
+    display: inline-block;
+    vertical-align: middle;
+}

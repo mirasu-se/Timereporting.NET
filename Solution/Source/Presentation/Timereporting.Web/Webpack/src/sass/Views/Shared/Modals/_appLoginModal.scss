@@ -1,0 +1,99 @@
+/* Customize modal header */
+.modal-header {
+    background-color: #DD2743;
+    color: #fff;
+  }
+  
+  .modal-title {
+    font-size: 24px;
+  }
+
+  .modal-body {
+    margin-top: 30px;;
+    padding: 30px !important;
+  }
+  
+  /* Style form inputs */
+  .input-group-text {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .form-control {
+    border-color: #333;
+  }
+  
+  .invalid-feedback {
+    color: red;
+  }
+  
+  /* Style form submit button */
+  .btn-primary {
+    background-color: #f96332;
+    border-color: #f96332;
+    font-weight: bold;
+  }
+  
+  /* Style social login buttons */
+  .btn-outline-dark {
+    border-color: #333;
+    color: #333;
+  }
+  
+  .btn-icon {
+    display: flex;
+    align-items: center;
+  }
+  
+  .m-1 {
+    margin: 0.5rem;
+  }
+  
+  /* Style success alerts */
+  .alert.alert-success {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .alert.alert-success .close {
+    color: #fff;
+  }
+  
+  /* Style error alerts */
+  .alert.alert-danger {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  .alert.alert-danger .close {
+    color: #fff;
+  }
+
+  /* Style form inputs */
+.input-group {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .input-group-text {
+    background-color: #333;
+    color: #fff;
+    border: none;
+  }
+  
+  .input-group-prepend {
+    display: flex;
+  }
+  
+  .input-group .form-control {
+    border-color: #333;
+    padding-left: 1rem;
+  }
+  
+  /* Adjust icon size */
+  .input-group-text i {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+  }
+  
+  
