@@ -16,6 +16,7 @@
     <div class="col-md-4">
         <label class="form-label" for="workplace-select">Välj arbetsplats:</label>
         <select id="workplace-filter" class="form-select">
+            <option value="0">Få alla tidrapporter</option>
             @foreach (var workplace in @Model.Workplaces)
             {
                 <option value="@workplace.Id">@workplace.Name</option>

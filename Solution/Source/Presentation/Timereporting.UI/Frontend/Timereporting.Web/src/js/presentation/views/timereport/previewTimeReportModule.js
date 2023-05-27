@@ -176,7 +176,7 @@ function processTimereports(data) {
     const formattedDate = dateParts.split('-').reverse().join('-'); // Rearrange the date parts to format it as 'YYYY-MM-DD'
 
     const row = `<tr>
-      <td>${report.id}</td>
+      <td>${formattedDate}</td>
       <td>${report.name}</td>
       <td>${report.hours.toFixed(2)}</td>
       <td>
