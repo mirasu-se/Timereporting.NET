@@ -1,41 +1,47 @@
-﻿@model CreateWorkplaceViewModel;
+﻿@model CreateWorkplaceFormModel
 
 <form id="create-workplace-form" method="post" enctype="multipart/form-data">
     <div class="text-center mt-5">
-        <h1 class="display-6">Create Workplace</h1>
-        <p>Fill in the form below to add a new workplace.</p>
+        <h1 class="display-6">Skapa Arbetsplats</h1>
+        <p>Fyll i formuläret nedan för att lägga till en ny arbetsplats.</p>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.Name">Name:</label>
+        <label asp-for="@Model.Name">Namn:</label>
         <input asp-for="@Model.Name" class="form-control" id="name">
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.Name" class="text-danger text-danger p-1"></span>
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.Address">Address:</label>
-        <input asp-for="@Model.Address" type="text" class="form-control" id="address">
+        <label asp-for="@Model.Info">Information:</label>
+        <textarea asp-for="@Model.Info" class="form-control" id="info"></textarea>
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.Info" class="text-danger text-danger p-1"></span>
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.Description">Info:</label>
-        <textarea asp-for="@Model.Description" class="form-control" id="info"></textarea>
-    </div>
-    <div class="form-group">
-        <img id="image-preview" src="~/img/default/workplace/default_workplace_image.png" class="" onclick="openImageFileDialog()">
+        <img id="image-preview" src="~/img/default/workplace/default_workplace_image.png" onclick="openImageFileDialog()">
     </div>
     <div class="form-group">
         <label class="file-input invisible">
-            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" name="ImageFile" onchange="previewImage(event)">
+            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" onchange="previewImage(event)">
         </label>
-        <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.ImageFile" class="text-danger text-danger p-1"></span>
+        </div>
     </div>
     <div class="form-group">
-        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitWorkplaceForm(event, 'http://localhost:5001')">
-            <span class="m-2">SUBMIT NEW WORKPLACE</span>
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" type="submit" onclick="submitWorkplaceForm()">
+            <span class="m-2">SPARA ARBETSPLATSEN</span>
             <i class="bi bi-building-add"></i>
         </button>
+        <div class="success"></div>
+        <div class="error"></div>
     </div>
 </form>
 
-
-<!--Include form submission validation modals -->
+<!--Include form submission validation modals and scripts-->
+<partial name="~/Views/Shared/Scripts/_ValidationScripts.cshtml" />
 <partial name="~/Views/Shared/Modals/_SubmissionSucessModal.cshtml" />
 <partial name="~/Views/Shared/Modals/_SubmissionFailedModal.cshtml" />
 

@@ -1,94 +1,122 @@
-﻿<div class="text-left mt-5">
-    <h1 class="display-6">Time Reports</h1>
-    <p>Use the filters below to search for time reports and view the results in the table.</p>
-    <h4>Filter Options:</h4>
+﻿@model TimereportPreviewModel
+
+<div class="text-left mt-5">
+    <h1 class="display-6">Tidsrapporter</h1>
+    <p>Använd filtren nedan för att söka efter tidsrapporter och visa resultaten i tabellen.</p>
+    <h4>Filtreringsalternativ:</h4>
     <ul>
-        <li>Selecting only the workplace name will display all reports for that workplace throughout its existence.</li>
-        <li>Selecting the workplace and specifying the "from date" will show reports from the selected date up to the current date.</li>
-        <li>Selecting the workplace and specifying the "to date" will display reports from the date the workplace was added up to your selected "to date".</li>
-        <li>Selecting the workplace, "from date," and "to date" will show reports within the specified date range.</li>
+        <li>Att endast välja arbetsplatsens namn kommer att visa alla rapporter för den arbetsplatsen under hela dess existens.</li>
+        <li>Att välja arbetsplatsen och specificera "från datum" kommer att visa rapporter från det valda datumet upp till dagens datum.</li>
+        <li>Att välja arbetsplatsen och specificera "till datum" kommer att visa rapporter från det datum arbetsplatsen lades till upp till ditt valda "till datum".</li>
+        <li>Att välja arbetsplatsen, "från datum" och "till datum" kommer att visa rapporter inom det angivna datumintervallet.</li>
     </ul>
 </div>
 
-<form id="time-report-form">
-    <div class="row">
-        <div class="col-md-4">
-            <label class="form-label" for="workplace-select">Select workplace:</label>
-            <select class="form-select" id="workplace-select">
-                <option>Workplace 1</option>
-                <option>Workplace 2</option>
-                <option>Workplace 3</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="from-date">From date:</label>
-            <input type="date" class="form-control" id="from-date">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="to-date">To date:</label>
-            <input type="date" class="form-control" id="to-date">
-        </div>
+<section id="filters" class="row">
+    <div class="col-md-4">
+        <label class="form-label" for="workplace-select">Välj arbetsplats:</label>
+        <select id="workplace-filter" class="form-select">
+            @foreach (var workplace in @Model.Workplaces)
+            {
+                <option value="@workplace.Id">@workplace.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="from-date">Från datum</label>
+        <input type="date" class="form-control" id="from-date">
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="to-date">Till datum::</label>
+        <input type="date" class="form-control" id="to-date">
     </div>
     <div class="btn-group d-block">
         <div class="mt-4 mb-4 float-start">
-            <form id="getDataForTimeReportsTable" asp-controller="Timereport" asp-action="PreviewTimeReport" method="get">
-                <button id="getReportsButton" class="btn btn-secondary" onclick="fetchTimeReports(event)"><span>DISPLAY REPORTS<i class="bi bi-search m-2"></i></span></button>
-            </form>
+            <button id="getReportsButton" class="btn btn-secondary" onclick="fetchTimeReports(event)"><span>VISA RAPPORTER<i class="bi bi-search m-2"></i></span></button>
         </div>
         <div class="mt-4 mb-4 float-end">
-            <form id="getViewCreateTimeReport" asp-controller="Timereport" asp-action="CreateTimeReport" method="get">
-                <button id="createReportsButton" class="btn btn-secondary" type="submit">CREATE REPORT<i class="bi bi-calendar3 m-2"></i></button>
-            </form>
+            <a asp-controller="Timereport" asp-action="CreateTimereport" class="btn btn-secondary" type="submit">SKAPA RAPPORT<i class="bi bi-calendar3 m-2"></i></a>
         </div>
     </div>
-</form>
+</section>
+
 
 <table id="time-report-table" class="table table-striped mt-4">
     <thead>
         <tr>
-            <th scope="col" class="col-4">Date</th>
-            <th scope="col" class="col-4">Workplace</th>
-            <th scope="col" class="col-2">Hours</th>
+            <th scope="col" class="col-4">Datum</th>
+            <th scope="col" class="col-4">Arbetsplatsnamn</th>
+            <th scope="col" class="col-2">Timmar</th>
             <th scope="col" class="col-2">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>2022-05-01</td>
-            <td>Workplace 1</td>
-            <td>08.00</td>
-            <td>
-                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                </button>
-            </td>
-        </tr>
-        <tr>
-            <td>2022-05-02</td>
-            <td>Workplace 2</td>
-            <td>07.00</td>
-            <td>
-                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                </button>
-            </td>
-        </tr>
-        <tr>
-            <td>2022-05-03</td>
-            <td>Workplace 3</td>
-            <td>06.00</td>
-            <td>
-                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                    <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                </button>
-            </td>
-        </tr>
+        @foreach (var timereport in Model.Timereports)
+        {
+            <tr>
+                <td>@timereport.Date.ToString("dd-MM-yyyy")</td>
+                <td>
+                    @{
+                        var workplace = Model.Workplaces.FirstOrDefault(w => w.Id == timereport.WorkplaceId);
+                        if (workplace != null)
+                        {
+                            @workplace.Name
+                        }
+                    }
+                </td>
+                <td>@timereport.Hours.ToString("0.00")</td>
+                <td>
+                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_@timereport.Id">
+                        <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-<!--Include report enrichment view modal window -->
-<partial name="~/Views/TimeReport/Modals/_ViewTimeReportModal.cshtml" />
-
+@foreach (var timereport in Model.Timereports)
+{
+    <div class="modal fade" id="timereportDetails_@timereport.Id" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">
+                        Tidsrapportdetaljer
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Datum:</strong> @timereport.Date.ToString("yyyy-MM-dd")</p>
+                                <p><strong>Arbetsplats:</strong> @timereport.WorkplaceId</p>
+                                <p><strong>Arbetade timmar:</strong> @timereport.Hours.ToString("0.00")</p>
+                                <p><strong>Information:</strong> @timereport.Info</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    @if (timereport.ImageFile != null)
+                                    {
+                                        <img src="@timereport.ImageFile.FileName" alt="Report Image" class="img-fluid">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/default/timereport/no_time_report_image.png" alt="Report Image" class="img-fluid">
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <!--Include required JS modules based on environment-->
 <environment include="Development">

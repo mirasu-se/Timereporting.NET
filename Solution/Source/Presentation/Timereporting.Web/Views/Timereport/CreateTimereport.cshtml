@@ -1,49 +1,35 @@
-﻿@model CreateTimereportViewModel
+﻿@model CreateTimereportFormModel
 
-<form id="create-time-report-form" method="post" enctype="multipart/form-data">
-    <div class="text-left m-5">
-        <h1 class="display-6">Create Time Report</h1>
-        <p>Step into the time-traveling world of time reports!</p>
-        <p>Unleash your imagination and fill in the form below to add a new time report.</p>
-    </div>
+<form id="create-time-report-form" method="post" enctype="multipart/form-data" class="mt-5">
+    <h1 class="display-6">SKAPA TIDSRAPPORT</h1>
+    <p>Träda in i tidsresandets värld av tidsrapporter!</p>
+    <p>Låt din fantasi flöda och fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
     <div class="form-group">
-        <label asp-for="@Model.SubFilterId">Select Report Type:</label>
-        <select asp-for="@Model.SubFilterId" class="form-control" id="SubFilterId">
-            <option value="1">Working Time Start Report</option>
-            <option value="2">Working Time Ending Report</option>
+        <select asp-for="@Model.WorkplaceId" class="form-control" id="WorkplaceId">
+            <option value="0">Välj arbetsplats</option>
+            @foreach (var workplace in @Model.Workplaces)
+            {
+                <option value="@workplace.Id">@workplace.Name</option>
+            }
         </select>
-        <span asp-validation-for="@Model.SubFilterId" class="text-danger"></span>
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.WorkplaceId" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.WorkplaceUUID">Select workplace:</label>
-        <select asp-for="@Model.WorkplaceUUID" class="form-control" id="WorkplaceId">
-            <option value="1">Workplace 1</option>
-            <option value="2">Workplace 2</option>
-        </select>
-        <span asp-validation-for="@Model.WorkplaceUUID" class="text-danger"></span>
-    </div>
-    <div class="form-group hidden">
-        <label asp-for="@Model.UserUUID">User UUID:</label>
-        <input asp-for="@Model.UserUUID" class="form-control" id="UserUUID">
-        <span asp-validation-for="@Model.UserUUID" class="text-danger"></span>
+        <label asp-for="@Model.Date">Datum:</label>
+        <input type="date" asp-for="@Model.Date" class="form-control" id="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.Date" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.Description">Description:</label>
-        <textarea asp-for="@Model.Description" class="form-control" id="Description"></textarea>
-        <span asp-validation-for="@Model.Description" class="text-danger"></span>
+        <label asp-for="@Model.Date">Arbetade timmar:</label>
+        <input type="number" step="0.10" asp-for="@Model.Hours" class="form-control" id="Hours">
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.Hours" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="@Model.TimeStarted">Time Started:</label>
-        <input type="time" asp-for="@Model.TimeStarted" class="form-control" id="TimeStarted">
-        <span asp-validation-for="@Model.TimeStarted" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="@Model.TimeEnded">Time Ended:</label>
-        <input type="time" asp-for="@Model.TimeEnded" class="form-control" id="TimeEnded">
-        <span asp-validation-for="@Model.TimeEnded" class="text-danger"></span>
-    </div>
-
     <div class="form-group">
         <img id="image-preview" src="~/img/default/timereport/default_time_report_image.png" onclick="openImageFileDialog()">
     </div>
@@ -51,17 +37,27 @@
         <label class="file-input invisible">
             <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" name="ImageFile" onchange="previewImage(event)">
         </label>
-        <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-group">
-        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimeReport(event, 'http://localhost:5001')">
-            <span class="m-2">SUBMIT TIME REPORT</span>
+        <label asp-for="@Model.Info">Information:</label>
+        <textarea asp-for="@Model.Info" class="form-control" id="Info" rows="6"></textarea>
+        <div class="mt-1 mb-1" role="alert">
+            <span asp-validation-for="@Model.Info" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimeReport(event)">
+            <span class="m-2">SKICKA IN TIDSRAPPORT</span>
             <i class="bi bi-send"></i>
         </button>
     </div>
 </form>
 
-<!--Include form submission validation modals -->
+<!--Include form submission validation modals and scripts-->
+<partial name="~/Views/Shared/Scripts/_ValidationScripts.cshtml" />
 <partial name="~/Views/Shared/Modals/_SubmissionSucessModal.cshtml" />
 <partial name="~/Views/Shared/Modals/_SubmissionFailedModal.cshtml" />
 

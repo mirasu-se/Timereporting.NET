@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Headers;
-using Timereporting.Infrastructure.Data;
-using Timereporting.Infrastructure.TagHelpers.Metadata.Services;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using Timereporting.UI.Features.TagHelpers.Metadata.Services;
+using Timereporting.Web.Configuration;
 
 namespace Timereporting.Web
 {
@@ -16,43 +11,59 @@ namespace Timereporting.Web
 
         public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
-            // Injected configuration is assigned to the Configuration property usin dependency injection
             Configuration = configuration;
             HostingEnvironment = hostingEnvironment;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigurationOptions(services);
+
+            ConfigureUIServices(services);
+        }
+
+
+
+        public void ConfigurationOptions(IServiceCollection services)
+        {
+            // Add antiforgery service
             services.AddAntiforgery();
 
-            // HostOptions Configuration: Configure the application host context from configuration file.
-            services.Configure<HostOptions>(Configuration.GetSection("HostOptions"));
-            var hostOptions = services.BuildServiceProvider().GetService<IOptions<HostOptions>>().Value;
+            // Add AddHttpClient 
+            services.AddHttpClient();
 
+            // Configure host options using app settings
+            services.Configure<WebHostingOptions>(Configuration.GetSection("WebHostingOptions"));
 
-            // Singleton Service Registration: Register the MetadataInjector as a singleton service.
-            services.AddSingleton<ITagHelperComponent, MetadataBuildingService>();
+            // Configure image options using so we can set different directories in app settings
+            services.Configure<FileHostingOptions>(Configuration.GetSection("FileHostingOptions"));
 
-            // MVC Configuration: Add MVC and enable razor runtime compilation.
+            // Configure API options using app settings
+            services.Configure<ApiHostingOptions>(Configuration.GetSection("ApiHostingOptions"));
+
+            // Add MVC services with Razor runtime compilation
             services.AddMvc(option => option.EnableEndpointRouting = true).AddRazorRuntimeCompilation();
+        }
+
+        public void ConfigureUIServices(IServiceCollection services)
+        {
+            // Register the MetadataTagBuildingService as a singleton tag helper component
+            services.AddSingleton<ITagHelperComponent, MetadataTagBuildingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-
             app.UseStaticFiles(); // Enable serving of static files
 
             app.UseRouting(); // Enable routing
 
-            app.UseStaticFiles(); // Configure static files middleware 
-
+            app.UseStaticFiles(); // Configure static files middleware
 
             if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage(); // Show detailed error information during development
             }
-
             else
             {
                 app.UseHttpsRedirection(); // Redirect HTTP requests to HTTPS
@@ -60,75 +71,67 @@ namespace Timereporting.Web
                 app.UseExceptionHandler("/error"); // Handle exceptions and redirect to an error page
             }
 
-            // Configuring the endpoints for request routing
             app.UseEndpoints(endpoints =>
             {
-                // Mapping the home route to the HomeController's Index action
                 endpoints.MapControllerRoute(
                     name: "home",
                     pattern: "/",
                     defaults: new { controller = "Home", action = "Index" });
 
-                // Mapping the time report preview route to the TimeReportController's PreviewTimeReport action
                 endpoints.MapControllerRoute(
-                    name: "timereports",
-                    pattern: "/timereports",
+                    name: "previewTimereport",
+                    pattern: "/timereport",
                     defaults: new { controller = "Timereport", action = "PreviewTimereport" });
 
-                // Mapping the time report creation route to the TimeReportController's CreateTimeReport action
                 endpoints.MapControllerRoute(
-                    name: "timereport",
-                    pattern: "/timereports/add-timereport",
+                    name: "createTimereport",
+                    pattern: "/timereport/create",
                     defaults: new { controller = "Timereport", action = "CreateTimereport" });
 
-                // Mapping the workplace preview route to the WorkplaceController's PreviewWorkplace action
                 endpoints.MapControllerRoute(
-                    name: "workplaces",
-                    pattern: "/workplaces",
+                    name: "previewWorkplace",
+                    pattern: "/workplace",
                     defaults: new { controller = "Workplace", action = "PreviewWorkplace" });
 
-                // Mapping the documentation database route to the DocumentationController's DatabaseWorks action
                 endpoints.MapControllerRoute(
-                    name: "documentation-database",
+                    name: "createWorkplace",
+                    pattern: "/workplace/create",
+                    defaults: new { controller = "Workplace", action = "CreateWorkplace" });
+
+                endpoints.MapControllerRoute(
+                    name: "databaseWorks",
                     pattern: "/docs/database",
                     defaults: new { controller = "Documentation", action = "DatabaseWorks" });
 
-                // Mapping the documentation API route to the DocumentationController's ApiDocumentation action
                 endpoints.MapControllerRoute(
-                    name: "documentation-api",
+                    name: "apiDocumentation",
                     pattern: "/docs/api",
                     defaults: new { controller = "Documentation", action = "ApiDocumentation" });
 
-                // Mapping the documentation Docker route to the DocumentationController's DockerCompose action
                 endpoints.MapControllerRoute(
-                    name: "documentation-docker",
+                    name: "dockerCompose",
                     pattern: "/docs/docker",
                     defaults: new { controller = "Documentation", action = "DockerCompose" });
 
-                // Mapping the documentation metadata route to the DocumentationController's MetadataInjection action
                 endpoints.MapControllerRoute(
-                    name: "documentation-metadata",
+                    name: "metadataInjection",
                     pattern: "/docs/metadata",
                     defaults: new { controller = "Documentation", action = "MetadataInjection" });
 
-                // Mapping the documentation performance route to the DocumentationController's PerformanceOptimization action
                 endpoints.MapControllerRoute(
-                    name: "documentation-performance",
+                    name: "performanceOptimization",
                     pattern: "/docs/performance",
                     defaults: new { controller = "Documentation", action = "PerformanceOptimization" });
 
-                // Mapping the documentation Webpack route to the DocumentationController's WebpackBundling action
                 endpoints.MapControllerRoute(
-                    name: "documentation-webpack",
+                    name: "webpackBundling",
                     pattern: "/docs/webpack",
                     defaults: new { controller = "Documentation", action = "WebpackBundling" });
 
-                // Default route for other controllers and actions
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                // Mapping Razor Pages endpoints
                 endpoints.MapRazorPages();
             });
         }

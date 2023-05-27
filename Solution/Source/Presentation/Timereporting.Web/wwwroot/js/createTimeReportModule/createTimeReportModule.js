@@ -121,50 +121,36 @@ function showModal(modalId, delay) {
     $('#' + modalId).modal('hide');
   }, delay);
 }
-
-// Function to submit the time report
-function submitTimeReport(event, apiHost) {
+function submitTimeReport(event) {
   event.preventDefault();
-  console.log("Trying to submit...");
-  const form = document.getElementById('create-time-report-form');
-
-  // Retrieve form data
-  const {
-    date,
-    hours,
-    workplace,
-    other,
-    image
-  } = form.elements;
-  const formData = new FormData();
-
-  // Append form data
-  formData.append('date', date.value);
-  formData.append('hours', hours.value);
-  formData.append('workplace', workplace.value);
-  formData.append('other', other.value);
-  formData.append('image', image.files[0]);
-
-  // Send AJAX request to submit the time report
-  $.ajax({
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false,
-    url: apiHost + '/api/v1/timereport',
-    success: function (data) {
-      // Handle successful submission
-      console.log('Time report submitted successfully:', data);
-      showSuccessModal();
-      disposeModalAfterDelay('reportSubmissionSuccessfulModal', 10000);
-    },
-    error: function (jqXhr, status, error) {
-      // Handle error
-      console.error('An error occurred while submitting the time report:', error);
-      showFailureModal();
-      disposeModalAfterDelay('reportSubmissionFailedModal', 10000);
-    }
-  });
+  var form = $('#create-time-report-form');
+  form.validate();
+  if (!form.valid()) {
+    return;
+  } else {
+    var formData = new FormData(form[0]);
+    $.ajax({
+      type: 'POST',
+      contentType: false,
+      processData: false,
+      url: 'http://localhost:5000/api/v1/timereport',
+      data: formData,
+      success: function () {
+        $('#WorkplaceId').val('0');
+        $('#Date').val('');
+        $('#Hours').val('');
+        $('#image').val('');
+        $('#Info').val('');
+        $('.success').html('Tidsrapporten har skickats in.');
+        setTimeout(function () {
+          window.location.reload();
+        }, 5000);
+      },
+      error: function () {
+        $('.error').html('Något gick fel och vi kunde inte skicka in tidsrapporten. Vänligen försök igen senare.');
+      }
+    });
+  }
 }
 
 // Expose functions to the global scope

@@ -121,41 +121,41 @@ function showModal(modalId, delay) {
     $('#' + modalId).modal('hide');
   }, delay);
 }
-function submitWorkplaceForm(event, apiHost) {
-  event.preventDefault();
-  console.log("Trying to submit...");
-  const form = document.getElementById('create-workplace-form');
-
-  // Extract the form data
-  const name = form.elements.name.value;
-  const address = form.elements.address.value;
-  const info = form.elements.info.value;
-  const image = form.elements.image.files[0];
-  const formData = new FormData();
-  formData.append('name', name);
-  formData.append('address', address);
-  formData.append('info', info);
-  formData.append('image', image);
-
-  // Perform an AJAX request to submit the form data
-  $.ajax({
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false,
-    url: apiHost + '/api/v1/workplace',
-    success: function (data) {
-      // Handle successful submission
-      console.log('Workplace form submitted successfully:', data);
-      showModal('submissionSuccessfulModal', 10000);
-    },
-    error: function (jqXhr, status, error) {
-      // Handle error
-      console.error('An error occurred while submitting the workplace form:', error);
-      showModal('submissionFailedModal', 10000);
+function submitWorkplaceForm() {
+  $('#create-workplace-form').submit(function (e) {
+    e.preventDefault();
+    var form = $(this);
+    form.validate();
+    if (!form.valid()) {
+      return;
+    } else {
+      var formData = new FormData();
+      formData.append('name', $('#name').val());
+      formData.append('info', $('#info').val());
+      formData.append('imageFile', $('#image')[0].files[0]);
+      $.ajax({
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        url: 'http://localhost:5000/api/v1/workplace',
+        data: formData,
+        success: function () {
+          $('#name').val('');
+          $('#info').val('');
+          $('#image').val('');
+          $('.success').html('Arbetsplatsen har skickats framgångsrikt!!');
+          setTimeout(function () {
+            window.location.reload();
+          }, 5000);
+        },
+        error: function () {
+          $('.error').html('Något gick fel. Vänligen försök igen senare.');
+        }
+      });
     }
   });
 }
+;
 
 // Expose functions to the global scope
 window.previewImage = previewImage;

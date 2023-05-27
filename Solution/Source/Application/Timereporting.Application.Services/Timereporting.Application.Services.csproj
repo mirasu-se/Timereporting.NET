@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Interaction\Timereporting.Interaction.DTO\Timereporting.Interaction.DTO.csproj" />
-    <ProjectReference Include="..\Timereporting.Application.Repositories\Timereporting.Application.Repositories.csproj" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Timereporting.Domain.Repositories\Timereporting.Domain.Repositories.csproj" />
+    <ProjectReference Include="..\..\Domain\Timereporting.Domain.Services\Timereporting.Domain.Services.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Timereporting.Infrastructure.Repositories\Timereporting.Infrastructure.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

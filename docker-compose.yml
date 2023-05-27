@@ -10,7 +10,7 @@ services:
     image: milenkoraic/timereporting:1.0.0
     build:
       context: .
-      dockerfile: Solution/Source/Interface/Timereporting.Api/Dockerfile
+      dockerfile: Solution/Source/Presentation/Timereporting.Api/Dockerfile
 
   # Configures the web container that will host the Timereporting.Web application.
   timereporting.web:

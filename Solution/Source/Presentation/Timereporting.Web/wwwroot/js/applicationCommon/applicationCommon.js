@@ -125,7 +125,7 @@ class dateTimeProvider {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "configureEnvironmentServices": () => (/* binding */ configureEnvironmentServices)
+/* harmony export */   configureEnvironmentServices: () => (/* binding */ configureEnvironmentServices)
 /* harmony export */ });
 /* harmony import */ var _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../application/appIdentityCore */ "./src/js/application/appIdentityCore.js");
 /* harmony import */ var _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../logging/appLogger */ "./src/js/infrastructure/logging/appLogger.js");
@@ -789,16 +789,6 @@ __webpack_require__.r(__webpack_exports__);
 const appBaseName = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppBaseName();
 const appLogLevel = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppLogLevel();
 const appEnvironment = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppEnvironment();
-
-// Log module availability and information
-if (appEnvironment === 'DEVELOPMENT') {
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logTitle(' is up and running!', appLogLevel, false);
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage('LOG FROM MODULE: ApplicationCommon.js', false);
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage('MODULE LOCATION: Timereporting.Web/Webpack/src/js/ApplicationCommon.js', false);
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage('CONFIGURATION FILE: Timereporting.Web/Webpack/webpack/webpack.common-mvc.js', false);
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage('DESCRIPTION:', false);
-  _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage('ApplicationCommon.js is a shared JavaScript module that provides common functionality and utilities across all views. It encapsulates reusable code and ensures consistency throughout the application. Any changes or updates made to this script will have a global impact on the application behavior and features. Please exercise caution and review the documentation before modifying this file.', false);
-}
 
 // Get the button element
 var scrollToTopBtn = document.getElementById("scrollToTopBtn");

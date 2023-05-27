@@ -1,4 +1,4 @@
-﻿@model UserLoginModalViewModel
+﻿@*@model LoginFormModel*@
 
 <!-- Start login modal -->
 <div class="modal fade" id="appLoginModal" tabindex="-1" aria-labelledby="appLoginModalLabel" aria-hidden="true">
@@ -23,7 +23,7 @@
                     </p>
                 </div>
                 <form id="account" method="post">
-                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
+@*                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
                     {
                         @foreach (var error in @ViewData.ModelState[string.Empty]?.Errors)
                         {
@@ -34,7 +34,7 @@
                                 </button>
                             </div>
                         }
-                    }
+                    }*@
                     <div class="form-group mb-3">
                         <div class="input-group input-group-alternative">
                             <div class="input-group-prepend">
@@ -42,9 +42,11 @@
                                     <i class="ni ni-email-83"></i>
                                 </span>
                             </div>
-                            <input asp-for="@Model.Email" class="form-control" placeholder="Email" type="email" />
+@*                            <input asp-for="@Model.Email" class="form-control" placeholder="Email" type="email" />*@
+                            <input class="form-control" placeholder="Email" type="email" />
                         </div>
-                        <span asp-validation-for="@Model.Email" class="invalid-feedback" style="display: block"></span>
+@*                        <span asp-validation-for="@Model.Email" class="invalid-feedback" style="display: block"></span>*@
+                        <span class="invalid-feedback" style="display: block"></span>
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-alternative">
@@ -53,9 +55,11 @@
                                     <i class="ni ni-lock-circle-open"></i>
                                 </span>
                             </div>
-                            <input asp-for="@Model.Password" placeholder="Password" type="password" class="form-control" />
+@*                            <input asp-for="@Model.Password" placeholder="Password" type="password" class="form-control" />*@
+                            <input placeholder="Password" type="password" class="form-control" />
                         </div>
-                        <span asp-validation-for="@Model.Password" class="invalid-feedback" style="display: block"></span>
+@*                        <span asp-validation-for="@Model.Password" class="invalid-feedback" style="display: block"></span>*@
+                        <span class="invalid-feedback" style="display: block"></span>
                     </div>
                     <div class="text-center">
                         <button class="btn btn-secondary my-4" type="submit">Sign in</button>

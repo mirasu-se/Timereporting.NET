@@ -14,6 +14,8 @@ services:
       - timereporting-data:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - timereporting-network
 
   # Define the API service
   timereporting.api:
@@ -22,7 +24,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5000:80"
-    #command: sh -c 'dotnet ef database update && dotnet run'
+    volumes:
+      - timereporting-files:/app/UploadedFiles
+    networks:
+      - timereporting-network
 
   # Define the web service
   timereporting.web:
@@ -31,8 +36,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5001:80"
+    networks:
+      - timereporting-network
 
 # Define volumes for the database and data protection keys
 volumes:
   timereporting-data:
     name: timereporting-data
+  timereporting-files:
+    name: timereporting-files
+
+# Define the custom network
+networks:
+  timereporting-network:
+    driver: bridge

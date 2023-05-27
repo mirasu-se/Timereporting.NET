@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interaction\Timereporting.Interaction.DataTransfer\Timereporting.Interaction.DataTransfer.csproj" />
+    <ProjectReference Include="..\Timereporting.Domain.Entities\Timereporting.Domain.Entities.csproj" />
+  </ItemGroup>
+
 </Project>
