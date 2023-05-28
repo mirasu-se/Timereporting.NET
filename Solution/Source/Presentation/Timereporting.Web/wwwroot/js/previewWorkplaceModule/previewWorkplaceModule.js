@@ -1,8 +1,9 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
-/*!***********************************************************************!*\
-  !*** ./src/js/presentation/views/workplace/previewWorkplaceModule.js ***!
-  \***********************************************************************/
-
+/*!********************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.web/views/workplace/previewWorkplaceModule.js ***!
+  \********************************************************************************************/
+﻿
 /******/ })()
 ;
+//# sourceMappingURL=previewWorkplaceModule.js.map

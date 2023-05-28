@@ -2,232 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/js/application/appIdentityCore.js":
-/*!***********************************************!*\
-  !*** ./src/js/application/appIdentityCore.js ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class appIdentityCore {
-  static getAppBaseName() {
-    return 'Timereports.Web';
-  }
-  static getAppBaseUrl() {
-    return 'http://localhost:5000';
-  }
-  static getAppEnvironment() {
-    return 'DEVELOPMENT';
-  }
-  static getAppLogLevel() {
-    return 'Info';
-  }
-  static getAppVersion() {
-    return '1.0.0';
-  }
-  static getAppMaxRequestSize() {
-    return 1048576;
-  }
-  static getApiBaseName() {
-    return 'Timereports.Api';
-  }
-  static getApiBaseUrl() {
-    return 'http://localhost:5001';
-  }
-  static getApiEnvironment() {
-    return 'DEVELOPMENT';
-  }
-  static setAppName(appBaseName) {
-    appIdentityCore.appBaseName = appBaseName;
-  }
-  static setAppBaseUrl(appBaseUrl) {
-    appIdentityCore.appBaseUrl = appBaseUrl;
-  }
-  static setAppEnvironment(appEnvironment) {
-    appIdentityCore.appEnvironment = appEnvironment;
-  }
-  static setAppLogLevel(appLogLevel) {
-    appIdentityCore.appLogLevel = appLogLevel;
-  }
-  static setAppVersion(appVersion) {
-    appIdentityCore.appVersion = appVersion;
-  }
-  static setAppMaxRequestSize(appMaxRequestSize) {
-    appIdentityCore.appMaxRequestSize = appMaxRequestSize;
-  }
-  static setApiBaseName(apiBaseName) {
-    appIdentityCore.apiBaseName = apiBaseName;
-  }
-  static setApiBaseUrl(apiBaseUrl) {
-    appIdentityCore.apiBaseUrl = apiBaseUrl;
-  }
-  static setApiEnvironment(apiEnvironment) {
-    appIdentityCore.apiEnvironment = apiEnvironment;
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (appIdentityCore);
-
-/***/ }),
-
-/***/ "./src/js/infrastructure/datetime/dateTimeProvider.js":
-/*!************************************************************!*\
-  !*** ./src/js/infrastructure/datetime/dateTimeProvider.js ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-// A class for providing date and time information
-class dateTimeProvider {
-  // Get the current date and time
-  static getCurrentDateTime() {
-    const currentDate = new Date();
-    const options = {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      fractionalSecondDigits: 3
-    };
-    // Return the formatted current date and time as a string
-    return currentDate.toLocaleString('en-GB', options);
-  }
-
-  // Get the current time
-  static getCurrentTime() {
-    const currentDate = new Date();
-    const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      fractionalSecondDigits: 3
-    };
-    // Return the formatted current time as a string
-    return currentDate.toLocaleString('en-GB', options);
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dateTimeProvider);
-
-/***/ }),
-
-/***/ "./src/js/infrastructure/environment/configurationResolver.js":
-/*!********************************************************************!*\
-  !*** ./src/js/infrastructure/environment/configurationResolver.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   configureEnvironmentServices: () => (/* binding */ configureEnvironmentServices)
-/* harmony export */ });
-/* harmony import */ var _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../application/appIdentityCore */ "./src/js/application/appIdentityCore.js");
-/* harmony import */ var _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../logging/appLogger */ "./src/js/infrastructure/logging/appLogger.js");
-// Import application identity core from appIdentityCore.js
-
-// Import application logger from AppLogger.js
-
-const appBaseName = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppBaseName();
-const appEnvironment = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppEnvironment();
-const appLogLevel = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppLogLevel();
-function configureEnvironmentServices() {
-  switch (appEnvironment) {
-    case 'DEVELOPMENT':
-      // Configure functionality for the development environment
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + appBaseName + ' is in [' + appEnvironment + '] environment!', false);
-
-      // Configure functionality for the development environment
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + appEnvironment + ' CONFIGURATION HAS BEEN INITIALIZED', false);
-      break;
-    case 'PRODUCTION':
-      // Configure functionality for the production environment
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(appBaseName + ' is currently running in [' + appEnvironment + '] environment!', false);
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + 'All modules and styles are compressed!', false);
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + 'Initializing [' + appEnvironment + '] configuration...', false);
-      break;
-    case 'STAGING':
-      // Configure functionality for the staging environment
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(appBaseName + ' is currently running in [' + appEnvironment + '] environment!', false);
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + 'Performing staging environment specific configurations...', false);
-      break;
-    // Add more cases for other popular environments as needed
-    default:
-      // Default case for unknown environments
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('Unknown environment: ' + appEnvironment, false);
-      _logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage('[' + appLogLevel + '] ' + 'Initializing configuration for unknown environment...', false);
-      break;
-  }
-}
-
-/***/ }),
-
-/***/ "./src/js/infrastructure/logging/appLogger.js":
-/*!****************************************************!*\
-  !*** ./src/js/infrastructure/logging/appLogger.js ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../application/appIdentityCore */ "./src/js/application/appIdentityCore.js");
-/* harmony import */ var _datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../datetime/dateTimeProvider */ "./src/js/infrastructure/datetime/dateTimeProvider.js");
-
-
-const appEnvironment = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppEnvironment();
-const appLogLevel = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppLogLevel();
-const currentDateTime = _datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentDateTime();
-const currentTime = _datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentTime();
-class appLogger {
-  constructor(appLogLevel) {
-    this.appEnvironment = appEnvironment;
-    this.appLogLevel = appLogLevel;
-    this.currentDateTime = currentDateTime;
-    this.currentTime = currentTime;
-  }
-  logTitle(label, appLogLevel = this.appLogLevel, includeTime = true) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const dateTimePrefix = includeTime ? `[${this.currentDateTime}] ` : '';
-      console.groupCollapsed(`${this.currentDateTime} [${appLogLevel}] ${dateTimePrefix}${label}`);
-    }
-  }
-  logMessage(message, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${message}`);
-    } else {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${message}`);
-    }
-  }
-  logException(exception, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${exception}`);
-    }
-  }
-  logError(error, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${error}`);
-    }
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new appLogger(appLogLevel));
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/applicationCommon.scss":
-/*!*********************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/applicationCommon.scss ***!
-  \*********************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./source/sass/applicationCommon.scss":
+/*!************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./source/sass/applicationCommon.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -369,10 +147,10 @@ module.exports = function (item) {
 
 /***/ }),
 
-/***/ "./src/sass/applicationCommon.scss":
-/*!*****************************************!*\
-  !*** ./src/sass/applicationCommon.scss ***!
-  \*****************************************/
+/***/ "./source/sass/applicationCommon.scss":
+/*!********************************************!*\
+  !*** ./source/sass/applicationCommon.scss ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -391,7 +169,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_node_modules_mini_css_extract_plugin_dist_loader_js_node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_applicationCommon_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!../../node_modules/mini-css-extract-plugin/dist/loader.js!../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!./applicationCommon.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/applicationCommon.scss");
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_node_modules_mini_css_extract_plugin_dist_loader_js_node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_applicationCommon_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!../../node_modules/mini-css-extract-plugin/dist/loader.js!../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!./applicationCommon.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./source/sass/applicationCommon.scss");
 
       
       
@@ -688,6 +466,295 @@ function styleTagTransform(css, styleElement) {
 }
 module.exports = styleTagTransform;
 
+/***/ }),
+
+/***/ "./source/js/application/appIdentityCore.js":
+/*!**************************************************!*\
+  !*** ./source/js/application/appIdentityCore.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Timereporting_Web_appsettings_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.json */ "../../../Timereporting.Web/appsettings.json");
+
+
+const appIdentityCore = {
+  config: _Timereporting_Web_appsettings_json__WEBPACK_IMPORTED_MODULE_0__.appIdentity,
+
+  loadConfig(config) {
+    this.config = { ...this.config, ...config };
+  },
+
+  getAppBaseName() {
+    return this.config.appBaseName;
+  },
+
+  getAppBaseUrl() {
+    return this.config.appBaseUrl;
+  },
+
+  getAppEnvironment() {
+    return this.config.appEnvironment;
+  },
+
+  getAppLogLevel() {
+    return this.config.appLogLevel;
+  },
+
+  getAppVersion() {
+    return this.config.appVersion;
+  },
+
+  getAppMaxRequestSize() {
+    return this.config.appMaxRequestSize;
+  },
+
+  getApiBaseName() {
+    return this.config.apiBaseName;
+  },
+
+  getApiBaseUrl() {
+    return this.config.apiBaseUrl;
+  },
+
+  getApiEnvironment() {
+    return this.config.apiEnvironment;
+  },
+
+  getApiVersion() {
+    return this.config.apiVersion;
+  },
+
+  splitVersion(version) {
+    return version.split('.');
+  },
+
+  getAppSyncVersion() {
+    const { appBuildMajorVersion, appBuildMinorVersion, appBuildPatchVersion } = this.config;
+    return `${appBuildMajorVersion}.${appBuildMinorVersion}.${appBuildPatchVersion}`;
+  },
+
+  getApiSyncVersion() {
+    const { apiBuildMajorVersion, apiBuildMinorVersion, apiBuildPatchVersion } = this.config;
+    return `${apiBuildMajorVersion}.${apiBuildMinorVersion}.${apiBuildPatchVersion}`;
+  },
+
+  getAppEnvironmentUrl() {
+    if (this.config.appEnvironment === 'DEVELOPMENT') {
+      return 'http://localhost:5001';
+    } else if (this.config.appEnvironment === 'STAGING') {
+      return 'https://staging-domain.com';
+    } else if (this.config.appEnvironment === 'PRODUCTION') {
+      return 'https://production-domain.com';
+    }
+  },
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (appIdentityCore);
+
+/***/ }),
+
+/***/ "./source/js/application/environment/appEnvironmentResolver.js":
+/*!*********************************************************************!*\
+  !*** ./source/js/application/environment/appEnvironmentResolver.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../appIdentityCore */ "./source/js/application/appIdentityCore.js");
+/* harmony import */ var _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../application/logging/appLogger */ "./source/js/application/logging/appLogger.js");
+
+
+
+const appBaseName = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppBaseName();
+const appVersion = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppVersion();
+const appLogLevel = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppLogLevel();
+const appEnvironment = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppEnvironment();
+
+class appEnvironmentResolver {
+  static configureEnvironment() {
+    let isDevelopmentConfigured = false; 
+    let isStaggingConfigured = false; 
+    let isProductionConfigured = false; 
+
+    switch (appEnvironment) {
+      // Configure functionality for the development environment
+      case 'DEVELOPMENT':
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`[${appLogLevel}] - Hello dev, welcome to ${appBaseName} ${appVersion}, you are running in [${appEnvironment}] environment. Happy coding!`, false);
+         // In this environment application will display console logs      
+        // Add logic to configure development environment
+         // ...........ADD YOUR CODE HERE.................
+
+        isDevelopmentConfigured = true;
+        if(isDevelopmentConfigured === true){
+          _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`${appEnvironment} configuration has been initialized succesfuly!`, true);
+        }
+        else{
+          _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`Something went wrong while initializing ${appEnvironment} configuration!`, true);
+        }
+        break;
+      // Configure functionality for the staging environment
+      case 'STAGING':
+         // In this environment application will not display console logs but we can uncomment logging for testing purposes
+         // appLogger.logMessage(`Hello stagger, welcome to ${appBaseName} ${appVersion}, you are running in [${appEnvironment}] environment.);
+         
+         // ...........ADD YOUR CODE HERE.................
+
+        isStaggingConfigured = true;
+        if(isStaggingConfigured === true){
+          // appLogger.logMessage(`${appEnvironment} configuration has been initialized succesfuly!`, true);
+        }
+        else{
+          // appLogger.logMessage(`Something went wrong while initializing ${appEnvironment} configuration!`, true);
+        }
+          break;
+      // Configure functionality for the production environment
+      case 'PRODUCTION':
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`${appBaseName} is currently running in [${appEnvironment}] environment!`, false);
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`[${appLogLevel}] All modules and styles are compressed!`, false);
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`[${appLogLevel}] Initializing [${appEnvironment}] configuration...`, false);
+        // Configure functionality for the production environment
+        break;
+      default:
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`Unknown environment: ${appEnvironment}`, false);
+        _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_1__["default"].logMessage(`[${appLogLevel}] Initializing configuration for unknown environment...`, false);
+        // Default case for unknown environments
+        break;
+    }
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (appEnvironmentResolver);
+
+
+/***/ }),
+
+/***/ "./source/js/application/logging/appLogger.js":
+/*!****************************************************!*\
+  !*** ./source/js/application/logging/appLogger.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../appIdentityCore */ "./source/js/application/appIdentityCore.js");
+/* harmony import */ var _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../infrastructure/datetime/dateTimeProvider */ "./source/js/infrastructure/datetime/dateTimeProvider.js");
+
+
+
+
+const appEnvironment = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppEnvironment();
+const appLogLevel = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppLogLevel();
+const currentDateTime = _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentDateTime();
+const currentTime = _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentTime();
+
+class appLogger {
+  constructor(appLogLevel) {
+    this.appEnvironment = appEnvironment;
+    this.appLogLevel = appLogLevel;
+    this.currentDateTime = currentDateTime;
+    this.currentTime = currentTime;
+  }
+
+  logTitle(label, appLogLevel = this.appLogLevel, includeTime = true) {
+    if (this.appEnvironment === 'DEVELOPMENT') {
+      const dateTimePrefix = includeTime ? `[${this.currentDateTime}] ` : '';
+      console.groupCollapsed(`${this.currentDateTime} [${appLogLevel}] ${dateTimePrefix}${label}`);
+    }
+  }
+
+  logMessage(message, includeTime) {
+    if (this.appEnvironment === 'DEVELOPMENT') {
+      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
+      console.log(`${timePrefix} ${message}`);
+    } else {
+      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
+      console.log(`${timePrefix} ${message}`);
+    }
+  }
+
+  logException(exception, includeTime) {
+    if (this.appEnvironment === 'DEVELOPMENT') {
+      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
+      console.log(`${timePrefix} ${exception}`);
+    }
+  }
+
+  logError(error, includeTime) {
+    if (this.appEnvironment === 'DEVELOPMENT') {
+      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
+      console.log(`${timePrefix} ${error}`);
+    }
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new appLogger(appLogLevel));
+
+
+/***/ }),
+
+/***/ "./source/js/infrastructure/datetime/dateTimeProvider.js":
+/*!***************************************************************!*\
+  !*** ./source/js/infrastructure/datetime/dateTimeProvider.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// A class for providing date and time information
+class dateTimeProvider {
+  // Get the current date and time
+  static getCurrentDateTime() {
+    const currentDate = new Date();
+    const options = {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3,
+    };
+    // Return the formatted current date and time as a string
+    return currentDate.toLocaleString('en-GB', options);
+  }
+
+  // Get the current time
+  static getCurrentTime() {
+    const currentDate = new Date();
+    const options = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3,
+    };
+    // Return the formatted current time as a string
+    return currentDate.toLocaleString('en-GB', options);
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dateTimeProvider); 
+
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.json":
+/*!***************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.json ***!
+  \***************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"appIdentity":{"appBaseName":"Timereports.Web","appBaseUrl":"http://localhost:5001","appEnvironment":"DEVELOPMENT","appLogLevel":"Info","appVersion":"1.0.0","appMaxRequestSize":1048576,"apiBaseName":"Timereports.Api","apiBaseUrl":"http://localhost:5000/api/v1","apiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}},"Email":{"EnableSsl":false,"Host":"mail-server","Port":25,"Addresses":{"Sender":"info@dstx.se","Recipient":"develop@dstx.se"}},"WebHostingOptions":{"BasePublicUrl":"https://timereporting.trinax.se"},"ApiHostingOptions":{"BasePublicUrl":"https://arbetsprov.trinax.se","ApiEndpoint":"https://arbetsprov.trinax.se/api/v1/"},"FileHostingOptions":{"FileHostingUrl":"","TimereportFileDirectory":"Resources/Timereport","WorkplaceFileDirectory":"Resources/Workplace"}}');
+
 /***/ })
 
 /******/ 	});
@@ -766,14 +833,14 @@ module.exports = styleTagTransform;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!*************************************!*\
-  !*** ./src/js/applicationCommon.js ***!
-  \*************************************/
+/*!****************************************!*\
+  !*** ./source/js/applicationCommon.js ***!
+  \****************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _sass_applicationCommon_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sass/applicationCommon.scss */ "./src/sass/applicationCommon.scss");
-/* harmony import */ var _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./application/appIdentityCore */ "./src/js/application/appIdentityCore.js");
-/* harmony import */ var _infrastructure_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./infrastructure/logging/appLogger */ "./src/js/infrastructure/logging/appLogger.js");
-/* harmony import */ var _infrastructure_environment_configurationResolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./infrastructure/environment/configurationResolver */ "./src/js/infrastructure/environment/configurationResolver.js");
+/* harmony import */ var _sass_applicationCommon_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sass/applicationCommon.scss */ "./source/sass/applicationCommon.scss");
+/* harmony import */ var _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./application/appIdentityCore */ "./source/js/application/appIdentityCore.js");
+/* harmony import */ var _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./application/logging/appLogger */ "./source/js/application/logging/appLogger.js");
+/* harmony import */ var _application_environment_appEnvironmentResolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./application/environment/appEnvironmentResolver */ "./source/js/application/environment/appEnvironmentResolver.js");
 // Import common application styles
 
 // Import application identity core from appIdentityCore.js
@@ -781,25 +848,35 @@ __webpack_require__.r(__webpack_exports__);
 // Import application logger from appLogger.js
 
 
-// Import the configureFunctionality function from AppEnvironment.js
 
 
-// Invoke the configureServices method
-(0,_infrastructure_environment_configurationResolver__WEBPACK_IMPORTED_MODULE_3__.configureEnvironmentServices)();
+// Invoke the AppEnvironmentServices to resolve environment configuration 
+_application_environment_appEnvironmentResolver__WEBPACK_IMPORTED_MODULE_3__["default"].configureEnvironment();
+
+
 const appBaseName = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppBaseName();
-const appLogLevel = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppLogLevel();
+const appVersion = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppVersion();
 const appEnvironment = _application_appIdentityCore__WEBPACK_IMPORTED_MODULE_1__["default"].getAppEnvironment();
+
+const module = "applicationCommon.js";
+const moduleLocation = "source/js/applicationCommon.js";
+
+// Log informative information using appLogger
+_application_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage(`Application Registered: ${appBaseName} v ${appVersion}`, true);
+_application_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage(`Application Environment: ${appEnvironment}`, true);
+_application_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage(`Module Registered: ${module}`, true);
+_application_logging_appLogger__WEBPACK_IMPORTED_MODULE_2__["default"].logMessage(`Module Location: ${moduleLocation}`, true);
 
 // Get the button element
 var scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
 // Function to check if the page has been scrolled enough to show the button
 function toggleScrollToTopButton() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    scrollToTopBtn.classList.add("active");
-  } else {
-    scrollToTopBtn.classList.remove("active");
-  }
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        scrollToTopBtn.classList.add("active");
+    } else {
+        scrollToTopBtn.classList.remove("active");
+    }
 }
 
 // Add scroll event listener to the window
@@ -807,14 +884,16 @@ window.addEventListener("scroll", toggleScrollToTopButton);
 
 // Function to smoothly scroll back to the top of the page when the button is clicked
 function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 // Add click event listener to the button
 scrollToTopBtn.addEventListener("click", scrollToTop);
+
+
 })();
 
 /******/ })()

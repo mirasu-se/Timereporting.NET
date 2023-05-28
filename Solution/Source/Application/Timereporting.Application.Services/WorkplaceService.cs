@@ -63,6 +63,16 @@ namespace Timereporting.Application.Services
             try
             {
                 var workplaceEntity = _mapper.Map<WorkplaceEntity>(workplaceDataModel);
+
+                if (workplaceDataModel.ImageFile != null)
+                {
+                    workplaceEntity.ImageUrl = workplaceDataModel.ImageFile.FileName;
+
+                    using var memoryStream = new MemoryStream();
+                    await workplaceDataModel.ImageFile.CopyToAsync(memoryStream);
+                    workplaceEntity.ImageData = memoryStream.ToArray();
+                }
+
                 await _workplaceRepository.CreateWorkplaceAsync(workplaceEntity);
             }
             catch (Exception ex)
@@ -81,6 +91,15 @@ namespace Timereporting.Application.Services
                     throw new NotFoundException($"Workplace with ID {id} not found.");
 
                 _mapper.Map(updatedWorkplaceDataModel, existingWorkplace);
+
+                if (updatedWorkplaceDataModel.ImageFile != null)
+                {
+                    existingWorkplace.ImageUrl = updatedWorkplaceDataModel.ImageFile.FileName;
+
+                    using var memoryStream = new MemoryStream();
+                    await updatedWorkplaceDataModel.ImageFile.CopyToAsync(memoryStream);
+                    existingWorkplace.ImageData = memoryStream.ToArray();
+                }
 
                 await _workplaceRepository.UpdateWorkplaceAsync(existingWorkplace);
             }

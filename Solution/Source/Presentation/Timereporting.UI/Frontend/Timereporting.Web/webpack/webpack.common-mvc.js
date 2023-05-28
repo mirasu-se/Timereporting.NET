@@ -4,13 +4,13 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    // Entry points for different modules
-    applicationCommon: path.resolve(__dirname, '../src/js/applicationCommon.js'),
-    applicationVendor: path.resolve(__dirname, '../src/js/applicationVendor.js'),
-    previewTimeReportModule: path.resolve(__dirname, '../src/js/presentation/views/timereport/previewTimeReportModule.js'),
-    createTimeReportModule: path.resolve(__dirname, '../src/js/presentation/views/timereport/createTimeReportModule.js'),
-    previewWorkplaceModule: path.resolve(__dirname, '../src/js/presentation/views/workplace/previewWorkplaceModule.js'),
-    createWorkplaceModule: path.resolve(__dirname, '../src/js/presentation/views/workplace/createWorkplaceModule.js'),
+    // Entry points for different modules required by the Asp NET Core Web App
+    applicationCommon: path.resolve(__dirname, '../source/js/applicationCommon.js'),
+    applicationVendor: path.resolve(__dirname, '../source/js/applicationVendor.js'),
+    previewTimeReportModule: path.resolve(__dirname, '../source/js/presentation/timereporting.web/views/timereport/previewTimeReportModule.js'),
+    createTimeReportModule: path.resolve(__dirname, '../source/js/presentation/timereporting.web/views/timereport/createTimeReportModule.js'),
+    previewWorkplaceModule: path.resolve(__dirname, '../source/js/presentation/timereporting.web/views/workplace/previewWorkplaceModule.js'),
+    createWorkplaceModule: path.resolve(__dirname, '../source/js/presentation/timereporting.web/views/workplace/createWorkplaceModule.js'),
   },
   output: {
     // Output configuration
@@ -32,14 +32,14 @@ module.exports = {
     // Copy files from Source directory to output directory
     new CopyWebpackPlugin({
       patterns: [
-        { from: path.resolve('./src/assets'), to: './' },
+        { from: path.resolve('./source/assets'), to: './' },
       ],
     }),
   ],
   resolve: {
     alias: {
       // Define an alias for the Source directory
-      '~': path.resolve(__dirname, '../src'),
+      '~': path.resolve(__dirname, '../source'),
     },
   },
   module: {
@@ -52,7 +52,7 @@ module.exports = {
           'css-loader', // Translates CSS into CommonJS modules
           'sass-loader' // Compiles Sass to CSS
         ],
-      },      
+      },
       // Rule for processing the Bootstrap icons
       {
         test: /\.(woff|woff2|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -85,5 +85,8 @@ module.exports = {
         ],
       },
     ],
+  },
+  stats: {
+    errorDetails: true,
   },
 };

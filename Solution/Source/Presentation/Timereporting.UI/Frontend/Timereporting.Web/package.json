@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A light foundation for your next frontend project based on webpack.",
   "scripts": {
+    "postinstall": "link-module-alias",
     "mvc-dev": "webpack --config webpack/webpack.config.mvc-dev.js ",
     "mvc-build": "webpack --config webpack/webpack.config.mvc-prod.js"
   },
@@ -59,7 +60,9 @@
     "jquery-lazyload": "^1.9.7",
     "jquery-ui": "^1.12.1",
     "jquery.scrollbar": "^0.2.11",
+    "link-module-alias": "^1.2.0",
     "mini-css-extract-plugin": "^2.7.5",
+    "module-alias": "^2.2.2",
     "node-sass": "^8.0.0",
     "postcss-loader": "^7.3.0",
     "sass": "^1.62.1",

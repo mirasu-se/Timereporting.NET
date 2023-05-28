@@ -87,58 +87,28 @@ namespace Timereporting.Api.Controllers
                     ImageFile = formModel.ImageFile
                 };
 
-                var workplace = await _workplaceService.GetWorkplaceByIdAsync(dataModel.Id);
+                await _workplaceService.CreateWorkplaceAsync(dataModel);
 
                 var fileHostingOptions = _fileHostingOptions.Value;
                 if (fileHostingOptions == null)
                 {
-                    _logger.LogError("Error occurred while. FileHostingOptions is null.");
+                    _logger.LogError("File hosting option is not specified.");
                     throw new Exception();
                 }
-
-                var storageDirectory = "/Resources/Images/Timereport";
-
-                var fileName = await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
-
-                await _workplaceService.CreateWorkplaceAsync(dataModel);
+                else
+                {
+                    var storageDirectory = fileHostingOptions.WorkplaceFileDirectory;
+                    if (formModel.ImageFile != null)
+                    {
+                        await _imageFileService.UploadImageAsync(formModel.ImageFile, storageDirectory);
+                    }
+                }
 
                 return Ok();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while creating workplace.");
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-        }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWorkplace(int id, WorkplaceRequestModel updatedWorkplace)
-        {
-            try
-            {
-                var existingWorkplace = await _workplaceService.GetWorkplaceByIdAsync(id);
-
-                if (existingWorkplace == null)
-                    return NotFound();
-
-                existingWorkplace.Name = updatedWorkplace.Name;
-                existingWorkplace.CreatedTime = updatedWorkplace.CreatedTime;
-                existingWorkplace.Info = updatedWorkplace.Info;
-                existingWorkplace.ImageFile = updatedWorkplace.ImageFile;
-
-                await _workplaceService.UpdateWorkplaceAsync(id, existingWorkplace);
-
-                var updatedWorkplaceModel = _mapper.Map<WorkplaceRequestModel>(existingWorkplace);
-                return Ok(updatedWorkplaceModel);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error occurred while updating workplace with ID {id}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -159,6 +129,43 @@ namespace Timereporting.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error occurred while deleting workplace with ID {id}.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateWorkplace(int id, WorkplaceRequestModel updatedWorkplace)
+        {
+            try
+            {
+                var existingWorkplace = await _workplaceService.GetWorkplaceByIdAsync(id);
+
+                if (existingWorkplace == null)
+                    return NotFound();
+
+                existingWorkplace.Name = updatedWorkplace.Name;
+                existingWorkplace.CreatedTime = updatedWorkplace.CreatedTime;
+                existingWorkplace.Info = updatedWorkplace.Info;
+
+                if (updatedWorkplace.ImageFile != null)
+                {
+                    var storageDirectory = "/Resources/Images/Workplace";
+                    var fileName = await _imageFileService.UploadImageAsync(updatedWorkplace.ImageFile, storageDirectory);
+                }
+
+                await _workplaceService.UpdateWorkplaceAsync(id, existingWorkplace);
+
+                var updatedWorkplaceModel = _mapper.Map<WorkplaceRequestModel>(existingWorkplace);
+                return Ok(updatedWorkplaceModel);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while updating workplace with ID {id}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }

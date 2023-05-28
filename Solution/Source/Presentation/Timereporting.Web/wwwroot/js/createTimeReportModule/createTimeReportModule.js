@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/js/infrastructure/filesystem/imageProcessing.js":
-/*!*************************************************************!*\
-  !*** ./src/js/infrastructure/filesystem/imageProcessing.js ***!
-  \*************************************************************/
+/***/ "./source/js/infrastructure/filesystem/imageProcessing.js":
+/*!****************************************************************!*\
+  !*** ./source/js/infrastructure/filesystem/imageProcessing.js ***!
+  \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -13,17 +13,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 class imageProcessing {
-  // Function to open the image file dialog
-  static openImageFileDialog() {
-    document.getElementById('image').click();
+    // Function to open the image file dialog
+    static openImageFileDialog() {
+      document.getElementById('image').click();
+    }
+    
+    // Function to preview the image
+    static previewImage(event) {
+      document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
+    }
   }
+  
+  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (imageProcessing);
+  
 
-  // Function to preview the image
-  static previewImage(event) {
-    document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (imageProcessing);
 
 /***/ }),
 
@@ -96,39 +99,45 @@ module.exports = jQuery;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!************************************************************************!*\
-  !*** ./src/js/presentation/views/timereport/createTimeReportModule.js ***!
-  \************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.web/views/timereport/createTimeReportModule.js ***!
+  \*********************************************************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../infrastructure/filesystem/imageProcessing */ "./src/js/infrastructure/filesystem/imageProcessing.js");
+/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../infrastructure/filesystem/imageProcessing */ "./source/js/infrastructure/filesystem/imageProcessing.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
-
+﻿
 
 // Function to open the image file dialog
 function openImageFileDialog() {
   _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].openImageFileDialog();
-}
-
+} window.openImageFileDialog = openImageFileDialog;
+  
 // Function to preview the image
 function previewImage(event) {
-  _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].previewImage(event);
-}
-
-// Function to show the failure modal
+    _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].previewImage(event);
+} window.previewImage = previewImage;
+  
+  // Function to show the failure modal
 function showModal(modalId, delay) {
-  $('#' + modalId).fadeIn();
-  setTimeout(function () {
-    $('#' + modalId).modal('hide');
-  }, delay);
-}
-function submitTimeReport(event) {
+    $('#' + modalId).fadeIn();
+    setTimeout(function() {$('#' + modalId).modal('hide');}, delay);
+} window.showModal = showModal;
+  
+function submitTimereportForm(event) {
   event.preventDefault();
-  var form = $('#create-time-report-form');
+  var form = $('#create-timereport-form');
   form.validate();
   if (!form.valid()) {
     return;
   } else {
-    var formData = new FormData(form[0]);
+    var formData = new FormData();
+    formData.append('workplaceId', $('#workplaceId').val());
+    formData.append('name', $('#workplaceId').text());
+    formData.append('date', $('#date').val());
+    formData.append('hours', $('#hours').val());
+    formData.append('imageFile', $('#image')[0].files[0]);
+    formData.append('info', $('#info').val());
+    
     $.ajax({
       type: 'POST',
       contentType: false,
@@ -136,28 +145,22 @@ function submitTimeReport(event) {
       url: 'http://localhost:5000/api/v1/timereport',
       data: formData,
       success: function () {
-        $('#WorkplaceId').val('0');
-        $('#Date').val('');
-        $('#Hours').val('');
+        $('#workplaceId').val('0');
+        $('#date').val('');
+        $('#hours').val('');
         $('#image').val('');
-        $('#Info').val('');
-        $('.success').html('Tidsrapporten har skickats in.');
+        $('#info').val('');
+        $('.success').html('Tidsrapporten har skickats framgångsrikt!');
         setTimeout(function () {
           window.location.reload();
-        }, 5000);
+        }, 3500);
       },
       error: function () {
-        $('.error').html('Något gick fel och vi kunde inte skicka in tidsrapporten. Vänligen försök igen senare.');
+        $('.error').html('Något gick fel. Vänligen försök igen senare.');
       }
     });
   }
-}
-
-// Expose functions to the global scope
-window.previewImage = previewImage;
-window.openImageFileDialog = openImageFileDialog;
-window.submitTimeReport = submitTimeReport;
-window.showModal = showModal;
+} window.submitTimereportForm = submitTimereportForm;
 })();
 
 /******/ })()

@@ -35,6 +35,18 @@ module.exports = merge(common, {
                 test: /\.s?css/i, // Apply rules to SCSS and CSS files
                 use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'], // Use loaders for CSS processing
             },
+            // Rule for processing images
+            {
+                test: /\.(ico|jpg|jpeg|png|gif|webp|svg)(\?.*)?$/,
+                use: [
+                {
+                    loader: 'file-loader',
+                    options: {
+                    name: 'assets/[name].[ext]',
+                    },
+                },
+                ],
+            },
         ],
     },
 });

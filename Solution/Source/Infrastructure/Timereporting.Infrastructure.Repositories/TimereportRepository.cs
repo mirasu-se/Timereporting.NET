@@ -56,7 +56,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date <= toDate.Date).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -69,7 +70,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date >= fromDate.Date && t.Date <= toDate.Date).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -82,7 +84,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date >= fromDate).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date >= fromDate).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -95,7 +98,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date <= toDate.Date).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -108,7 +112,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date >= fromDate.Date && t.Date <= toDate.Date).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -121,7 +126,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date == fromDate).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date == fromDate).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -134,7 +140,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId).ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Id == workplaceId).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -147,7 +154,8 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.ToListAsync();
+                return await _dbContext.Timereports.OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
+                            .ToListAsync();
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ namespace Timereporting.Web.ViewModel.Timereport
     public class CreateTimereportFormModel
     {
         public IEnumerable<WorkplaceDataModel>? Workplaces { get; set; }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The WorkplaceId field is required.")]
@@ -20,7 +21,6 @@ namespace Timereporting.Web.ViewModel.Timereport
         [StringLength(500, ErrorMessage = "Info must not exceed 500 characters.")]
         public string? Info { get; set; }
 
-        [Display(Name = "Image")]
         public IFormFile? ImageFile { get; set; }
     }
 }

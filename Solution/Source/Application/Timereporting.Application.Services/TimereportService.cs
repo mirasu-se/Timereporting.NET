@@ -206,6 +206,14 @@ namespace Timereporting.Application.Services
             try
             {
                 var timereportEntity = _mapper.Map<TimereportEntity>(timereportDataModel);
+                if (timereportDataModel.ImageFile != null)
+                {
+                    timereportEntity.ImageUrl = timereportDataModel.ImageFile.FileName;
+                    using var memoryStream = new MemoryStream();
+                    await timereportDataModel.ImageFile.CopyToAsync(memoryStream);
+                    timereportEntity.ImageData = memoryStream.ToArray();
+                }
+
                 await _timereportRepository.CreateTimereportAsync(timereportEntity);
             }
             catch (Exception ex)
@@ -224,6 +232,15 @@ namespace Timereporting.Application.Services
                     throw new NotFoundException($"Timereport with ID {id} not found.");
 
                 _mapper.Map(updatedTimereportDataModel, existingTimereport);
+
+                if (updatedTimereportDataModel.ImageFile != null)
+                {
+                    existingTimereport.ImageUrl = updatedTimereportDataModel.ImageFile.FileName;
+
+                    using var memoryStream = new MemoryStream();
+                    await updatedTimereportDataModel.ImageFile.CopyToAsync(memoryStream);
+                    existingTimereport.ImageData = memoryStream.ToArray();
+                }
 
                 await _timereportRepository.UpdateTimereportAsync(existingTimereport);
             }

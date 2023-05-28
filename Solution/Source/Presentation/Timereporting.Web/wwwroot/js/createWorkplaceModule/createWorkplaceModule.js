@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/js/infrastructure/filesystem/imageProcessing.js":
-/*!*************************************************************!*\
-  !*** ./src/js/infrastructure/filesystem/imageProcessing.js ***!
-  \*************************************************************/
+/***/ "./source/js/infrastructure/filesystem/imageProcessing.js":
+/*!****************************************************************!*\
+  !*** ./source/js/infrastructure/filesystem/imageProcessing.js ***!
+  \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -13,17 +13,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 class imageProcessing {
-  // Function to open the image file dialog
-  static openImageFileDialog() {
-    document.getElementById('image').click();
+    // Function to open the image file dialog
+    static openImageFileDialog() {
+      document.getElementById('image').click();
+    }
+    
+    // Function to preview the image
+    static previewImage(event) {
+      document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
+    }
   }
+  
+  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (imageProcessing);
+  
 
-  // Function to preview the image
-  static previewImage(event) {
-    document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (imageProcessing);
 
 /***/ }),
 
@@ -96,31 +99,30 @@ module.exports = jQuery;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!**********************************************************************!*\
-  !*** ./src/js/presentation/views/workplace/createWorkplaceModule.js ***!
-  \**********************************************************************/
+/*!*******************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.web/views/workplace/createWorkplaceModule.js ***!
+  \*******************************************************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../infrastructure/filesystem/imageProcessing */ "./src/js/infrastructure/filesystem/imageProcessing.js");
+/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../infrastructure/filesystem/imageProcessing */ "./source/js/infrastructure/filesystem/imageProcessing.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
-
+﻿
 
 // Function to open the image file dialog
 function openImageFileDialog() {
   _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].openImageFileDialog();
 }
-
+  
 // Function to preview the image
 function previewImage(event) {
-  _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].previewImage(event);
+    _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].previewImage(event);
 }
-
+    
 // Function to show the failure modal
 function showModal(modalId, delay) {
-  $('#' + modalId).fadeIn();
-  setTimeout(function () {
-    $('#' + modalId).modal('hide');
-  }, delay);
-}
+    $('#' + modalId).fadeIn();
+    setTimeout(function() {$('#' + modalId).modal('hide');}, delay);
+} 
+
 function submitWorkplaceForm() {
   $('#create-workplace-form').submit(function (e) {
     e.preventDefault();
@@ -146,7 +148,7 @@ function submitWorkplaceForm() {
           $('.success').html('Arbetsplatsen har skickats framgångsrikt!!');
           setTimeout(function () {
             window.location.reload();
-          }, 5000);
+          }, 3500);
         },
         error: function () {
           $('.error').html('Något gick fel. Vänligen försök igen senare.');
@@ -154,14 +156,15 @@ function submitWorkplaceForm() {
       });
     }
   });
-}
-;
+};
+
+  
 
 // Expose functions to the global scope
 window.previewImage = previewImage;
 window.openImageFileDialog = openImageFileDialog;
 window.submitWorkplaceForm = submitWorkplaceForm;
-window.showModal = showModal;
+window.showModal = showModal; 
 })();
 
 /******/ })()

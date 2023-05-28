@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Mysqlx.Crud;
 using OpenQA.Selenium;
 using Timereporting.Api.Configuration;
 using Timereporting.Application.Services;
@@ -148,27 +149,30 @@ namespace Timereporting.Controllers
                     Id = formModel.Id,
                     WorkplaceId = formModel.WorkplaceId,
                     Name = formModel.Name,
-                    Date = DateTime.Now,
+                    Date = formModel.Date,
                     Hours = formModel.Hours,
                     Info = formModel.Info,
                     ImageFile = formModel.ImageFile
                 };
 
-                var timereport = await _timereportService.GetTimereportByIdAsync(dataModel.Id);
-                if (timereport == null) return null;
+                await _timereportService.CreateTimereportAsync(dataModel);
 
                 var fileHostingOptions = _fileHostingOptions.Value;
+
                 if (fileHostingOptions == null)
                 {
-                    LogAndThrowError("File hosting option is not specified.");
+                    _logger.LogError("File hosting option is not specified.");
                     throw new Exception();
                 }
+                else
+                {
+                    var storageDirectory = fileHostingOptions.TimereportFileDirectory;
 
-                var storageDirectory = "/Resources/Images/Timereport";
-
-                var fileName = await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
-
-                await _timereportService.CreateTimereportAsync(dataModel);
+                    if (dataModel.ImageFile != null)
+                    {
+                        await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
+                    }
+                }
 
                 return Ok();
             }
@@ -193,11 +197,25 @@ namespace Timereporting.Controllers
                 existingTimereport.Date = requestModel.Date;
                 existingTimereport.Hours = requestModel.Hours;
                 existingTimereport.Info = requestModel.Info;
+                existingTimereport.ImageFile = requestModel.ImageFile;
 
                 await _timereportService.UpdateTimereportAsync(id, existingTimereport);
 
-                var response = _mapper.Map<TimereportResponseModel>(existingTimereport);
-                return Ok(response);
+                var fileHostingOptions = _fileHostingOptions.Value;
+                if (fileHostingOptions == null)
+                {
+                    _logger.LogError("File hosting option is not specified.");
+                    throw new Exception();
+                }
+
+                var storageDirectory = "/Resources/Images/Timereport";
+
+                if (requestModel.ImageFile != null)
+                {
+                    await _imageFileService.UploadImageAsync(requestModel.ImageFile, storageDirectory);
+                }
+
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -212,7 +230,6 @@ namespace Timereporting.Controllers
             try
             {
                 await _timereportService.DeleteTimereportAsync(id);
-
                 return NoContent();
             }
             catch (NotFoundException)
@@ -231,11 +248,7 @@ namespace Timereporting.Controllers
         {
             try
             {
-                var fileName = await UploadTimereportImage(id, file);
-
-                if (fileName == null)
-                    return NotFound();
-
+                await UploadTimereportImageOnUpdate(id, file);
                 return Ok();
             }
             catch (Exception ex)
@@ -246,7 +259,7 @@ namespace Timereporting.Controllers
         }
 
 
-        private async Task<string?> UploadTimereportImage(int id, IFormFile imageFile)
+        private async Task<string?> UploadTimereportImageOnUpdate(int id, IFormFile imageFile)
         {
             var timereport = await _timereportService.GetTimereportByIdAsync(id);
             if (timereport == null)  return null;
@@ -254,7 +267,7 @@ namespace Timereporting.Controllers
             var fileHostingOptions = _fileHostingOptions.Value;
             if (fileHostingOptions == null)
             {
-                LogAndThrowError("File hosting option is not specified.");
+                _logger.LogError("File hosting option is not specified.");
                 throw new Exception();
             }
 
@@ -266,12 +279,6 @@ namespace Timereporting.Controllers
             await _timereportService.UpdateTimereportAsync(id, timereport);
 
             return fileName;
-        }
-
-        private void LogAndThrowError(string errorMessage)
-        {
-            _logger.LogError(message: errorMessage);
-            throw new Exception(message: errorMessage);
         }
     }
 }

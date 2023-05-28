@@ -1,6 +1,6 @@
 ﻿@model CreateTimereportFormModel
 
-<form id="create-time-report-form" method="post" enctype="multipart/form-data" class="mt-5">
+<form id="create-timereport-form" method="post" enctype="multipart/form-data">
     <h1 class="display-6">SKAPA TIDSRAPPORT</h1>
     <p>Träda in i tidsresandets värld av tidsrapporter!</p>
     <p>Låt din fantasi flöda och fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
@@ -9,7 +9,7 @@
             <option value="0">Välj arbetsplats</option>
             @foreach (var workplace in @Model.Workplaces)
             {
-                <option value="@workplace.Id">@workplace.Name</option>
+                <option value="@workplace.Id" id="workplaceId">@workplace.Name</option>
             }
         </select>
         <div class="mt-1 mb-1" role="alert">
@@ -18,14 +18,14 @@
     </div>
     <div class="form-group">
         <label asp-for="@Model.Date">Datum:</label>
-        <input type="date" asp-for="@Model.Date" class="form-control" id="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+        <input type="date" asp-for="@Model.Date" class="form-control" id="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.Date" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="@Model.Date">Arbetade timmar:</label>
-        <input type="number" step="0.10" asp-for="@Model.Hours" class="form-control" id="Hours">
+        <input type="number" step="0.10" asp-for="@Model.Hours" class="form-control" id="hours">
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.Hours" class="text-danger"></span>
         </div>
@@ -43,13 +43,13 @@
     </div>
     <div class="form-group">
         <label asp-for="@Model.Info">Information:</label>
-        <textarea asp-for="@Model.Info" class="form-control" id="Info" rows="6"></textarea>
+        <textarea asp-for="@Model.Info" class="form-control" id="info" rows="6"></textarea>
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.Info" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimeReport(event)">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimereportForm(event)">
             <span class="m-2">SKICKA IN TIDSRAPPORT</span>
             <i class="bi bi-send"></i>
         </button>
