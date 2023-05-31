@@ -236,7 +236,6 @@ namespace Timereporting.Application.Services
                 if (updatedTimereportDataModel.ImageFile != null)
                 {
                     existingTimereport.ImageUrl = updatedTimereportDataModel.ImageFile.FileName;
-
                     using var memoryStream = new MemoryStream();
                     await updatedTimereportDataModel.ImageFile.CopyToAsync(memoryStream);
                     existingTimereport.ImageData = memoryStream.ToArray();

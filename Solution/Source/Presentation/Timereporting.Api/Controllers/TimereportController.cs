@@ -67,7 +67,7 @@ namespace Timereporting.Controllers
                         {
                             if (fromDate > toDate)
                             {
-                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 0, Name = "Invalid date range. 'From Date' cannot be after 'To Date'." } };
+                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 0 } };
                             }
                             else
                             {
@@ -93,7 +93,7 @@ namespace Timereporting.Controllers
                         {
                             if (fromDate > toDate)
                             {
-                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 9, Name = "Invalid date range. 'From Date' cannot be after 'To Date'." } };
+                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 9 } };
                             }
                             else
                             {
@@ -146,9 +146,7 @@ namespace Timereporting.Controllers
 
                 var dataModel = new TimereportDataModel
                 {
-                    Id = formModel.Id,
                     WorkplaceId = formModel.WorkplaceId,
-                    Name = formModel.Name,
                     Date = formModel.Date,
                     Hours = formModel.Hours,
                     Info = formModel.Info,
@@ -159,7 +157,7 @@ namespace Timereporting.Controllers
 
                 var fileHostingOptions = _fileHostingOptions.Value;
 
-                if (fileHostingOptions == null)
+                if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.TimereportFileDirectory))
                 {
                     _logger.LogError("File hosting option is not specified.");
                     throw new Exception();
@@ -178,8 +176,18 @@ namespace Timereporting.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while creating workplace.");
+                _logger.LogError(ex, "Error occurred while creating timereport.");
                 return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        private IFormFile CreateFormFileWithNewName(IFormFile originalFile, string newFileName)
+        {
+            using (var stream = new MemoryStream())
+            {
+                originalFile.CopyTo(stream);
+                stream.Position = 0;
+                return new FormFile(stream, 0, stream.Length, originalFile.Name, newFileName);
             }
         }
 

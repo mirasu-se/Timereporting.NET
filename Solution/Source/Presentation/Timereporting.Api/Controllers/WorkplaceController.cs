@@ -90,7 +90,7 @@ namespace Timereporting.Api.Controllers
                 await _workplaceService.CreateWorkplaceAsync(dataModel);
 
                 var fileHostingOptions = _fileHostingOptions.Value;
-                if (fileHostingOptions == null)
+                if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.WorkplaceFileDirectory))
                 {
                     _logger.LogError("File hosting option is not specified.");
                     throw new Exception();
@@ -98,20 +98,32 @@ namespace Timereporting.Api.Controllers
                 else
                 {
                     var storageDirectory = fileHostingOptions.WorkplaceFileDirectory;
-                    if (formModel.ImageFile != null)
+                    if (dataModel.ImageFile != null)
                     {
-                        await _imageFileService.UploadImageAsync(formModel.ImageFile, storageDirectory);
+                        await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
                     }
                 }
 
                 return Ok();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) 
+            { 
+            
                 _logger.LogError(ex, "Error occurred while creating workplace.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+
+        private IFormFile CreateFormFileWithNewName(IFormFile originalFile, string newFileName)
+        {
+            using (var stream = new MemoryStream())
+            {
+                originalFile.CopyTo(stream);
+                stream.Position = 0;
+                return new FormFile(stream, 0, stream.Length, originalFile.Name, newFileName);
+            }
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkplace(int id)

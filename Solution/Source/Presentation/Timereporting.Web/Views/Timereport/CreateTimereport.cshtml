@@ -1,15 +1,26 @@
 ﻿@model CreateTimereportFormModel
 
 <form id="create-timereport-form" method="post" enctype="multipart/form-data">
-    <h1 class="display-6">SKAPA TIDSRAPPORT</h1>
-    <p>Träda in i tidsresandets värld av tidsrapporter!</p>
-    <p>Låt din fantasi flöda och fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
+    <div class="justify-content-center text-center mb-5">
+        <h1 class="display-6">Skapa Tidsrapport</h1>
+        <p>Fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
+        <div class="m-2">
+            <div class="m-2">
+                <select class="api-select" id="api-endpoint">
+                    <option value="0" selected>SYNKRONYSERAD API POST</option>
+                    <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax API POST</option>
+                    <option value="http://localhost:5000/api/v1">Timereporting API POST</option>
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
-        <select asp-for="@Model.WorkplaceId" class="form-control" id="WorkplaceId">
-            <option value="0">Välj arbetsplats</option>
-            @foreach (var workplace in @Model.Workplaces)
-            {
-                <option value="@workplace.Id" id="workplaceId">@workplace.Name</option>
+        <select asp-for="@Model.WorkplaceId" class="form-control" id="workplace-filter">
+            @if(@Model.Workplaces != null){
+                foreach (var workplace in @Model.Workplaces)
+                {
+                    <option value="@workplace.Id" id="workplaceId">@workplace.Name</option>
+                }
             }
         </select>
         <div class="mt-1 mb-1" role="alert">
@@ -30,12 +41,12 @@
             <span asp-validation-for="@Model.Hours" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <img id="image-preview" src="~/img/default/timereport/default_time_report_image.png" onclick="openImageFileDialog()">
+    <div class="form-group mt-3">
+        <img id="image-preview" src="~/img/default/timereport/default_time_report_image.png">
     </div>
     <div class="form-group">
         <label class="file-input invisible">
-            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" name="ImageFile" onchange="previewImage(event)">
+            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image-input" name="ImageFile">
         </label>
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.ImageFile" class="text-danger"></span>
@@ -48,11 +59,17 @@
             <span asp-validation-for="@Model.Info" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" onclick="submitTimereportForm(event)">
+    <div class="form-group mt-3">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" id="submit-button">
             <span class="m-2">SKICKA IN TIDSRAPPORT</span>
             <i class="bi bi-send"></i>
         </button>
+        <div class="m-2 p-2 text-danger" role="alert">
+                <div class="error"></div>
+        </div>
+        <div class="m-2 p-2 text-success" role="alert">
+            <div class="success"></div>
+        </div>
     </div>
 </form>
 

@@ -7,6 +7,6 @@ namespace Timereporting.Web.ViewModel.Workplace
     {
         public IEnumerable<WorkplaceDataModel>? Workplaces { get; set; }
 
-        public WorkplaceDetailsModel WorkplaceDetails { get; set; }
+        public WorkplaceDetailsModel? WorkplaceDetails { get; set; }
     }
 }

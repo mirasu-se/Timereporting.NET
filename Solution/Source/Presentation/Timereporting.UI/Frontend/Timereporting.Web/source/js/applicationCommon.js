@@ -1,28 +1,13 @@
 // Import common application styles
 import '../sass/applicationCommon.scss';
-// Import application identity core from appIdentityCore.js
-import appIdentityCore from './application/appIdentityCore';
-// Import application logger from appLogger.js
-import appLogger from './application/logging/appLogger';
+import AppLogger from './infrastructure/logging/loggers/appLogger';
 
-import appEnvironmentResolver from './application/environment/appEnvironmentResolver';
+// Create an instance of AppMainLogger
+const appLogger = new AppLogger();
 
-// Invoke the AppEnvironmentServices to resolve environment configuration 
-appEnvironmentResolver.configureEnvironment();
+// Log module application and module info to the console
+appLogger.logModuleInfo("applicationCommon.js","source/js/applicationCommon.js");
 
-
-const appBaseName = appIdentityCore.getAppBaseName();
-const appVersion = appIdentityCore.getAppVersion();
-const appEnvironment = appIdentityCore.getAppEnvironment();
-
-const module = "applicationCommon.js";
-const moduleLocation = "source/js/applicationCommon.js";
-
-// Log informative information using appLogger
-appLogger.logMessage(`Application Registered: ${appBaseName} v ${appVersion}`, true);
-appLogger.logMessage(`Application Environment: ${appEnvironment}`, true);
-appLogger.logMessage(`Module Registered: ${module}`, true);
-appLogger.logMessage(`Module Location: ${moduleLocation}`, true);
 
 // Get the button element
 var scrollToTopBtn = document.getElementById("scrollToTopBtn");

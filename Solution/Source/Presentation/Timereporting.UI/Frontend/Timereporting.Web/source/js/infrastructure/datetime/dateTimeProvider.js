@@ -1,7 +1,7 @@
 // A class for providing date and time information
-class dateTimeProvider {
+class DateTimeProvider {
   // Get the current date and time
-  static getCurrentDateTime() {
+  getCurrentDateTime() {
     const currentDate = new Date();
     const options = {
       day: '2-digit',
@@ -17,7 +17,7 @@ class dateTimeProvider {
   }
 
   // Get the current time
-  static getCurrentTime() {
+  getCurrentTime() {
     const currentDate = new Date();
     const options = {
       hour: '2-digit',
@@ -30,4 +30,4 @@ class dateTimeProvider {
   }
 }
 
-export default dateTimeProvider; 
+export default DateTimeProvider; 

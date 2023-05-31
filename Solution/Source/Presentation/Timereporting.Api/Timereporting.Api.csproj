@@ -50,8 +50,4 @@
     <ProjectReference Include="..\..\Infrastructure\Timereporting.Infrastructure.Repositories\Timereporting.Infrastructure.Repositories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\Timereport\" />
-  </ItemGroup>
-
 </Project>

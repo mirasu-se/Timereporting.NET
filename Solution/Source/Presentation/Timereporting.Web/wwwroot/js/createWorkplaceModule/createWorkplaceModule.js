@@ -12,21 +12,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-class imageProcessing {
-    // Function to open the image file dialog
-    static openImageFileDialog() {
-      document.getElementById('image').click();
+class ImageProcessing {
+  // Function to open the image file dialog
+  openImageFileDialog() {
+    document.getElementById('image-input').click();
+  }
+  
+  // Function to preview the image
+  previewImage(event) {
+    document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ImageProcessing);
+
+
+/***/ }),
+
+/***/ "./source/js/presentation/timereporting.web/views/shared/appModalPresenter.js":
+/*!************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.web/views/shared/appModalPresenter.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+class AppModalPresenter {
+    showFailureModal(delay) {
+      $('#submission-failed-modal').fadeIn();
+      setTimeout(function() {
+        $('#submission-failed-modal').modal('hide');
+      }, delay);
     }
-    
-    // Function to preview the image
-    static previewImage(event) {
-      document.getElementById("image-preview").src = URL.createObjectURL(event.target.files[0]);
+  
+    showSuccessModal(modalId, delay) {
+      $('#submission-successful-modal').fadeIn();
+      setTimeout(function() {
+        $('#submission-successful-modal').modal('hide');
+      }, delay);
     }
   }
   
-  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (imageProcessing);
+  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AppModalPresenter);
   
-
 
 /***/ }),
 
@@ -104,67 +135,115 @@ var __webpack_exports__ = {};
   \*******************************************************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../infrastructure/filesystem/imageProcessing */ "./source/js/infrastructure/filesystem/imageProcessing.js");
+/* harmony import */ var _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/appModalPresenter */ "./source/js/presentation/timereporting.web/views/shared/appModalPresenter.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 ﻿
 
-// Function to open the image file dialog
-function openImageFileDialog() {
-  _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].openImageFileDialog();
-}
-  
-// Function to preview the image
-function previewImage(event) {
-    _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"].previewImage(event);
-}
-    
-// Function to show the failure modal
-function showModal(modalId, delay) {
-    $('#' + modalId).fadeIn();
-    setTimeout(function() {$('#' + modalId).modal('hide');}, delay);
-} 
 
-function submitWorkplaceForm() {
-  $('#create-workplace-form').submit(function (e) {
-    e.preventDefault();
-    var form = $(this);
-    form.validate();
-    if (!form.valid()) {
-      return;
+const imageProcessing = new _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"]();
+const appModalPresenter = new _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_1__["default"]();
+
+// Function to open the image file dialog
+window.openImageFileDialog = imageProcessing.openImageFileDialog;
+
+// Attach click event listener to the image preview
+$('#image-preview').on('click', openImageFileDialog);
+
+// Function to preview the image
+window.previewImage = imageProcessing.previewImage;
+
+// Attach change event listener to the image input field
+$('#image-input').on('change', previewImage);
+
+$('#api-endpoint').on('change', function() {
+  var selectedIndex = this.selectedIndex;
+
+  if (selectedIndex === 0 || selectedIndex === 2) {
+    $('.info-option').removeClass('hidden');
+    $('.image-option').removeClass('hidden');
+  } else {
+    $('.info-option').addClass('hidden');
+    $('.image-option').addClass('hidden');
+  }
+});
+
+function shouldSubmitToTrinaxApi() {
+  return $('#api-endpoint')[0].selectedIndex === 0;
+}
+
+shouldSubmitToTrinaxApi();
+
+// Function to handle form submission
+function submitWorkplaceForm(event) {
+  event.preventDefault();
+  var form = $('#create-workplace-form');
+  form.validate();
+  if (!form.valid()) {
+    return;
+  } else {
+    // Call the appropriate submitWorkplace function based on the condition
+    if (shouldSubmitToTrinaxApi()) {
+      submitWorkplaceToTrinaxApi();
     } else {
-      var formData = new FormData();
-      formData.append('name', $('#name').val());
-      formData.append('info', $('#info').val());
-      formData.append('imageFile', $('#image')[0].files[0]);
-      $.ajax({
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        url: 'http://localhost:5000/api/v1/workplace',
-        data: formData,
-        success: function () {
-          $('#name').val('');
-          $('#info').val('');
-          $('#image').val('');
-          $('.success').html('Arbetsplatsen har skickats framgångsrikt!!');
-          setTimeout(function () {
-            window.location.reload();
-          }, 3500);
-        },
-        error: function () {
-          $('.error').html('Något gick fel. Vänligen försök igen senare.');
-        }
-      });
+      submitWorkplaceToFallbackApi();
+    }
+  }
+}
+
+// Function to submit the workplace
+function submitWorkplace(url, headers) {
+  var formData = new FormData();
+  formData.append('name', $('#name').val());
+  formData.append('info', $('#info').val());
+  formData.append('imageFile', $('#image-input')[0].files[0]);
+
+  $.ajax({
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    url: url,
+    headers: headers,
+    data: formData,
+    success: function() {
+      // Handle success
+      $('#name').val('');
+      $('#info').val('');
+      $('#image-input').val('');
+      $('.success').html('Arbetsplatsen har skickats framgångsrikt!');
+      appModalPresenter.showSuccessModal(3000);
+      setTimeout(function() {
+        window.location.reload();
+      }, 3500);
+    },
+    error: function() {
+      // Handle error
+      appModalPresenter.showFailureModal(3000);
+      $('.error').html('Något gick fel. Vänligen försök igen senare.');
     }
   });
-};
+}
 
-  
+// Function to submit workplace to Trinax API
+function submitWorkplaceToTrinaxApi() {
+  var url = 'https://arbetsprov.trinax.se/api/v1/workplace';
+  var headers = {
+    'Authorization': 'bearer abc123testtoken',
+    'Accept': 'application/json'
+  };
 
-// Expose functions to the global scope
-window.previewImage = previewImage;
-window.openImageFileDialog = openImageFileDialog;
-window.submitWorkplaceForm = submitWorkplaceForm;
-window.showModal = showModal; 
+  submitWorkplace(url, headers);
+}
+
+// Function to submit workplace as a fallback
+function submitWorkplaceToFallbackApi() {
+  var url = 'http://localhost:5000/api/v1/workplace';
+  var headers = {};
+
+  submitWorkplace(url, headers);
+}
+
+// Event listener for submit button click
+$('#submit-button').on('click', submitWorkplaceForm);
 })();
 
 /******/ })()

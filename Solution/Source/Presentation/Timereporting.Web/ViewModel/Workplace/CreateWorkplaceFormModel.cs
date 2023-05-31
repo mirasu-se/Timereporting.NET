@@ -10,7 +10,6 @@ namespace Timereporting.Web.ViewModel.Workplace
         [StringLength(100, ErrorMessage = "Name must not exceed 100 characters.")]
         public string? Name { get; set; }
 
-        [StringLength(500, ErrorMessage = "Info must not exceed 500 characters.")]
         public string? Info { get; set; }
 
         public IFormFile? ImageFile { get; set; }

@@ -21,9 +21,8 @@ namespace Timereporting.Web
             {
                 var env = hostingContext.HostingEnvironment;
 
-                // Add JSON configuration files
-                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                      .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                // Add JSON configuration files based on system environment variable ASPNETCORE_ENVIRONMENT
+                config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
                 // Add environment variables as configuration source
                 config.AddEnvironmentVariables();

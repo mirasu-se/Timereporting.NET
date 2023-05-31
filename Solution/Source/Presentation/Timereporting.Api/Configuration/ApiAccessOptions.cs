@@ -2,6 +2,6 @@
 {
     public class ApiAccessOptions
     {
-        public string SecretKey { get; set; }
+        public string? AuthorizationKey { get; set; }
     }
 }

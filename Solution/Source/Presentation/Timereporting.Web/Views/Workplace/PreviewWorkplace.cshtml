@@ -1,11 +1,19 @@
 ﻿@model WorkplacePreviewModel
 
-<div class="text-right mt-4 mb-4">
-    <a class="btn btn-secondary" asp-controller="Workplace" asp-action="CreateWorkplace">
-        <span>LÄGG TILL ARBETSPLATS</span>
-        <i class="bi bi-building-add"></i>
-    </a>
-</div>
+
+<section id="filters" class="row">
+    <div class="btn-group d-block">
+        <div class="mt-4 mb-4 float-start">
+            <button id="getWorkplacesButton" class="btn btn-secondary" onclick="fetchWorkplaces(event)"><span>VISA PLATSER<i class="bi bi-search m-2"></i></span></button>
+        </div>
+        <a class="btn btn-secondary float-end mt-4 mb-4" asp-controller="Workplace" asp-action="CreateWorkplace">
+            <span>LÄGG TILL ARBETSPLATS</span>
+            <i class="bi bi-building-add"></i>
+        </a>
+    </div>
+</section>
+
+
 
 <table class="table table-striped mt-4">
     <thead>
@@ -17,52 +25,60 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var workplace in Model.Workplaces)
+        @if (Model.Workplaces != null)
         {
-            <tr>
-                <td>@workplace.Id</td>
-                <td>@workplace.Name</td>
-                <td>@workplace.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>
-                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#workplaceDetails_@workplace.Id">
-                        <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                    </button>
-                </td>
-            </tr>
+            foreach (var workplace in Model.Workplaces)
+            {
+                <tr>
+                    <td>@workplace.Id</td>
+                    <td>@workplace.Name</td>
+                    <td>@workplace.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#workplaceDetails_@workplace.Id">
+                            <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 <div id="modal-container"></div>
-@foreach (var workplace in Model.Workplaces)
+
+@if (Model.Workplaces != null)
 {
-    <div class="modal fade" id="workplaceDetails_@workplace.Id" tabindex="-1" aria-labelledby="workplaceModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="workplaceModalLabel">Workplace Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <p><strong>Id:</strong> @workplace.Id</p>
-                        <p><strong>Name:</strong> @workplace.Name</p>
-                        <p><strong>Time:</strong> @workplace.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
-                        <p><strong>Info:</strong> @workplace.Info</p>
-                        <div class="text-center">
-                            @if (workplace.ImageFile != null)
-                            {
-                                <img src="@workplace.ImageFile.FileName" alt="Workplace Image" class="img-fluid">
-                            }
-                            else
-                            {
-                                <img src="~/img/default/workplace/no_workplace_image.png" alt="Workplace Image" class="img-fluid">
-                            }
+    foreach (var workplace in Model.Workplaces)
+    {
+        <div class="modal fade" id="workplaceDetails_@workplace.Id" tabindex="-1" aria-labelledby="workplaceModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="workplaceModalLabel">
+                            Arbetsplats Info
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>ARBETSPLATS ID:</strong> @workplace.Id</p>
+                            <p><strong>Name:</strong> @workplace.Name</p>
+                            <p><strong>Time:</strong> @workplace.CreatedTime</p>
+                            <div class="text-center">
+                                @if (workplace.ImageFile != null)
+                                {
+                                    <img src="@workplace.ImageFile.FileName" alt="Workplace Image" class="img-fluid">
+                                }
+                                else
+                                {
+                                    <img src="~/img/default/workplace/no_workplace_image.png" alt="Workplace Image" class="img-fluid">
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 

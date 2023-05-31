@@ -1,234 +1,109 @@
-﻿// Import application logger from appLogger.js
-import appLogger from '../../../../application/logging/appLogger';
+﻿import appConfig from '../../../../application/appConfig';
+import TrinaxApiClient from '../../../arbetsprov.trinax.api/trinaxApiClient';
+import TimereportApi from '../../../arbetsprov.trinax.api/timereport/timereportApi';
+import TimereportApiService from '../../../arbetsprov.trinax.api/timereport/timereportApiService';
+import TimereportingApiClient from '../../../timereporting.api/timereportingApiClient';
+import TimereportingApi from '../../../timereporting.api/timereport/timereportingApi';
 
-// Define the fetchAllTimereports component
-function fetchAllTimereports() {
-  // Make an API request to fetch all timereports
-  fetch("http://localhost:5000/api/v1/timereport")
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-      appLogger.logError("fetchAllTimereports:", data); // Log the error using the appLogger
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-      appLogger.logError("Error fetching timereports:", error); // Log the error using the appLogger
+let apiEndpoint = document.getElementById('api-endpoint').value;
+
+async function fetchAllWorkplaces() {
+  try {
+    const workplaceFilter = $('#workplace-filter');
+    // Fetch workplaces and fill the combo box
+    const response = await fetch(`${apiEndpoint}/workplace`);
+    const data = await response.json();
+
+    // Clear existing options
+    workplaceFilter.empty();
+
+    // Add the "Get all tidrapporter" option
+    const getAllOptionHTML = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
+    workplaceFilter.append(getAllOptionHTML);
+
+    // Add other workplace options
+    data.forEach(workplace => {
+      const optionHTML = `<option value="${workplace.id}">${workplace.name}</option>`;
+      workplaceFilter.append(optionHTML);
     });
-}
-
-export default fetchAllTimereports;
-
-
-function fetchTimereportByTimereportId(reportId) {
-  // Make a GET request to fetch the report data
-  fetch(`http://localhost:5000/api/v1/timereport/${reportId}`)
-    .then(response => response.json())
-    .then(data => {
-      // Update the modal with the fetched report data
-      document.getElementById(`reportModalLabel`).innerText = 'Time Report Details';
-      document.getElementById(`name`).innerText = `Date: ${data.name}`;     
-      document.getElementById(`date`).innerText = `Date: ${data.date}`;
-      document.getElementById(`workplace`).innerText = `Workplace: ${data.workplace}`;
-      document.getElementById(`hours`).innerText = `Hours Worked: ${data.hours}`;
-      
-      // Show the modal
-      $(`#reportDetails_${reportId}`).modal('show');
-    })
-    .catch(error => {
-      console.error('Error fetching report data:', error);
-    });
-} window.fetchTimereportByTimereportId = fetchTimereportByTimereportId;
-
-
-function fetchTimereportsBetweenDatesForAllWorkplaces(fromDate, toDate) {
-  // Make an API request to fetch timereports between the selected dates for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsBetweenDatesForAllWorkplaces = fetchTimereportsBetweenDatesForAllWorkplaces;
-
-function fetchTimereportsByStartDateForAllWorkplaces(fromDate) {
-  // Make an API request to fetch timereports starting from the selected date for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByStartDateForAllWorkplaces = fetchTimereportsByStartDateForAllWorkplaces;
-
-function fetchTimereportsByEndDateForAllWorkplaces(toDate) {
-  // Make an API request to fetch timereports up to the selected end date for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByEndDateForAllWorkplaces = fetchTimereportsByEndDateForAllWorkplaces;
-
-function fetchTimereportsByWorkplace(workplaceId) {
-  // Make an API request to fetch timereports for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByWorkplace = fetchTimereportsByWorkplace;
-
-function fetchTimereportsByStartDate(workplaceId, fromDate) {
-  // Make an API request to fetch timereports starting from the selected date for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByStartDate = fetchTimereportsByStartDate;
-
-function fetchTimereportsByEndDate(workplaceId, toDate) {
-  // Make an API request to fetch timereports up to the selected end date for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByEndDate = fetchTimereportsByEndDate;
-
-function fetchTimereportsBetweenDates(workplaceId, fromDate, toDate) {
-  // Make an API request to fetch timereports between the selected dates for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsBetweenDates = fetchTimereportsBetweenDates;
-
-function fetchTimeReports(event) {
-  event.preventDefault();
-
-  // Get selected values
-  var workplaceId = document.getElementById("workplace-filter").value;
-  var fromDate = document.getElementById("from-date").value;
-  var toDate = document.getElementById("to-date").value;
-
-  // Determine the appropriate action based on the selected filters
-  if (workplaceId && fromDate && toDate) {
-    // Fetch timereports between selected dates for selected workplace
-    fetchTimereportsBetweenDates(workplaceId, fromDate, toDate);
-  } else if (workplaceId && fromDate) {
-    // Fetch timereports starting from the selected date for selected workplace
-    fetchTimereportsByStartDate(workplaceId, fromDate);
-  } else if (workplaceId && toDate) {
-    // Fetch timereports up to the selected end date for selected workplace
-    fetchTimereportsByEndDate(workplaceId, toDate);
-  } else if (workplaceId) {
-    // Fetch timereports for the selected workplace
-    fetchTimereportsByWorkplace(workplaceId);
-  } else if (fromDate && toDate) {
-    // Fetch timereports between the selected dates for all workplaces
-    fetchTimereportsBetweenDatesForAllWorkplaces(fromDate, toDate);
-  } else if (fromDate) {
-    // Fetch timereports starting from the selected date for all workplaces
-    fetchTimereportsByStartDateForAllWorkplaces(fromDate);
-  } else if (toDate) {
-    // Fetch timereports up to the selected end date for all workplaces
-    fetchTimereportsByEndDateForAllWorkplaces(toDate);
-  } else {
-    // Fetch all timereports from all workplaces
-    fetchAllTimereports();
+  } catch (error) {
+    console.error('Error:', error);
   }
-} window.fetchTimeReports = fetchTimeReports;
-
-function processTimereports(data) {
-  console.log("Processing timereports:", data);
-  // Sort the data by report.id in ascending order
-  data.sort((a, b) => a.id - b.id);
-
-  // Clean the time-report-table by removing all existing rows
-  const tableBody = document.querySelector("#time-report-table tbody");
-  tableBody.innerHTML = "";
-
-  // Generate new table rows based on the fetched data
-  data.forEach((report) => {
-    const buttonId = `btn_${report.id}`; // Unique ID for the button
-    const dateParts = report.date.split('T')[0]; // Extract the date part before the 'T' delimiter
-    const formattedDate = dateParts.split('-').reverse().join('-'); // Rearrange the date parts to format it as 'YYYY-MM-DD'
-
-    const row = `<tr>
-      <td>${formattedDate}</td>
-      <td>${report.name}</td>
-      <td>${report.hours.toFixed(2)}</td>
-      <td>
-        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
-          <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-        </button>
-      </td>
-    </tr>`;
-    tableBody.insertAdjacentHTML("beforeend", row);
-  });
-
-  // Generate the modal elements
-  const modalContainer = document.querySelector("#modal-container");
-  modalContainer.innerHTML = "";
-
-  data.forEach((report) => {
-    const modalId = `timereportDetails_${report.id}`;
-
-    const modal = `
-    <div id="modal-container"> 
-      <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="timereportModalLabel">
-                Tidsrapportdetaljer
-              </h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <p><strong>Id:</strong> ${report.id}</p>
-                <p><strong>Name:</strong> ${report.name}</p>
-                <p><strong>Time:</strong> ${report.createdTime}</p>
-                <p><strong>Info:</strong> ${report.info}</p>
-                <div class="text-center">
-                  <img src="${report.imageUrl || '/img/default/timereport/no_time_report_image.png'}" alt="Workplace Image" class="img-fluid">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-    modalContainer.insertAdjacentHTML("beforeend", modal);
-  });
 }
+
+$('#api-endpoint').on('change', function() {
+  const selectedIndex = this.selectedIndex;
+  const workplaceFilter = $('#workplace-filter');
+  
+  if (selectedIndex !== 0) {
+    apiEndpoint = document.getElementById('api-endpoint').value;
+    const timereportingHTMLOptions = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
+    workplaceFilter.prepend(timereportingHTMLOptions);
+    fetchAllWorkplaces();
+  } else {
+    apiEndpoint = document.getElementById('api-endpoint').value;
+    window.location.reload();
+  }
+});
+
+const trinaxApiClient = new TrinaxApiClient(apiEndpoint, appConfig.getApiAuthorizationKey());
+const timereportApi = new TimereportApi(trinaxApiClient);
+const timereportApiService = new TimereportApiService();
+
+const timereportingApiClient = new TimereportingApiClient(apiEndpoint);
+const timereportingApi = new TimereportingApi(timereportingApiClient, apiEndpoint);
+
+
+async function fetchTimereports() {
+  console.log(`We are fetching from ${apiEndpoint}`);
+  try {
+    const fromDate = document.getElementById('from-date').value;
+    const toDate = document.getElementById('to-date').value;
+    const workplaceId = document.getElementById('workplace-filter').value;
+
+    let timereports;
+
+    if (apiEndpoint === "https://arbetsprov.trinax.se/api/v1") {
+      // Use Trinax API for fetching data from Trinax database
+      if (fromDate && toDate) {
+        timereports = await timereportApi.getTimereportsByDateRange(fromDate, toDate);
+      } else if (fromDate) {
+        timereports = await timereportApi.getTimereportsFromDate(fromDate);
+      } else if (toDate) {
+        timereports = await timereportApi.getTimereportsToDate(toDate);
+      } else {
+        timereports = await timereportApi.getAllTimereports();
+      }
+      // Filter timereports based on workplace_id
+      timereports = timereports.filter(report => report.workplace_id === parseInt(workplaceId));
+      // Handle the response and update the UI accordingly
+      timereportApiService.createTimereportTableRows(timereports);
+      timereportApiService.createTimereportDetailsModal(timereports);
+    } else {
+      // Use Timereporting API for fetching data from local MySql database
+      if (workplaceId && fromDate && toDate) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceIdBetweenDates(workplaceId, fromDate, toDate);
+      } else if (workplaceId && fromDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndFromDate(workplaceId, fromDate);
+      } else if (workplaceId && toDate) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate);
+      } else if (workplaceId) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceId(workplaceId);
+      } else if (fromDate && toDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesBetweenDates(fromDate, toDate);
+      } else if (fromDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndFromDate(fromDate);
+      } else if (toDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndToDate(toDate);
+      } else {
+        timereports = await timereportingApi.fetchTimereportsByAllWorkplacesForEntirePeriod();
+      }
+    }
+  } catch (error) {
+    // Handle the error
+    console.log(error);
+  }
+}
+
+const button = document.getElementById('get-timereports');
+button.addEventListener('click', fetchTimereports);

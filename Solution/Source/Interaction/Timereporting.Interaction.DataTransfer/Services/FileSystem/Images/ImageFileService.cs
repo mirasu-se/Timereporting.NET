@@ -23,7 +23,7 @@ namespace Timereporting.Interaction.DataTransfer.Services.FileSystem.Images
                     throw new ArgumentException("File size exceeds the limit.");
 
                 // Generate a unique filename for the image
-                var fileName = image.Name;
+                var fileName = image.FileName;
 
                 // Save the image to the storage directory
                 var filePath = Path.Combine(storageDirectory, fileName);

@@ -1,5 +1,18 @@
 ﻿@model CreateWorkplaceFormModel
-
+    <div class="justify-content-center text-center mb-5">
+    <h1 class="display-6">Lägg till Arbetsplats</h1>
+    <p>Fyll i formuläret nedan för att lägga till en ny arbetsplats.</p>
+    <div class="m-2">
+        <div class="m-2">
+            <label class="p-2">Välj API-alternativ:</label>
+            <select class="api-select" id="api-endpoint">
+                <option value="0" selected>Synkronizerad API - POST Request</option>
+                <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API - POST Request</option>
+                <option value="http://localhost:5000/api/v1">Timereporting API - POST Request</option>
+            </select>
+        </div>
+    </div>
+</div>
 <form id="create-workplace-form" method="post" enctype="multipart/form-data">
     <div class="text-center mt-5">
         <h1 class="display-6">Skapa Arbetsplats</h1>
@@ -12,31 +25,35 @@
             <span asp-validation-for="@Model.Name" class="text-danger text-danger p-1"></span>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group info-option hidden">
         <label asp-for="@Model.Info">Information:</label>
         <textarea asp-for="@Model.Info" class="form-control" id="info"></textarea>
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.Info" class="text-danger text-danger p-1"></span>
         </div>
     </div>
-    <div class="form-group">
-        <img id="image-preview" src="~/img/default/workplace/default_workplace_image.png" onclick="openImageFileDialog()">
+    <div class="form-group image-option hidden">
+        <img id="image-preview" src="~/img/default/workplace/default_workplace_image.png">
     </div>
     <div class="form-group">
         <label class="file-input invisible">
-            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image" onchange="previewImage(event)">
+            <input type="file" asp-for="@Model.ImageFile" class="form-control-file" id="image-input">
         </label>
         <div class="mt-1 mb-1" role="alert">
             <span asp-validation-for="@Model.ImageFile" class="text-danger text-danger p-1"></span>
         </div>
     </div>
     <div class="form-group">
-        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" type="submit" onclick="submitWorkplaceForm()">
+        <button class="btn btn-secondary w-100 m-0 mb-5 p-2" type="submit" id="submit-button">
             <span class="m-2">SPARA ARBETSPLATSEN</span>
             <i class="bi bi-building-add"></i>
         </button>
-        <div class="success"></div>
-        <div class="error"></div>
+        <div class="mt-2 mb-2" role="alert">
+                <div class="error"></div>
+        </div>
+        <div class="mt-2 mb-2" role="alert">
+            <div class="success"></div>
+        </div>
     </div>
 </form>
 

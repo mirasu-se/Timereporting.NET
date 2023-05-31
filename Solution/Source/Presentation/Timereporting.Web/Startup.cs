@@ -32,14 +32,8 @@ namespace Timereporting.Web
             // Add AddHttpClient 
             services.AddHttpClient();
 
-            // Configure host options using app settings
-            services.Configure<WebHostingOptions>(Configuration.GetSection("WebHostingOptions"));
-
-            // Configure image options using so we can set different directories in app settings
-            services.Configure<FileHostingOptions>(Configuration.GetSection("FileHostingOptions"));
-
-            // Configure API options using app settings
-            services.Configure<ApiHostingOptions>(Configuration.GetSection("ApiHostingOptions"));
+            // Configure app identity configuration using app settings
+            services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
 
             // Add MVC services with Razor runtime compilation
             services.AddMvc(option => option.EnableEndpointRouting = true).AddRazorRuntimeCompilation();

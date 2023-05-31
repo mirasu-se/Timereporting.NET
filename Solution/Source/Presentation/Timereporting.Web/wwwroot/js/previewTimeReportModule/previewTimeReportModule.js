@@ -2,204 +2,660 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./source/js/application/appIdentityCore.js":
-/*!**************************************************!*\
-  !*** ./source/js/application/appIdentityCore.js ***!
-  \**************************************************/
+/***/ "./source/js/application/appConfig.js":
+/*!********************************************!*\
+  !*** ./source/js/application/appConfig.js ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Timereporting_Web_appsettings_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.json */ "../../../Timereporting.Web/appsettings.json");
+/* harmony import */ var _Timereporting_Web_appsettings_DEVELOPMENT_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.DEVELOPMENT.json */ "../../../Timereporting.Web/appsettings.DEVELOPMENT.json");
+/* harmony import */ var _Timereporting_Web_appsettings_STAGING_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.STAGING.json */ "../../../Timereporting.Web/appsettings.STAGING.json");
+/* harmony import */ var _Timereporting_Web_appsettings_PRODUCTION_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.PRODUCTION.json */ "../../../Timereporting.Web/appsettings.PRODUCTION.json");
 
 
-const appIdentityCore = {
-  config: _Timereporting_Web_appsettings_json__WEBPACK_IMPORTED_MODULE_0__.appIdentity,
 
-  loadConfig(config) {
-    this.config = { ...this.config, ...config };
-  },
 
-  getAppBaseName() {
-    return this.config.appBaseName;
-  },
+const Environment = "DEVELOPMENT";
 
-  getAppBaseUrl() {
-    return this.config.appBaseUrl;
-  },
-
-  getAppEnvironment() {
-    return this.config.appEnvironment;
-  },
-
-  getAppLogLevel() {
-    return this.config.appLogLevel;
-  },
-
-  getAppVersion() {
-    return this.config.appVersion;
-  },
-
-  getAppMaxRequestSize() {
-    return this.config.appMaxRequestSize;
-  },
-
-  getApiBaseName() {
-    return this.config.apiBaseName;
-  },
-
-  getApiBaseUrl() {
-    return this.config.apiBaseUrl;
-  },
-
-  getApiEnvironment() {
-    return this.config.apiEnvironment;
-  },
-
-  getApiVersion() {
-    return this.config.apiVersion;
-  },
-
-  splitVersion(version) {
-    return version.split('.');
-  },
-
-  getAppSyncVersion() {
-    const { appBuildMajorVersion, appBuildMinorVersion, appBuildPatchVersion } = this.config;
-    return `${appBuildMajorVersion}.${appBuildMinorVersion}.${appBuildPatchVersion}`;
-  },
-
-  getApiSyncVersion() {
-    const { apiBuildMajorVersion, apiBuildMinorVersion, apiBuildPatchVersion } = this.config;
-    return `${apiBuildMajorVersion}.${apiBuildMinorVersion}.${apiBuildPatchVersion}`;
-  },
-
-  getAppEnvironmentUrl() {
-    if (this.config.appEnvironment === 'DEVELOPMENT') {
-      return 'http://localhost:5001';
-    } else if (this.config.appEnvironment === 'STAGING') {
-      return 'https://staging-domain.com';
-    } else if (this.config.appEnvironment === 'PRODUCTION') {
-      return 'https://production-domain.com';
-    }
-  },
+const getConfigurationByEnvironment = (environment) => {
+  switch (environment) {
+    case 'DEVELOPMENT':
+      return _Timereporting_Web_appsettings_DEVELOPMENT_json__WEBPACK_IMPORTED_MODULE_0__.AppConfig;
+    case 'STAGING':
+      return _Timereporting_Web_appsettings_STAGING_json__WEBPACK_IMPORTED_MODULE_1__.AppConfig;
+    case 'PRODUCTION':
+      return _Timereporting_Web_appsettings_PRODUCTION_json__WEBPACK_IMPORTED_MODULE_2__.AppConfig;
+    default:
+      throw new Error(`Invalid environment: ${environment}`);
+  }
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (appIdentityCore);
+class AppConfig {
+  constructor() {
+    this.config = null;
+    this.loadConfig();
+  }
+
+  loadConfig() {
+    const environmentConfig = getConfigurationByEnvironment(Environment);
+    this.config = { ...this.config, ...environmentConfig };
+  }
+
+  getAppBaseName() {
+    return this.config.AppBaseName;
+  }
+
+  getAppBaseUrl() {
+    return this.config.AppBaseUrl;
+  }
+
+  getAppEnvironment() {
+    return this.config.AppEnvironment;
+  }
+
+  getAppLogLevel() {
+    return this.config.AppLogLevel;
+  }
+
+  getAppVersion() {
+    return this.config.AppVersion;
+  }
+
+  getAppResourceHostingUrl() {
+    return this.config.AppResourceHostingUrl;
+  }
+
+  getAppImageFileDirectory() {
+    return this.config.AppImageFileDirectory;
+  }
+
+  getApiBaseName() {
+    return this.config.ApiBaseName;
+  }
+
+  getApiBaseUrl() {
+    return this.config.ApiBaseUrl;
+  }
+
+  getApiAuthorizationKey() {
+    return this.config.ApiAuthorizationKey;
+  }
+
+  getApiVersion() {
+    return this.config.ApiVersion;
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new AppConfig());
+
 
 /***/ }),
 
-/***/ "./source/js/application/logging/appLogger.js":
-/*!****************************************************!*\
-  !*** ./source/js/application/logging/appLogger.js ***!
-  \****************************************************/
+/***/ "./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApi.js":
+/*!**********************************************************************************!*\
+  !*** ./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApi.js ***!
+  \**********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../appIdentityCore */ "./source/js/application/appIdentityCore.js");
-/* harmony import */ var _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../infrastructure/datetime/dateTimeProvider */ "./source/js/infrastructure/datetime/dateTimeProvider.js");
-
-
-
-
-const appEnvironment = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppEnvironment();
-const appLogLevel = _appIdentityCore__WEBPACK_IMPORTED_MODULE_0__["default"].getAppLogLevel();
-const currentDateTime = _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentDateTime();
-const currentTime = _infrastructure_datetime_dateTimeProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentTime();
-
-class appLogger {
-  constructor(appLogLevel) {
-    this.appEnvironment = appEnvironment;
-    this.appLogLevel = appLogLevel;
-    this.currentDateTime = currentDateTime;
-    this.currentTime = currentTime;
+class TimereportApi {
+  constructor(apiClient) {
+    this.apiClient = apiClient;
   }
 
-  logTitle(label, appLogLevel = this.appLogLevel, includeTime = true) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const dateTimePrefix = includeTime ? `[${this.currentDateTime}] ` : '';
-      console.groupCollapsed(`${this.currentDateTime} [${appLogLevel}] ${dateTimePrefix}${label}`);
-    }
+  async getAllTimereports() {
+    const path = `/timereport`;
+    return this.apiClient.get(path);
   }
 
-  logMessage(message, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${message}`);
+  async getTimereportsByDateRange(fromDate, toDate) {
+    const filters = {
+      from_date: encodeURIComponent(fromDate),
+      to_date: encodeURIComponent(toDate)
+    };
+    const queryString = new URLSearchParams(filters).toString();
+    const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+    return this.apiClient.get(path);
+  }
+
+  async getTimereportsFromDate(fromDate) {
+    const now = new Date().toISOString().split('T')[0];
+    return this.getTimereportsByDateRange(fromDate, now);
+  }
+
+  async getTimereportsToDate(toDate) {
+    const startOfTime = new Date(0).toISOString().slice(0, 10);
+    return this.getTimereportsByDateRange(startOfTime, toDate);
+  }
+
+  async getAllTimereportsWithDateFilter(fromDate, toDate) {
+    if (fromDate && toDate) {
+      return this.getTimereportsByDateRange(fromDate, toDate);
+    } else if (fromDate) {
+      return this.getTimereportsFromDate(fromDate);
+    } else if (toDate) {
+      return this.getTimereportsToDate(toDate);
     } else {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${message}`);
+      return this.getAllTimereports();
     }
   }
 
-  logException(exception, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${exception}`);
-    }
+  async getTimereport(id) {
+    const path = `/timereport/${encodeURIComponent(id)}`;
+    return this.apiClient.get(path);
   }
 
-  logError(error, includeTime) {
-    if (this.appEnvironment === 'DEVELOPMENT') {
-      const timePrefix = includeTime ? `${this.currentDateTime} -` : '';
-      console.log(`${timePrefix} ${error}`);
-    }
+  async createTimereport(data) {
+    const path = '/timereport';
+    return this.apiClient.post(path, data);
   }
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new appLogger(appLogLevel));
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportApi);
 
 /***/ }),
 
-/***/ "./source/js/infrastructure/datetime/dateTimeProvider.js":
-/*!***************************************************************!*\
-  !*** ./source/js/infrastructure/datetime/dateTimeProvider.js ***!
-  \***************************************************************/
+/***/ "./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApiService.js":
+/*!*****************************************************************************************!*\
+  !*** ./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApiService.js ***!
+  \*****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-// A class for providing date and time information
-class dateTimeProvider {
-  // Get the current date and time
-  static getCurrentDateTime() {
-    const currentDate = new Date();
-    const options = {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      fractionalSecondDigits: 3,
-    };
-    // Return the formatted current date and time as a string
-    return currentDate.toLocaleString('en-GB', options);
-  }
+/* harmony import */ var _application_appConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../application/appConfig */ "./source/js/application/appConfig.js");
+/* harmony import */ var _workplace_workplaceApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../workplace/workplaceApi */ "./source/js/presentation/arbetsprov.trinax.api/workplace/workplaceApi.js");
+/* harmony import */ var _trinaxApiClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../trinaxApiClient */ "./source/js/presentation/arbetsprov.trinax.api/trinaxApiClient.js");
 
-  // Get the current time
-  static getCurrentTime() {
-    const currentDate = new Date();
-    const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      fractionalSecondDigits: 3,
-    };
-    // Return the formatted current time as a string
-    return currentDate.toLocaleString('en-GB', options);
+
+
+
+const selectedApiEndpoint = document.getElementById('api-endpoint').value;
+const authorizationKey = `${_application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getApiAuthorizationKey()}`;
+const trinaxApiClient = new _trinaxApiClient__WEBPACK_IMPORTED_MODULE_2__["default"](selectedApiEndpoint, authorizationKey);
+const workplaceApi = new _workplace_workplaceApi__WEBPACK_IMPORTED_MODULE_1__["default"](trinaxApiClient);
+
+class TimereportApiService {
+  async createTimereportTableRows(data) {
+    console.log("[API RESPONSE]:", data);
+    // Sort the data by report.id in descending order
+    // Last report should be displayed at the top for better UI/UX functionality
+    data.sort((b, a) => a.id - b.id);
+    
+    // Clean the time-report-table by removing all existing rows
+    const tableBody = document.querySelector("#time-report-table tbody");
+    tableBody.innerHTML = "";
+    
+    // Fetch workplace data for each report and create new table rows based on the fetched data
+    for (const report of data) {
+      const workplace = await workplaceApi.getWorkplaceById(report.workplace_id);
+      const row = `<tr>
+        <td>${report.date}</td>
+        <td>${workplace.name}</td>
+        <td>${report.hours}</td>
+        <td>
+          <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
+            <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+          </button>
+        </td>
+      </tr>`;
+      tableBody.insertAdjacentHTML("beforeend", row);
+    }
+  }
+  
+ createTimereportDetailsModal(data) {
+    const modalContainer = document.querySelector("#modal-container");
+    modalContainer.innerHTML = "";
+    
+    data.forEach(async (report) => {
+    // Since Arbetsplatsnamn is required (according to email instructions)  and not avilible by default in direct timereport reponse we will fatch it from workplaceApi
+    // We are here in a forEach loop which means that this will execute asyncronuse calls on workplace endpoint only to get workplace name
+    // This should make a lot of unnecessary reqwuests on our API and in reality we should eaither expand table columns in our database 
+    // or if columns already exists we should reconfigure timereport API controller to expose requred data property in the API interface
+    const workplace = await workplaceApi.getWorkplaceById(report.workplace_id);
+      const modal = `
+        <div id="modal-container"> 
+          <div class="modal fade" id="timereportDetails_${report.id}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="timereportModalLabel">
+                    Tidsrapportdetaljer
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                </div>
+                <div class="card">
+                  <div class="card-body">
+                    <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
+                    <p id="workplace"><strong>Arbetsplats Id:</strong> ${report.workplaceId}</p>
+                    <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
+                    <p id="date"><strong>Datum:</strong> ${report.date}</p>
+                    <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours}</p>
+                    <p id=""><strong>Info:</strong> ${report.info}</p>
+                    <div class="text-center">
+                      <img src="${report.imageFile || '/img/default/timereport/no_time_report_image.png'}" alt="Workplace Image" class="img-fluid">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      modalContainer.insertAdjacentHTML("beforeend", modal);
+    });
   }
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dateTimeProvider); 
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportApiService);
+
+/***/ }),
+
+/***/ "./source/js/presentation/arbetsprov.trinax.api/trinaxApiClient.js":
+/*!*************************************************************************!*\
+  !*** ./source/js/presentation/arbetsprov.trinax.api/trinaxApiClient.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class TrinaxApiClient {
+    constructor(apiBaseUrl, authorizationToken) {
+      this.apiBaseUrl = apiBaseUrl;
+      this.authorizationToken = authorizationToken;
+    }
+  
+    async sendRequest(method, path, data = null) {
+      const url = `${this.apiBaseUrl}${path}`;
+      const headers = {
+        'Authorization': `bearer ${this.authorizationToken}`,
+        'Accept': 'application/json'
+      };
+  
+      if (data) {
+        headers['Content-Type'] = 'application/json';
+      }
+  
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: data ? JSON.stringify(data) : null
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+  
+      const responseData = await response.json();
+      return responseData;
+    }
+  
+    async get(path) {
+      return this.sendRequest('GET', path);
+    }
+  
+    async post(path, data) {
+      return this.sendRequest('POST', path, data);
+    }
+  }
+
+  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TrinaxApiClient);
+
+
+/***/ }),
+
+/***/ "./source/js/presentation/arbetsprov.trinax.api/workplace/workplaceApi.js":
+/*!********************************************************************************!*\
+  !*** ./source/js/presentation/arbetsprov.trinax.api/workplace/workplaceApi.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class WorkplaceApi {
+    constructor(apiClient) {
+      this.apiClient = apiClient;
+    }
+  
+    async getAllWorkplaces() {
+      const path = '/workplace';
+      return this.apiClient.get(path);
+    }
+
+    async getWorkplaceById(workplaceId) {
+      const path = `/workplace/${encodeURIComponent(workplaceId)}`;
+      return this.apiClient.get(path);
+    }    
+  }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (WorkplaceApi);
+
+/***/ }),
+
+/***/ "./source/js/presentation/timereporting.api/timereport/timereportingApi.js":
+/*!*********************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.api/timereport/timereportingApi.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _timereport_timereportingApiService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../timereport/timereportingApiService */ "./source/js/presentation/timereporting.api/timereport/timereportingApiService.js");
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
+
+const timereportingApiService = new _timereport_timereportingApiService__WEBPACK_IMPORTED_MODULE_0__["default"]();
+
+class TimereportingApi {
+    constructor(apiClient) {
+      this.apiClient = apiClient;
+    }
+  
+    async getTimereportsByAllWorkplaces() {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport`);
+        const data = await response.json();
+        // Process the fetched data
+        timereportingApiService.createTimereportTableRows(data);
+        timereportingApiService.createTimereportDetailsModal(data);
+      } catch (error) {
+        console.error("Error fetching timereports:", error);
+      }
+    }
+  
+    async getTimereportsByWorkplaceId(workplaceId) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}`);
+        const data = await response.json();
+        // Process the fetched data
+        timereportingApiService.createTimereportTableRows(data);
+        timereportingApiService.createTimereportDetailsModal(data);
+      } catch (error) {
+        console.error("Error fetching timereports:", error);
+      }
+    }
+  
+    async getTimereportByTimereportId(reportId) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport/${reportId}`);
+        const data = await response.json();
+        // Update the modal with the fetched report data
+        timereportingApiService.createTimereportTableRows(data);
+        timereportingApiService.createTimereportDetailsModal(data);
+        // Show the modal
+        $(`#reportDetails_${reportId}`).modal('show');
+      } catch (error) {
+        console.error('Error fetching report data:', error);
+      }
+    }
+  
+    async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}`);
+        const data = await response.json();
+        // Process the fetched data
+        timereportingApiService.createTimereportTableRows(data);
+        timereportingApiService.createTimereportDetailsModal(data);
+      } catch (error) {
+        console.error("Error fetching timereports:", error);
+      }
+    }
+  
+    async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&to_date=${toDate}`);
+        const data = await response.json();
+        // Process the fetched data
+        timereportingApiService.createTimereportTableRows(data);
+        timereportingApiService.createTimereportDetailsModal(data);
+      } catch (error) {
+        console.error("Error fetching timereports:", error);
+      }
+    }
+  
+    async getTimereportsByWorkplaceIdBetweenDates(workplaceId, fromDate, toDate) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}&to_date=${toDate}`);
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching timereports:", error);
+        return null;
+      }
+    }
+  
+    async getTimereportsByAllWorkplacesBetweenDates(fromDate, toDate) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}&to_date=${toDate}`);
+          const data = await response.json();
+          // Process the fetched data
+          timereportingApiService.createTimereportTableRows(data);
+          timereportingApiService.createTimereportDetailsModal(data);
+        } catch (error) {
+          console.error("Error fetching timereports:", error);
+        }
+      }
+    
+      async getTimereportsByAllWorkplacesAndFromDate(fromDate) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}`);
+          const data = await response.json();
+          // Process the fetched data
+          timereportingApiService.createTimereportTableRows(data);
+          timereportingApiService.createTimereportDetailsModal(data);
+        } catch (error) {
+          console.error("Error fetching timereports:", error);
+        }
+      }
+    
+      async getTimereportsByAllWorkplacesAndToDate(toDate) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/v1/timereport?to_date=${toDate}`);
+          const data = await response.json();
+          // Process the fetched data
+          timereportingApiService.createTimereportTableRows(data);
+          timereportingApiService.createTimereportDetailsModal(data);
+        } catch (error) {
+          console.error("Error fetching timereports:", error);
+        }
+      }
+    }
+    
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportingApi);
+    
+  
+
+/***/ }),
+
+/***/ "./source/js/presentation/timereporting.api/timereport/timereportingApiService.js":
+/*!****************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.api/timereport/timereportingApiService.js ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _timereporting_api_workplace_timereportingWorkplaceApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../timereporting.api/workplace/timereportingWorkplaceApi */ "./source/js/presentation/timereporting.api/workplace/timereportingWorkplaceApi.js");
+/* harmony import */ var _timereporting_api_timereportingApiClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../timereporting.api/timereportingApiClient */ "./source/js/presentation/timereporting.api/timereportingApiClient.js");
+
+
+
+const selectedApiEndpoint = "http://localhost:5000/api/v1";
+const timereportingApiClient = new _timereporting_api_timereportingApiClient__WEBPACK_IMPORTED_MODULE_1__["default"](selectedApiEndpoint);
+const timereportingWorkplaceApi = new _timereporting_api_workplace_timereportingWorkplaceApi__WEBPACK_IMPORTED_MODULE_0__["default"](timereportingApiClient);
+
+class TimereportingApiService {
+
+  createTimereportTableRows(data) {
+    console.log("[API - RESPONSE]:", data);
+    // Sort the data by report.id in ascending order
+    data.sort((b, a) => a.id - b.id);
+  
+    // Clean the time-report-table by removing all existing rows
+    const tableBody = document.querySelector("#time-report-table tbody");
+    tableBody.innerHTML = "";
+  
+    // create new table rows based on the fetched data
+    data.forEach(async (report) => {
+      const workplace = await timereportingWorkplaceApi.getWorkplaceById(report.workplaceId);
+      const row = `<tr>
+        <td>${new Date(report.date).toISOString().split('T')[0]}</td>
+        <td>${workplace.name}</td>
+        <td>${report.hours.toFixed(2)}</td>
+        <td>
+          <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
+            <i class="btn btn-secondary bi bi-info-circle m-0"></i>
+          </button>
+        </td>
+      </tr>`;
+      tableBody.insertAdjacentHTML("beforeend", row);
+    });
+  }
+  
+  createTimereportDetailsModal(data) {
+    const modalContainer = document.querySelector("#modal-container");
+    modalContainer.innerHTML = "";
+  
+    data.forEach(async (report) => {
+      const workplace = await timereportingWorkplaceApi.getWorkplaceById(report.workplaceId);
+      const modal = `
+      <div id="modal-container"> 
+        <div class="modal fade" id="timereportDetails_${report.id}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="timereportModalLabel">
+                  Tidsrapportdetaljer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
+                  <p id="workplace"><strong>Arbetsplats Id:</strong> ${report.workplaceId}</p>
+                  <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
+                  <p id="date"><strong>Datum:</strong> ${new Date(report.date).toISOString().split('T')[0]}</p>
+                  <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours.toFixed(2)}</p>
+                  <p id=""><strong>Info:</strong> ${report.info}</p>
+                  <div class="text-center">
+                    <img src="${report.imageFile || '/img/default/timereport/no_time_report_image.png'}" alt="Workplace Image" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+      modalContainer.insertAdjacentHTML("beforeend", modal);
+    });
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportingApiService);
+
+/***/ }),
+
+/***/ "./source/js/presentation/timereporting.api/timereportingApiClient.js":
+/*!****************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.api/timereportingApiClient.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class TimereportingApiClient {
+  constructor(apiBaseUrl) {
+    this.apiBaseUrl = apiBaseUrl;
+  }
+
+  async sendRequest(method, path, data = null) {
+    const url = `${this.apiBaseUrl}${path}`;
+    const headers = {};
+
+    if (data) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: data ? JSON.stringify(data) : null
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  }
+
+  async get(path) {
+    return this.sendRequest('GET', path);
+  }
+
+  async post(path, data) {
+    return this.sendRequest('POST', path, data);
+  }
+
+  async put(path, data) {
+    return this.sendRequest('PUT', path, data);
+  }
+
+  async delete(path) {
+    return this.sendRequest('DELETE', path);
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportingApiClient);
+
+/***/ }),
+
+/***/ "./source/js/presentation/timereporting.api/workplace/timereportingWorkplaceApi.js":
+/*!*****************************************************************************************!*\
+  !*** ./source/js/presentation/timereporting.api/workplace/timereportingWorkplaceApi.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class TimereportingWorkplaceApi {
+    constructor(apiClient) {
+      this.apiClient = apiClient;
+    }
+  
+    async getAllWorkplaces() {
+      const path = '/workplace';
+      return this.apiClient.get(path);
+    }
+
+    async getWorkplaceById(workplaceId) {
+      const path = `/workplace/${encodeURIComponent(workplaceId)}`;
+      return this.apiClient.get(path);
+    }    
+  }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimereportingWorkplaceApi);
 
 /***/ }),
 
@@ -213,13 +669,33 @@ module.exports = jQuery;
 
 /***/ }),
 
-/***/ "../../../Timereporting.Web/appsettings.json":
-/*!***************************************************!*\
-  !*** ../../../Timereporting.Web/appsettings.json ***!
-  \***************************************************/
+/***/ "../../../Timereporting.Web/appsettings.DEVELOPMENT.json":
+/*!***************************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.DEVELOPMENT.json ***!
+  \***************************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"appIdentity":{"appBaseName":"Timereports.Web","appBaseUrl":"http://localhost:5001","appEnvironment":"DEVELOPMENT","appLogLevel":"Info","appVersion":"1.0.0","appMaxRequestSize":1048576,"apiBaseName":"Timereports.Api","apiBaseUrl":"http://localhost:5000/api/v1","apiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}},"Email":{"EnableSsl":false,"Host":"mail-server","Port":25,"Addresses":{"Sender":"info@dstx.se","Recipient":"develop@dstx.se"}},"WebHostingOptions":{"BasePublicUrl":"https://timereporting.trinax.se"},"ApiHostingOptions":{"BasePublicUrl":"https://arbetsprov.trinax.se","ApiEndpoint":"https://arbetsprov.trinax.se/api/v1/"},"FileHostingOptions":{"FileHostingUrl":"","TimereportFileDirectory":"Resources/Timereport","WorkplaceFileDirectory":"Resources/Workplace"}}');
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://localhost:5001","AppEnvironment":"DEVELOPMENT","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"IncludeScopes":false,"LogLevel":{"Default":"Debug","System":"Information","Microsoft":"Information"}}}');
+
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.PRODUCTION.json":
+/*!**************************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.PRODUCTION.json ***!
+  \**************************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://timereporting.trinax.se","AppEnvironment":"PRODUCTION","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}}}');
+
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.STAGING.json":
+/*!***********************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.STAGING.json ***!
+  \***********************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://timereporting.staging.se","AppEnvironment":"STAGING","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}}}');
 
 /***/ })
 
@@ -286,246 +762,122 @@ var __webpack_exports__ = {};
   !*** ./source/js/presentation/timereporting.web/views/timereport/previewTimeReportModule.js ***!
   \**********************************************************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../application/logging/appLogger */ "./source/js/application/logging/appLogger.js");
+/* harmony import */ var _application_appConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../application/appConfig */ "./source/js/application/appConfig.js");
+/* harmony import */ var _arbetsprov_trinax_api_trinaxApiClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../arbetsprov.trinax.api/trinaxApiClient */ "./source/js/presentation/arbetsprov.trinax.api/trinaxApiClient.js");
+/* harmony import */ var _arbetsprov_trinax_api_timereport_timereportApi__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../arbetsprov.trinax.api/timereport/timereportApi */ "./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApi.js");
+/* harmony import */ var _arbetsprov_trinax_api_timereport_timereportApiService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../arbetsprov.trinax.api/timereport/timereportApiService */ "./source/js/presentation/arbetsprov.trinax.api/timereport/timereportApiService.js");
+/* harmony import */ var _timereporting_api_timereportingApiClient__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../timereporting.api/timereportingApiClient */ "./source/js/presentation/timereporting.api/timereportingApiClient.js");
+/* harmony import */ var _timereporting_api_timereport_timereportingApi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../timereporting.api/timereport/timereportingApi */ "./source/js/presentation/timereporting.api/timereport/timereportingApi.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
-﻿// Import application logger from appLogger.js
+﻿
 
 
-// Define the fetchAllTimereports component
-function fetchAllTimereports() {
-  // Make an API request to fetch all timereports
-  fetch("http://localhost:5000/api/v1/timereport")
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-      _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_0__["default"].logError("fetchAllTimereports:", data); // Log the error using the appLogger
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-      _application_logging_appLogger__WEBPACK_IMPORTED_MODULE_0__["default"].logError("Error fetching timereports:", error); // Log the error using the appLogger
+
+
+
+
+let apiEndpoint = document.getElementById('api-endpoint').value;
+
+async function fetchAllWorkplaces() {
+  try {
+    const workplaceFilter = $('#workplace-filter');
+    // Fetch workplaces and fill the combo box
+    const response = await fetch(`${apiEndpoint}/workplace`);
+    const data = await response.json();
+
+    // Clear existing options
+    workplaceFilter.empty();
+
+    // Add the "Get all tidrapporter" option
+    const getAllOptionHTML = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
+    workplaceFilter.append(getAllOptionHTML);
+
+    // Add other workplace options
+    data.forEach(workplace => {
+      const optionHTML = `<option value="${workplace.id}">${workplace.name}</option>`;
+      workplaceFilter.append(optionHTML);
     });
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fetchAllTimereports);
-
-
-function fetchTimereportByTimereportId(reportId) {
-  // Make a GET request to fetch the report data
-  fetch(`http://localhost:5000/api/v1/timereport/${reportId}`)
-    .then(response => response.json())
-    .then(data => {
-      // Update the modal with the fetched report data
-      document.getElementById(`reportModalLabel`).innerText = 'Time Report Details';
-      document.getElementById(`name`).innerText = `Date: ${data.name}`;     
-      document.getElementById(`date`).innerText = `Date: ${data.date}`;
-      document.getElementById(`workplace`).innerText = `Workplace: ${data.workplace}`;
-      document.getElementById(`hours`).innerText = `Hours Worked: ${data.hours}`;
-      
-      // Show the modal
-      $(`#reportDetails_${reportId}`).modal('show');
-    })
-    .catch(error => {
-      console.error('Error fetching report data:', error);
-    });
-} window.fetchTimereportByTimereportId = fetchTimereportByTimereportId;
-
-
-function fetchTimereportsBetweenDatesForAllWorkplaces(fromDate, toDate) {
-  // Make an API request to fetch timereports between the selected dates for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsBetweenDatesForAllWorkplaces = fetchTimereportsBetweenDatesForAllWorkplaces;
-
-function fetchTimereportsByStartDateForAllWorkplaces(fromDate) {
-  // Make an API request to fetch timereports starting from the selected date for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?from_date=${fromDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByStartDateForAllWorkplaces = fetchTimereportsByStartDateForAllWorkplaces;
-
-function fetchTimereportsByEndDateForAllWorkplaces(toDate) {
-  // Make an API request to fetch timereports up to the selected end date for all workplaces
-  fetch(`http://localhost:5000/api/v1/timereport?to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByEndDateForAllWorkplaces = fetchTimereportsByEndDateForAllWorkplaces;
-
-function fetchTimereportsByWorkplace(workplaceId) {
-  // Make an API request to fetch timereports for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByWorkplace = fetchTimereportsByWorkplace;
-
-function fetchTimereportsByStartDate(workplaceId, fromDate) {
-  // Make an API request to fetch timereports starting from the selected date for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByStartDate = fetchTimereportsByStartDate;
-
-function fetchTimereportsByEndDate(workplaceId, toDate) {
-  // Make an API request to fetch timereports up to the selected end date for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsByEndDate = fetchTimereportsByEndDate;
-
-function fetchTimereportsBetweenDates(workplaceId, fromDate, toDate) {
-  // Make an API request to fetch timereports between the selected dates for the selected workplace
-  fetch(`http://localhost:5000/api/v1/timereport?workplace=${workplaceId}&from_date=${fromDate}&to_date=${toDate}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Process the fetched data
-      processTimereports(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching timereports:", error);
-    });
-} window.fetchTimereportsBetweenDates = fetchTimereportsBetweenDates;
-
-function fetchTimeReports(event) {
-  event.preventDefault();
-
-  // Get selected values
-  var workplaceId = document.getElementById("workplace-filter").value;
-  var fromDate = document.getElementById("from-date").value;
-  var toDate = document.getElementById("to-date").value;
-
-  // Determine the appropriate action based on the selected filters
-  if (workplaceId && fromDate && toDate) {
-    // Fetch timereports between selected dates for selected workplace
-    fetchTimereportsBetweenDates(workplaceId, fromDate, toDate);
-  } else if (workplaceId && fromDate) {
-    // Fetch timereports starting from the selected date for selected workplace
-    fetchTimereportsByStartDate(workplaceId, fromDate);
-  } else if (workplaceId && toDate) {
-    // Fetch timereports up to the selected end date for selected workplace
-    fetchTimereportsByEndDate(workplaceId, toDate);
-  } else if (workplaceId) {
-    // Fetch timereports for the selected workplace
-    fetchTimereportsByWorkplace(workplaceId);
-  } else if (fromDate && toDate) {
-    // Fetch timereports between the selected dates for all workplaces
-    fetchTimereportsBetweenDatesForAllWorkplaces(fromDate, toDate);
-  } else if (fromDate) {
-    // Fetch timereports starting from the selected date for all workplaces
-    fetchTimereportsByStartDateForAllWorkplaces(fromDate);
-  } else if (toDate) {
-    // Fetch timereports up to the selected end date for all workplaces
-    fetchTimereportsByEndDateForAllWorkplaces(toDate);
-  } else {
-    // Fetch all timereports from all workplaces
-    fetchAllTimereports();
+  } catch (error) {
+    console.error('Error:', error);
   }
-} window.fetchTimeReports = fetchTimeReports;
-
-function processTimereports(data) {
-  console.log("Processing timereports:", data);
-  // Sort the data by report.id in ascending order
-  data.sort((a, b) => a.id - b.id);
-
-  // Clean the time-report-table by removing all existing rows
-  const tableBody = document.querySelector("#time-report-table tbody");
-  tableBody.innerHTML = "";
-
-  // Generate new table rows based on the fetched data
-  data.forEach((report) => {
-    const buttonId = `btn_${report.id}`; // Unique ID for the button
-    const dateParts = report.date.split('T')[0]; // Extract the date part before the 'T' delimiter
-    const formattedDate = dateParts.split('-').reverse().join('-'); // Rearrange the date parts to format it as 'YYYY-MM-DD'
-
-    const row = `<tr>
-      <td>${formattedDate}</td>
-      <td>${report.name}</td>
-      <td>${report.hours.toFixed(2)}</td>
-      <td>
-        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
-          <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-        </button>
-      </td>
-    </tr>`;
-    tableBody.insertAdjacentHTML("beforeend", row);
-  });
-
-  // Generate the modal elements
-  const modalContainer = document.querySelector("#modal-container");
-  modalContainer.innerHTML = "";
-
-  data.forEach((report) => {
-    const modalId = `timereportDetails_${report.id}`;
-
-    const modal = `
-    <div id="modal-container"> 
-      <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="timereportModalLabel">
-                Tidsrapportdetaljer
-              </h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <p><strong>Id:</strong> ${report.id}</p>
-                <p><strong>Name:</strong> ${report.name}</p>
-                <p><strong>Time:</strong> ${report.createdTime}</p>
-                <p><strong>Info:</strong> ${report.info}</p>
-                <div class="text-center">
-                  <img src="${report.imageUrl || '/img/default/timereport/no_time_report_image.png'}" alt="Workplace Image" class="img-fluid">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-    modalContainer.insertAdjacentHTML("beforeend", modal);
-  });
 }
 
+$('#api-endpoint').on('change', function() {
+  const selectedIndex = this.selectedIndex;
+  const workplaceFilter = $('#workplace-filter');
+  
+  if (selectedIndex !== 0) {
+    apiEndpoint = document.getElementById('api-endpoint').value;
+    const timereportingHTMLOptions = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
+    workplaceFilter.prepend(timereportingHTMLOptions);
+    fetchAllWorkplaces();
+  } else {
+    apiEndpoint = document.getElementById('api-endpoint').value;
+    window.location.reload();
+  }
+});
+
+const trinaxApiClient = new _arbetsprov_trinax_api_trinaxApiClient__WEBPACK_IMPORTED_MODULE_1__["default"](apiEndpoint, _application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getApiAuthorizationKey());
+const timereportApi = new _arbetsprov_trinax_api_timereport_timereportApi__WEBPACK_IMPORTED_MODULE_2__["default"](trinaxApiClient);
+const timereportApiService = new _arbetsprov_trinax_api_timereport_timereportApiService__WEBPACK_IMPORTED_MODULE_3__["default"]();
+
+const timereportingApiClient = new _timereporting_api_timereportingApiClient__WEBPACK_IMPORTED_MODULE_4__["default"](apiEndpoint);
+const timereportingApi = new _timereporting_api_timereport_timereportingApi__WEBPACK_IMPORTED_MODULE_5__["default"](timereportingApiClient, apiEndpoint);
+
+
+async function fetchTimereports() {
+  console.log(`We are fetching from ${apiEndpoint}`);
+  try {
+    const fromDate = document.getElementById('from-date').value;
+    const toDate = document.getElementById('to-date').value;
+    const workplaceId = document.getElementById('workplace-filter').value;
+
+    let timereports;
+
+    if (apiEndpoint === "https://arbetsprov.trinax.se/api/v1") {
+      // Use Trinax API for fetching data from Trinax database
+      if (fromDate && toDate) {
+        timereports = await timereportApi.getTimereportsByDateRange(fromDate, toDate);
+      } else if (fromDate) {
+        timereports = await timereportApi.getTimereportsFromDate(fromDate);
+      } else if (toDate) {
+        timereports = await timereportApi.getTimereportsToDate(toDate);
+      } else {
+        timereports = await timereportApi.getAllTimereports();
+      }
+      // Filter timereports based on workplace_id
+      timereports = timereports.filter(report => report.workplace_id === parseInt(workplaceId));
+      // Handle the response and update the UI accordingly
+      timereportApiService.createTimereportTableRows(timereports);
+      timereportApiService.createTimereportDetailsModal(timereports);
+    } else {
+      // Use Timereporting API for fetching data from local MySql database
+      if (workplaceId && fromDate && toDate) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceIdBetweenDates(workplaceId, fromDate, toDate);
+      } else if (workplaceId && fromDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndFromDate(workplaceId, fromDate);
+      } else if (workplaceId && toDate) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate);
+      } else if (workplaceId) {
+        timereports = await timereportingApi.getTimereportsByWorkplaceId(workplaceId);
+      } else if (fromDate && toDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesBetweenDates(fromDate, toDate);
+      } else if (fromDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndFromDate(fromDate);
+      } else if (toDate) {
+        timereports = await timereportingApi.getTimereportsByAllWorkplacesAndToDate(toDate);
+      } else {
+        timereports = await timereportingApi.fetchTimereportsByAllWorkplacesForEntirePeriod();
+      }
+    }
+  } catch (error) {
+    // Handle the error
+    console.log(error);
+  }
+}
+
+const button = document.getElementById('get-timereports');
+button.addEventListener('click', fetchTimereports);
 })();
 
 /******/ })()

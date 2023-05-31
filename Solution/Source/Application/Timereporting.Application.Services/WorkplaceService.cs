@@ -67,7 +67,6 @@ namespace Timereporting.Application.Services
                 if (workplaceDataModel.ImageFile != null)
                 {
                     workplaceEntity.ImageUrl = workplaceDataModel.ImageFile.FileName;
-
                     using var memoryStream = new MemoryStream();
                     await workplaceDataModel.ImageFile.CopyToAsync(memoryStream);
                     workplaceEntity.ImageData = memoryStream.ToArray();

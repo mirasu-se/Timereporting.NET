@@ -11,14 +11,13 @@ namespace Timereporting.Web.ViewModel.Timereport
 
         [Required(ErrorMessage = "The WorkplaceId field is required.")]
         public int WorkplaceId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTime Date { get; set; }
 
         [Required(ErrorMessage = "The Hours field is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "The Hours field must be greater than 0.")]
         public double Hours { get; set; }
 
-        [StringLength(500, ErrorMessage = "Info must not exceed 500 characters.")]
         public string? Info { get; set; }
 
         public IFormFile? ImageFile { get; set; }

@@ -1,10 +1,19 @@
 ﻿@model TimereportPreviewModel
 
 <section id="filters" class="row">
+    <div class="justify-content-center text-center">
+        <div class="m-2">
+            <div class="m-2">
+                <select class="api-select" id="api-endpoint">
+                    <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API Fetch</option>
+                    <option value="http://localhost:5000/api/v1">Timereporting API Fetch</option>
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="col-md-4">
         <label class="form-label" for="workplace-select">Välj arbetsplats:</label>
         <select id="workplace-filter" class="form-select">
-            <option value="0">Få alla tidrapporter</option>
             @if(Model.Workplaces != null){
                 foreach (var workplace in Model.Workplaces)
                 {
@@ -23,7 +32,7 @@
     </div>
     <div class="btn-group d-block">
         <div class="mt-4 mb-4 float-start">
-            <button id="getReportsButton" class="btn btn-secondary" onclick="fetchTimeReports(event)"><span>VISA RAPPORTER<i class="bi bi-search m-2"></i></span></button>
+            <button id="get-timereports" class="btn btn-secondary"><span>VISA RAPPORTER<i class="bi bi-search m-2"></i></span></button>
         </div>
         <div class="mt-4 mb-4 float-end">
             <a asp-controller="Timereport" asp-action="CreateTimereport" class="btn btn-secondary" type="submit">SKAPA RAPPORT<i class="bi bi-calendar3 m-2"></i></a>
@@ -42,80 +51,15 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.Timereports != null)
-        {
-            @foreach (var timereport in Model.Timereports)
-            {
-                <tr>
-                    <td>@timereport.Date.ToString("dd-MM-yyyy")</td>
-                    <td>
-                        @{
-                            var workplace = Model.Workplaces.FirstOrDefault(w => w.Id == timereport.WorkplaceId);
-                            if (workplace != null)
-                            {
-                                @workplace.Name
-                            }
-                        }
-                    </td>
-                    <td>@timereport.Hours.ToString("0.00")</td>
-                    <td>
-                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_@timereport.Id">
-                            <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                        </button>
-                    </td>
-                </tr>
-            }
-        }
+
     </tbody>
 </table>
 
-@if (Model.Timereports != null)
-{
-    @foreach (var timereport in Model.Timereports)
-    {
-    <div id="modal-container">
-        <div class="modal fade" id="timereportDetails_@timereport.Id" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reportModalLabel">
-                            Tidsrapportdetaljer
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Datum:</strong> @timereport.Date.ToString("yyyy-MM-dd")</p>
-                                    <p><strong>Arbetsplats:</strong> @timereport.WorkplaceId</p>
-                                    <p><strong>Arbetade timmar:</strong> @timereport.Hours.ToString("0.00")</p>
-                                    <p><strong>Information:</strong> @timereport.Info</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="text-center">
-                                        @if (timereport.ImageFile != null)
-                                        {
-                                            <img src="@timereport.ImageFile.FileName" alt="Report Image" class="img-fluid">
-                                        }
-                                        else
-                                        {
-                                            <img src="~/img/default/timereport/no_time_report_image.png" alt="Report Image" class="img-fluid">
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stäng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    }
-}
+<div id="modal-container">
+
+</div>
+
+
 
 <!--Include required JS modules based on environment-->
 <environment include="Development">

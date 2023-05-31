@@ -1,7 +1,0 @@
-{
-    "timereports": [
-      { "id": 1, "date": "2022-05-01", "workplace": "Workplace 1", "hours": "08.00" },
-      { "id": 2, "date": "2022-05-02", "workplace": "Workplace 2", "hours": "07.00" },
-      { "id": 3, "date": "2022-05-03", "workplace": "Workplace 3", "hours": "06.00" }
-    ]
-  }

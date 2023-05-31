@@ -1,23 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.Net.Mail;
-using System.Text;
-using Timereporting.Interaction.DataTransfer.Models.Api;
 using Timereporting.Interaction.DataTransfer.Models.Objects;
-using Timereporting.Web.ViewModel.Timereport;
+using Timereporting.Web.Configuration;
 using Timereporting.Web.ViewModel.Workplace;
 
 namespace Timereporting.Web.Controllers
 {
     public class WorkplaceController : Controller
     {
-        private readonly ILogger<WorkplaceController> _logger;
+        private readonly ILogger<TimeReportController> _logger;
+        private readonly IOptions<AppConfig> _appConfig;
 
-        public WorkplaceController(ILogger<WorkplaceController> logger)
+        public WorkplaceController(ILogger<TimeReportController> logger, IOptions<AppConfig> appConfig)
         {
             _logger = logger;
+            _appConfig = appConfig;
         }
 
         public async Task<IActionResult> PreviewWorkplace()
@@ -26,26 +24,46 @@ namespace Timereporting.Web.Controllers
             {
                 using HttpClient httpClient = new();
 
+                // Set the authorization header
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {_appConfig.Value.ApiAuthorizationKey}");
+
                 // Call the API to get workplaces
-                var workplaceResponse = await httpClient.GetAsync("http://timereporting.api/api/v1/workplace");
+                var workplaceResponse = await httpClient.GetAsync("https://arbetsprov.trinax.se/api/v1/workplace");
                 var workplaceContent = await workplaceResponse.Content.ReadAsStringAsync();
-                var workplaceModels = JsonConvert.DeserializeObject<IEnumerable<WorkplaceDataModel>>(workplaceContent);
 
-                // Create the view model and populate the data
-                var viewModel = new WorkplacePreviewModel
+                // Deserialize the API response into a list of dynamic objects
+                var workplaceData = JsonConvert.DeserializeObject<IEnumerable<dynamic>>(workplaceContent);
+
+                if (workplaceData != null)
                 {
-                    Workplaces = workplaceModels,
-                    WorkplaceDetails = null // Set ReportDetails property to null or default values
-                };
+                    // Create the view model and populate the data
+                    var viewModel = new WorkplacePreviewModel
+                    {
+                        Workplaces = workplaceData.Select(workplace => new WorkplaceDataModel
+                        {
+                            Id = (int)workplace.id,
+                            Name = (string)workplace.name,
+                            CreatedTime = DateTime.Parse((string)workplace.created_time),
+                        })
+                    };
 
-                return View(viewModel);
+                    return View(viewModel);
+                }
+
+                // Handle the case when workplaceData is null (or empty) here if needed
             }
             catch (Exception ex)
             {
+                // Handle exceptions
                 _logger.LogError(ex, "Error occurred while retrieving data.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
+
+            // Default return statement (return an appropriate IActionResult)
+            return StatusCode(500, "An error occurred while processing your request.");
         }
+
+
 
         // GET: /timereport/create
         [HttpGet]
