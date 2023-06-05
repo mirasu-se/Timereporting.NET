@@ -778,7 +778,6 @@ class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
-      selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -976,7 +975,6 @@ class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
-      selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -1235,22 +1233,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 class AppModalPresenter {
-    showFailureModal(delay) {
-      $('#submission-failed-modal').fadeIn();
-      setTimeout(function() {
-        $('#submission-failed-modal').modal('hide');
-      }, delay);
-    }
-  
-    showSuccessModal(modalId, delay) {
-      $('#submission-successful-modal').fadeIn();
-      setTimeout(function() {
-        $('#submission-successful-modal').modal('hide');
-      }, delay);
-    }
+  showFailureModal(delay) {
+    $('#submission-failed-modal').modal('show');
+    setTimeout(function() {
+      $('#submission-failed-modal').modal('hide');
+    }, delay);
   }
-  
-  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AppModalPresenter);
+
+  showSuccessModal(delay) {
+    $('#submission-successful-modal').modal('show');
+    setTimeout(function() {
+      $('#submission-successful-modal').modal('hide');
+    }, delay);
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AppModalPresenter);
+
   
 
 /***/ }),
@@ -1455,16 +1454,17 @@ function submitTimereportToTrinaxApi() {
       $('#date').val('');
       $('#hours').val('');
       $('#info').val('');
-      $('.success').html('Time report has been submitted successfully!');
       appModalPresenter.showSuccessModal(3000);
       setTimeout(function() {
         window.location.reload();
-      }, 3500);
+      }, 8500);
     },
     error: function() {
       // Handle error
       appModalPresenter.showFailureModal(3000);
-      $('.error').html('Something went wrong. Please try again later.');
+      setTimeout(function() {
+        window.location.reload();
+      }, 8500);
     }
   });
 }
@@ -1497,16 +1497,17 @@ function submitTimereportToFallbackApi(timereportId) {
       $('#hours').val('');
       $('#info').val('');
       $('#image-input').val('');
-      $('.success').html('Tidsrapporten har skickats framgångsrikt!');
       appModalPresenter.showSuccessModal(3000);
       setTimeout(function() {
         window.location.reload();
-      }, 3500);
+      }, 8500);
     },
     error: function() {
       // Handle error
       appModalPresenter.showFailureModal(3000);
-      $('.error').html('Något gick fel. Vänligen försök igen senare.');
+      setTimeout(function() {
+        window.location.reload();
+      }, 8500);
     }
   });
 }

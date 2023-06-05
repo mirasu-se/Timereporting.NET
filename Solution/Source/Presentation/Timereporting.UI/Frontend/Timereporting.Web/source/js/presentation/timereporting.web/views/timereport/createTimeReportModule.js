@@ -90,16 +90,17 @@ function submitTimereportToTrinaxApi() {
       $('#date').val('');
       $('#hours').val('');
       $('#info').val('');
-      $('.success').html('Time report has been submitted successfully!');
       appModalPresenter.showSuccessModal(3000);
       setTimeout(function() {
         window.location.reload();
-      }, 3500);
+      }, 8500);
     },
     error: function() {
       // Handle error
       appModalPresenter.showFailureModal(3000);
-      $('.error').html('Something went wrong. Please try again later.');
+      setTimeout(function() {
+        window.location.reload();
+      }, 8500);
     }
   });
 }
@@ -132,16 +133,17 @@ function submitTimereportToFallbackApi(timereportId) {
       $('#hours').val('');
       $('#info').val('');
       $('#image-input').val('');
-      $('.success').html('Tidsrapporten har skickats framgångsrikt!');
       appModalPresenter.showSuccessModal(3000);
       setTimeout(function() {
         window.location.reload();
-      }, 3500);
+      }, 8500);
     },
     error: function() {
       // Handle error
       appModalPresenter.showFailureModal(3000);
-      $('.error').html('Något gick fel. Vänligen försök igen senare.');
+      setTimeout(function() {
+        window.location.reload();
+      }, 8500);
     }
   });
 }

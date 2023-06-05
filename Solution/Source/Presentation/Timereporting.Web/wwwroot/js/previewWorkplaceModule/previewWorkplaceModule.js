@@ -751,7 +751,6 @@ class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
-      selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -949,7 +948,6 @@ class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
-      selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {

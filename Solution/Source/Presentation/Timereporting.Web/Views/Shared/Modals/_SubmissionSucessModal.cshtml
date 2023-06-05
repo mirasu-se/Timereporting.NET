@@ -1,26 +1,23 @@
 ﻿<!-- Start submission successful modal -->
-<div class="modal submission-successful-modal fade" id="submissionSuccessfulModal" tabindex="-1" role="dialog" aria-labelledby="submissionSuccessfulModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <!-- Modal title -->
-                <h5 class="modal-title" id="submissionSuccessfulModalTitle">Submission Successful</h5>
-                <!-- Close button -->
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <!-- Display the success image at the center -->
-                <div class="d-flex justify-content-center">
-                    <img src="~/img/shared/modals/form-submission/sucess-modal/success-image.gif" alt="Success" class="img-fluid success-image">
+<div id="modal-container">
+    <div class="modal fade" id="submission-successful-modal" tabindex="-1" aria-labelledby="submissionSuccessfulModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <!-- Modal title -->
+                    <h5 class="modal-title" id="submissionSuccessfulModalTitle">Inlämning lyckades</h5>
                 </div>
-                <!-- Success Title and Message -->
-                <div class="text-center mt-3">
-                    <h6 class="success-title">Submission Successful</h6>
-                    <p class="success-message">The submission was successful. Thank you!</p>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Display the success image at the center -->
+                    <div class="d-flex justify-content-center">
+                        <img src="~/img/shared/modals/form-submission/sucess-modal/success-image.gif" alt="Lyckat" class="img-fluid success-image">
+                    </div>
+                    <!-- Success Title and Message -->
+                    <div class="text-center mt-3">
+                        <p class="success-message text-success">Tack!</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,26 +1,23 @@
 ﻿<!-- Start submission failed modal -->
-<div class="modal submission-failed-modal fade" id="submissionFailedModal" tabindex="-1" role="dialog" aria-labelledby="submissionFailedModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <!-- Modal title -->
-                <h5 class="modal-title" id="submissionFailedModalTitle">Submission Failed</h5>
-                <!-- Close button -->
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <!-- Display the failure image at the center -->
-                <div class="d-flex justify-content-center">
-                    <img src="~/img/shared/modals/form-submission/failure-modal/failure-image.gif" alt="Failure" class="img-fluid failure-image">
+<div id="modal-container">
+    <div class="modal fade" id="submission-failed-modal" tabindex="-1" aria-labelledby="submissionFailedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <!-- Modal title -->
+                    <h5 class="modal-title" id="submissionFailedModalTitle">Inlämning misslyckades</h5>
                 </div>
-                <!-- Failure Title and Message -->
-                <div class="text-center mt-3">
-                    <h6 class="failure-title">Submission Failed</h6>
-                    <p class="failure-message">The submission was unsuccessful. Please try again later.</p>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Display the failure image at the center -->
+                    <div class="d-flex justify-content-center p-5">
+                        <img src="~/img/shared/modals/form-submission/failure-modal/failure-image.gif" alt="Misslyckande" class="img-fluid failure-image p-5">
+                    </div>
+                    <!-- Failure Title and Message -->
+                    <div class="text-center mt-3">
+                        <p class="failure-message text-danger">Något gick fel. Vänligen försök igen senare.</p>
+                    </div>
                 </div>
             </div>
         </div>
