@@ -10,10 +10,9 @@ namespace Timereporting.Infrastructure.Persistence.Entities
         public int Id { get; set; }
 
         [ForeignKey("Workplace")]
-        public int WorkplaceId { get; set; }
+        public Guid WorkplaceId { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public Guid TimereportId { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

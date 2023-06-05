@@ -16,33 +16,33 @@ namespace Timereporting.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TimereportEntity>> GetTimereportsAsync(int workplaceId, DateTime? fromDate, DateTime? toDate)
+        public async Task<IEnumerable<TimereportEntity>> GetTimereportsAsync(Guid? workplaceId, DateTime? fromDate, DateTime? toDate)
         {
-            if (workplaceId != 0 && fromDate != null && toDate != null)
+            if (workplaceId.HasValue && fromDate.HasValue && toDate.HasValue)
             {
-                return await GetTimereportsBetweenDatesAsync(workplaceId, fromDate.Value, toDate.Value);
+                return await GetTimereportsBetweenDatesAsync(workplaceId.Value, fromDate.Value, toDate.Value);
             }
-            else if (workplaceId != 0 && fromDate != null)
+            else if (workplaceId.HasValue && fromDate.HasValue)
             {
-                return await GetTimereportsByStartDateAsync(workplaceId, fromDate.Value);
+                return await GetTimereportsByStartDateAsync(workplaceId.Value, fromDate.Value);
             }
-            else if (workplaceId != 0 && toDate != null)
+            else if (workplaceId.HasValue && toDate.HasValue)
             {
-                return await GetTimereportsByEndDateAsync(workplaceId, toDate.Value);
+                return await GetTimereportsByEndDateAsync(workplaceId.Value, toDate.Value);
             }
-            else if (workplaceId != 0)
+            else if (workplaceId.HasValue)
             {
-                return await GetTimereportsByWorkplaceAsync(workplaceId);
+                return await GetTimereportsByWorkplaceAsync(workplaceId.Value);
             }
-            else if (fromDate != null && toDate != null)
+            else if (fromDate.HasValue && toDate.HasValue)
             {
                 return await GetTimereportsBetweenDatesForAllWorkplacesAsync(fromDate.Value, toDate.Value);
             }
-            else if (fromDate != null)
+            else if (fromDate.HasValue)
             {
                 return await GetTimereportsByStartDateForAllWorkplacesAsync(fromDate.Value);
             }
-            else if (toDate != null)
+            else if (toDate.HasValue)
             {
                 return await GetTimereportsByEndDateForAllWorkplacesAsync(toDate.Value);
             }
@@ -52,16 +52,15 @@ namespace Timereporting.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByEndDateAsync(int workplaceId, DateTime toDate)
+        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByEndDateAsync(Guid workplaceId, DateTime toDate)
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.WorkplaceId == workplaceId && t.Date <= toDate.Date).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId} up to end date {toDate}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId} up to end date {toDate}.");
                 throw;
             }
         }
@@ -70,8 +69,7 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -84,8 +82,7 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date >= fromDate).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date >= fromDate).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -98,8 +95,7 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.Date <= toDate.Date).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -108,44 +104,41 @@ namespace Timereporting.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<TimereportEntity>> GetTimereportsBetweenDatesAsync(int workplaceId, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<TimereportEntity>> GetTimereportsBetweenDatesAsync(Guid workplaceId, DateTime fromDate, DateTime toDate)
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.WorkplaceId == workplaceId && t.Date >= fromDate.Date && t.Date <= toDate.Date).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId} between start date {fromDate} and end date {toDate}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId} between start date {fromDate} and end date {toDate}.");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByStartDateAsync(int workplaceId, DateTime fromDate)
+        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByStartDateAsync(Guid workplaceId, DateTime fromDate)
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId && t.Date == fromDate).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.WorkplaceId == workplaceId && t.Date == fromDate).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId} and start date {fromDate}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId} and start date {fromDate}.");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByWorkplaceAsync(int workplaceId)
+        public async Task<IEnumerable<TimereportEntity>> GetTimereportsByWorkplaceAsync(Guid workplaceId)
         {
             try
             {
-                return await _dbContext.Timereports.Where(t => t.Id == workplaceId).OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.Where(t => t.WorkplaceId == workplaceId).OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }
@@ -154,8 +147,7 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Timereports.OrderBy(t => t.WorkplaceId) // Sort by Id in ascending order
-                            .ToListAsync();
+                return await _dbContext.Timereports.OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -165,15 +157,25 @@ namespace Timereporting.Infrastructure.Repositories
         }
 
 
-        public async Task<TimereportEntity> GetTimereportByIdAsync(int id)
+        public async Task<TimereportEntity> GetTimereportByIdAsync(Guid workplaceId)
         {
             try
             {
-                return await _dbContext.Timereports.FindAsync(id);
+                var timereport = await _dbContext.Timereports.FirstOrDefaultAsync(t => t.WorkplaceId == workplaceId);
+                if (timereport != null)
+                {
+                    // The timereport exists
+                    return timereport;
+                }
+                else
+                {
+                    // The timereport with the given workplaceId doesn't exist
+                    return null;
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereport with workplaceId {workplaceId}.");
                 throw;
             }
         }
@@ -201,7 +203,7 @@ namespace Timereporting.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating timereport with ID {timereport.Id}.");
+                _logger.LogError(ex, $"Error occurred while updating timereport with workplaceId {timereport.Id}.");
                 throw;
             }
         }
@@ -215,7 +217,7 @@ namespace Timereporting.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting timereport with ID {timereport.Id}.");
+                _logger.LogError(ex, $"Error occurred while deleting timereport with workplaceId {timereport.Id}.");
                 throw;
             }
         }

@@ -10,17 +10,15 @@ namespace Timereporting.Application.Automapper
         public WorkplaceMappingProfile()
         {
             ConfigureApiToApplicationMapping();
-
             ConfigureServiceToRepositoryMapping();
         }
 
-        // This method configures the mapping from WorkplaceRequestModel to WorkplaceDataModel
         public void ConfigureApiToApplicationMapping()
         {
-            CreateMap<WorkplaceRequestModel, WorkplaceDataModel>().ReverseMap();
+            CreateMap<WorkplaceRequestModel, WorkplaceDataModel>().ForMember(
+                dest => dest.CreatedTime, opt => opt.MapFrom(src => src.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))).ReverseMap();
         }
 
-        // This method configures the mapping between WorkplaceDataModel and WorkplaceEntity in both directions
         public void ConfigureServiceToRepositoryMapping()
         {
             CreateMap<WorkplaceDataModel, WorkplaceEntity>().ReverseMap();

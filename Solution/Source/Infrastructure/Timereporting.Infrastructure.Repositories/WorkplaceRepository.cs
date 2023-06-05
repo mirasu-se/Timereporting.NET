@@ -20,7 +20,7 @@ namespace Timereporting.Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Workplaces.ToListAsync();
+                return await _dbContext.Workplaces.OrderBy(t => t.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -29,15 +29,25 @@ namespace Timereporting.Infrastructure.Repositories
             }
         }
 
-        public async Task<WorkplaceEntity> GetWorkplaceByIdAsync(int id)
+        public async Task<WorkplaceEntity> GetWorkplaceByIdAsync(Guid workplaceId)
         {
             try
             {
-                return await _dbContext.Workplaces.FindAsync(id);
+                var workplace = await _dbContext.Workplaces.FirstOrDefaultAsync(w => w.WorkplaceId == workplaceId);
+                if (workplace != null)
+                {
+                    // The workplace exists
+                    return workplace;
+                }
+                else
+                {
+                    // The workplace with the given workplaceId doesn't exist
+                    return null;
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }
@@ -65,7 +75,7 @@ namespace Timereporting.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating workplace with ID {workplace.Id}.");
+                _logger.LogError(ex, $"Error occurred while updating workplace with workplaceId {workplace.WorkplaceId}.");
                 throw;
             }
         }
@@ -79,12 +89,10 @@ namespace Timereporting.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting workplace with ID {workplace.Id}.");
+                _logger.LogError(ex, $"Error occurred while deleting workplace with workplaceId {workplace.WorkplaceId}.");
                 throw;
             }
         }
-
-        // Add other repository methods as needed
 
         public async Task<int> SaveChangesAsync()
         {

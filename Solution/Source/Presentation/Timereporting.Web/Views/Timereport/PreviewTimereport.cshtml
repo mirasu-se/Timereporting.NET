@@ -1,23 +1,23 @@
 ﻿@model TimereportPreviewModel
 
-<section id="filters" class="row">
-    <div class="justify-content-center text-center">
-        <div class="m-2">
-            <div class="m-2">
-                <select class="api-select" id="api-endpoint">
-                    <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API Fetch</option>
-                    <option value="http://localhost:5000/api/v1">Timereporting API Fetch</option>
-                </select>
-            </div>
-        </div>
+<div class="justify-content-center text-center">
+    <div class="m-2">
+            <label class="d-block p-2 m-2">Välj API-alternativ:</label>
+            <select class="api-select" id="api-endpoint">
+                <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API</option>
+                <option value="http://localhost:5000/api/v1">Fallback API</option>
+            </select>
     </div>
+</div>
+
+<section id="filters" class="row">
     <div class="col-md-4">
         <label class="form-label" for="workplace-select">Välj arbetsplats:</label>
         <select id="workplace-filter" class="form-select">
             @if(Model.Workplaces != null){
                 foreach (var workplace in Model.Workplaces)
                 {
-                    <option value="@workplace.Id">@workplace.Name</option>
+                    <option value="@workplace.WorkplaceId">@workplace.Name</option>
                 }
             }
         </select>

@@ -1,23 +1,20 @@
 ﻿@model CreateWorkplaceFormModel
-    <div class="justify-content-center text-center mb-5">
+
+<div class="justify-content-center text-center mb-5">
     <h1 class="display-6">Lägg till Arbetsplats</h1>
     <p>Fyll i formuläret nedan för att lägga till en ny arbetsplats.</p>
     <div class="m-2">
         <div class="m-2">
-            <label class="p-2">Välj API-alternativ:</label>
+            <label class="d-block p-2 m-2">Välj API-alternativ:</label>
             <select class="api-select" id="api-endpoint">
-                <option value="0" selected>Synkronizerad API - POST Request</option>
-                <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API - POST Request</option>
-                <option value="http://localhost:5000/api/v1">Timereporting API - POST Request</option>
+                <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API</option>
+                <option value="http://localhost:5000/api/v1">Fallback API</option>
             </select>
         </div>
     </div>
 </div>
+
 <form id="create-workplace-form" method="post" enctype="multipart/form-data">
-    <div class="text-center mt-5">
-        <h1 class="display-6">Skapa Arbetsplats</h1>
-        <p>Fyll i formuläret nedan för att lägga till en ny arbetsplats.</p>
-    </div>
     <div class="form-group">
         <label asp-for="@Model.Name">Namn:</label>
         <input asp-for="@Model.Name" class="form-control" id="name">

@@ -5,6 +5,7 @@ using Mysqlx.Crud;
 using OpenQA.Selenium;
 using Timereporting.Api.Configuration;
 using Timereporting.Application.Services;
+using Timereporting.Domain.Entities;
 using Timereporting.Interaction.DataTransfer.Models.Api;
 using Timereporting.Interaction.DataTransfer.Models.Objects;
 using Timereporting.Interaction.DataTransfer.Services.FileSystem.Images;
@@ -37,7 +38,7 @@ namespace Timereporting.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TimereportDataModel>>> GetTimereports(
-           [FromQuery(Name = "workplace")] int workplaceId,
+           [FromQuery(Name = "workplace")] Guid workplaceId,
            [FromQuery(Name = "from_date")] DateTime? fromDate,
            [FromQuery(Name = "to_date")] DateTime? toDate)
         {
@@ -47,7 +48,7 @@ namespace Timereporting.Controllers
 
                 switch (workplaceId)
                 {
-                    case 0:
+                    case Guid guid when guid == Guid.Parse("00000000-0000-0000-0000-000000000000"):
                         if (fromDate == null && toDate == null)
                         {
                             timereports = await _timereportService.GetAllTimereportsAsync();
@@ -67,7 +68,7 @@ namespace Timereporting.Controllers
                         {
                             if (fromDate > toDate)
                             {
-                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 0 } };
+                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 0, Info = "From date can't be larger than to date!" } };
                             }
                             else
                             {
@@ -93,7 +94,7 @@ namespace Timereporting.Controllers
                         {
                             if (fromDate > toDate)
                             {
-                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 9 } };
+                                timereports = new List<TimereportDataModel> { new TimereportDataModel { Id = 0, Info = "From date can't be larger than to date!" } };
                             }
                             else
                             {
@@ -115,13 +116,12 @@ namespace Timereporting.Controllers
             }
         }
 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TimereportRequestModel>> GetTimereport(int id)
+        [HttpGet("{timereportId}")]
+        public async Task<ActionResult<TimereportRequestModel>> GetTimereport(Guid timereportId)
         {
             try
             {
-                var timereport = await _timereportService.GetTimereportByIdAsync(id);
+                var timereport = await _timereportService.GetTimereportByIdAsync(timereportId);
 
                 if (timereport == null)
                     return NotFound();
@@ -131,7 +131,7 @@ namespace Timereporting.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereport with timereportId {timereportId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -147,31 +147,27 @@ namespace Timereporting.Controllers
                 var dataModel = new TimereportDataModel
                 {
                     WorkplaceId = formModel.WorkplaceId,
+                    TimereportId = Guid.NewGuid(),
                     Date = formModel.Date,
                     Hours = formModel.Hours,
                     Info = formModel.Info,
                     ImageFile = formModel.ImageFile
                 };
 
-                await _timereportService.CreateTimereportAsync(dataModel);
-
-                var fileHostingOptions = _fileHostingOptions.Value;
-
-                if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.TimereportFileDirectory))
+                if (dataModel.ImageFile != null)
                 {
-                    _logger.LogError("File hosting option is not specified.");
-                    throw new Exception();
-                }
-                else
-                {
-                    var storageDirectory = fileHostingOptions.TimereportFileDirectory;
+                    var fileHostingOptions = _fileHostingOptions.Value;
 
-                    if (dataModel.ImageFile != null)
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.TimereportFileDirectory))
                     {
-                        await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
+                        _logger.LogError("File hosting option is not specified or TimereportFileDirectory is null or empty.");
+                        throw new Exception();
                     }
+
+                    await _imageFileService.UploadTimereportImageAsync(dataModel.ImageFile, Path.Combine("wwwroot", fileHostingOptions.TimereportFileDirectory), dataModel.TimereportId);
                 }
 
+                await _timereportService.CreateTimereportAsync(dataModel);
                 return Ok();
             }
             catch (Exception ex)
@@ -181,63 +177,49 @@ namespace Timereporting.Controllers
             }
         }
 
-        private IFormFile CreateFormFileWithNewName(IFormFile originalFile, string newFileName)
-        {
-            using (var stream = new MemoryStream())
-            {
-                originalFile.CopyTo(stream);
-                stream.Position = 0;
-                return new FormFile(stream, 0, stream.Length, originalFile.Name, newFileName);
-            }
-        }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTimereport(int id, TimereportRequestModel requestModel)
+        [HttpPut("{timereportId}")]
+        public async Task<IActionResult> UpdateTimereport(Guid timereportId, TimereportRequestModel dataModel)
         {
             try
             {
-                var existingTimereport = await _timereportService.GetTimereportByIdAsync(id);
+                var existingTimereport = await _timereportService.GetTimereportByIdAsync(timereportId);
 
                 if (existingTimereport == null)
                     return NotFound();
 
-                existingTimereport.Id = requestModel.Id;
-                existingTimereport.Date = requestModel.Date;
-                existingTimereport.Hours = requestModel.Hours;
-                existingTimereport.Info = requestModel.Info;
-                existingTimereport.ImageFile = requestModel.ImageFile;
+                _mapper.Map(dataModel, existingTimereport);
 
-                await _timereportService.UpdateTimereportAsync(id, existingTimereport);
-
-                var fileHostingOptions = _fileHostingOptions.Value;
-                if (fileHostingOptions == null)
+                if (dataModel.ImageFile != null)
                 {
-                    _logger.LogError("File hosting option is not specified.");
-                    throw new Exception();
+                    var fileHostingOptions = _fileHostingOptions.Value;
+
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.TimereportFileDirectory))
+                    {
+                        _logger.LogError("File hosting option is not specified or TimereportFileDirectory is null or empty.");
+                        throw new Exception();
+                    }
+
+                    await _imageFileService.UploadTimereportImageAsync(dataModel.ImageFile, fileHostingOptions.TimereportFileDirectory, timereportId);
                 }
 
-                var storageDirectory = "/Resources/Images/Timereport";
-
-                if (requestModel.ImageFile != null)
-                {
-                    await _imageFileService.UploadImageAsync(requestModel.ImageFile, storageDirectory);
-                }
-
+                await _timereportService.UpdateTimereportAsync(timereportId, existingTimereport);
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while updating timereport with timereportId {timereportId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTimereport(int id)
+
+        [HttpDelete("{timereportId}")]
+        public async Task<IActionResult> DeleteTimereport(Guid timereportId)
         {
             try
             {
-                await _timereportService.DeleteTimereportAsync(id);
+                await _timereportService.DeleteTimereportAsync(timereportId);
                 return NoContent();
             }
             catch (NotFoundException)
@@ -246,47 +228,42 @@ namespace Timereporting.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting Timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while deleting Timereport with timereportId {timereportId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
-        [HttpPost("{id}/image")]
-        public async Task<IActionResult> UploadImage(int id, IFormFile file)
+        [HttpPost("{timereportId}/image")]
+        public async Task<IActionResult> UploadImage(Guid timereportId, IFormFile imageFile)
         {
             try
             {
-                await UploadTimereportImageOnUpdate(id, file);
+                var timereport = await _timereportService.GetTimereportByIdAsync(timereportId);
+                if (timereport == null)
+                {
+                    return NotFound();
+                }
+
+                if (imageFile != null)
+                {
+                    var fileHostingOptions = _fileHostingOptions.Value;
+
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.TimereportFileDirectory))
+                    {
+                        _logger.LogError("File hosting option is not specified or TimereportFileDirectory is null or empty.");
+                        throw new Exception();
+                    }
+                    await _imageFileService.UploadTimereportImageAsync(imageFile, fileHostingOptions.TimereportFileDirectory, timereportId);
+                }
+
+                await _timereportService.UpdateTimereportAsync(timereportId, timereport);
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while uploading image for timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while uploading image for timereport with timereportId {timereportId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
-        }
-
-
-        private async Task<string?> UploadTimereportImageOnUpdate(int id, IFormFile imageFile)
-        {
-            var timereport = await _timereportService.GetTimereportByIdAsync(id);
-            if (timereport == null)  return null;
-
-            var fileHostingOptions = _fileHostingOptions.Value;
-            if (fileHostingOptions == null)
-            {
-                _logger.LogError("File hosting option is not specified.");
-                throw new Exception();
-            }
-
-            var storageDirectory = "/Resources/Images/Timereport";
-
-            var fileName = await _imageFileService.UploadImageAsync(imageFile, storageDirectory);
-
-            // Update the timereport with the image filename and save changes
-            await _timereportService.UpdateTimereportAsync(id, timereport);
-
-            return fileName;
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Timereporting.Interaction.DataTransfer.Services.FileSystem.Images
 {
     public interface IImageFileService
     {
-        Task<string> UploadImageAsync(IFormFile file, string storageDirectory);
+        Task<string> UploadTimereportImageAsync(IFormFile image, string storageDirectory, Guid id);
+        Task<string> UploadWorkplaceImageAsync(IFormFile image, string storageDirectory, Guid id);
     }
 }

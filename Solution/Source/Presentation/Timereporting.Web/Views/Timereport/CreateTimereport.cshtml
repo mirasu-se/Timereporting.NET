@@ -1,25 +1,23 @@
 ﻿@model CreateTimereportFormModel
 
-<form id="create-timereport-form" method="post" enctype="multipart/form-data">
-    <div class="justify-content-center text-center mb-5">
-        <h1 class="display-6">Skapa Tidsrapport</h1>
-        <p>Fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
-        <div class="m-2">
-            <div class="m-2">
-                <select class="api-select" id="api-endpoint">
-                    <option value="0" selected>SYNKRONYSERAD API POST</option>
-                    <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax API POST</option>
-                    <option value="http://localhost:5000/api/v1">Timereporting API POST</option>
-                </select>
-            </div>
-        </div>
+<div class="justify-content-center text-center mb-5">
+    <h1 class="display-6">Skapa Tidsrapport</h1>
+    <p>Fyll i formuläret nedan för att lägga till en ny tidsrapport.</p>
+    <div class="m-2">
+        <select class="api-select" id="api-endpoint">
+            <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax API</option>
+            <option value="http://localhost:5000/api/v1">Fallback API</option>
+        </select>
     </div>
+</div>
+
+<form id="create-timereport-form" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <select asp-for="@Model.WorkplaceId" class="form-control" id="workplace-filter">
             @if(@Model.Workplaces != null){
                 foreach (var workplace in @Model.Workplaces)
                 {
-                    <option value="@workplace.Id" id="workplaceId">@workplace.Name</option>
+                    <option value="@workplace.WorkplaceId" id="workplaceId">@workplace.Name</option>
                 }
             }
         </select>
@@ -41,7 +39,7 @@
             <span asp-validation-for="@Model.Hours" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group mt-3">
+    <div class="form-group image-option hidden mt-3">
         <img id="image-preview" src="~/img/default/timereport/default_time_report_image.png">
     </div>
     <div class="form-group">

@@ -2,6 +2,99 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./source/js/application/appConfig.js":
+/*!********************************************!*\
+  !*** ./source/js/application/appConfig.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Timereporting_Web_appsettings_DEVELOPMENT_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.DEVELOPMENT.json */ "../../../Timereporting.Web/appsettings.DEVELOPMENT.json");
+/* harmony import */ var _Timereporting_Web_appsettings_STAGING_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.STAGING.json */ "../../../Timereporting.Web/appsettings.STAGING.json");
+/* harmony import */ var _Timereporting_Web_appsettings_PRODUCTION_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../Timereporting.Web/appsettings.PRODUCTION.json */ "../../../Timereporting.Web/appsettings.PRODUCTION.json");
+
+
+
+
+const Environment = "DEVELOPMENT";
+
+const getConfigurationByEnvironment = (environment) => {
+  switch (environment) {
+    case 'DEVELOPMENT':
+      return _Timereporting_Web_appsettings_DEVELOPMENT_json__WEBPACK_IMPORTED_MODULE_0__.AppConfig;
+    case 'STAGING':
+      return _Timereporting_Web_appsettings_STAGING_json__WEBPACK_IMPORTED_MODULE_1__.AppConfig;
+    case 'PRODUCTION':
+      return _Timereporting_Web_appsettings_PRODUCTION_json__WEBPACK_IMPORTED_MODULE_2__.AppConfig;
+    default:
+      throw new Error(`Invalid environment: ${environment}`);
+  }
+};
+
+class AppConfig {
+  constructor() {
+    this.config = null;
+    this.loadConfig();
+  }
+
+  loadConfig() {
+    const environmentConfig = getConfigurationByEnvironment(Environment);
+    this.config = { ...this.config, ...environmentConfig };
+  }
+
+  getAppBaseName() {
+    return this.config.AppBaseName;
+  }
+
+  getAppBaseUrl() {
+    return this.config.AppBaseUrl;
+  }
+
+  getAppEnvironment() {
+    return this.config.AppEnvironment;
+  }
+
+  getAppLogLevel() {
+    return this.config.AppLogLevel;
+  }
+
+  getAppVersion() {
+    return this.config.AppVersion;
+  }
+
+  getAppResourceHostingUrl() {
+    return this.config.AppResourceHostingUrl;
+  }
+
+  getAppImageFileDirectory() {
+    return this.config.AppImageFileDirectory;
+  }
+
+  getApiBaseName() {
+    return this.config.ApiBaseName;
+  }
+
+  getApiBaseUrl() {
+    return this.config.ApiBaseUrl;
+  }
+
+  getApiAuthorizationKey() {
+    return this.config.ApiAuthorizationKey;
+  }
+
+  getApiVersion() {
+    return this.config.ApiVersion;
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new AppConfig());
+
+
+/***/ }),
+
 /***/ "./source/js/infrastructure/filesystem/imageProcessing.js":
 /*!****************************************************************!*\
   !*** ./source/js/infrastructure/filesystem/imageProcessing.js ***!
@@ -69,6 +162,36 @@ class AppModalPresenter {
 
 module.exports = jQuery;
 
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.DEVELOPMENT.json":
+/*!***************************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.DEVELOPMENT.json ***!
+  \***************************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://localhost:5001/","AppEnvironment":"DEVELOPMENT","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"http://localhost:5000/","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"IncludeScopes":false,"LogLevel":{"Default":"Debug","System":"Information","Microsoft":"Information"}}}');
+
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.PRODUCTION.json":
+/*!**************************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.PRODUCTION.json ***!
+  \**************************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://timereporting.trinax.se","AppEnvironment":"PRODUCTION","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}}}');
+
+/***/ }),
+
+/***/ "../../../Timereporting.Web/appsettings.STAGING.json":
+/*!***********************************************************!*\
+  !*** ../../../Timereporting.Web/appsettings.STAGING.json ***!
+  \***********************************************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"AppConfig":{"AppBaseName":"Timereports.Web","AppBaseUrl":"http://timereporting.staging.se","AppEnvironment":"STAGING","AppLogLevel":"Info","AppVersion":"1.0.0","AppResourceHostingUrl":"","AppImageFileDirectory":"Resource/Images","ApiBaseName":"Timereports.Api","ApiBaseUrl":"https://arbetsprov.trinax.se/api/v1","ApiAuthorizationKey":"212e5cedb3d8bff7e8343a38e0851da6","ApiVersion":"1.0.0"},"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}}}');
+
 /***/ })
 
 /******/ 	});
@@ -134,31 +257,28 @@ var __webpack_exports__ = {};
   !*** ./source/js/presentation/timereporting.web/views/workplace/createWorkplaceModule.js ***!
   \*******************************************************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../infrastructure/filesystem/imageProcessing */ "./source/js/infrastructure/filesystem/imageProcessing.js");
-/* harmony import */ var _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/appModalPresenter */ "./source/js/presentation/timereporting.web/views/shared/appModalPresenter.js");
+/* harmony import */ var _application_appConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../application/appConfig */ "./source/js/application/appConfig.js");
+/* harmony import */ var _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../infrastructure/filesystem/imageProcessing */ "./source/js/infrastructure/filesystem/imageProcessing.js");
+/* harmony import */ var _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/appModalPresenter */ "./source/js/presentation/timereporting.web/views/shared/appModalPresenter.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 ﻿
 
 
-const imageProcessing = new _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_0__["default"]();
-const appModalPresenter = new _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_1__["default"]();
 
-// Function to open the image file dialog
-window.openImageFileDialog = imageProcessing.openImageFileDialog;
+const imageProcessing = new _infrastructure_filesystem_imageProcessing__WEBPACK_IMPORTED_MODULE_1__["default"]();
+const appModalPresenter = new _shared_appModalPresenter__WEBPACK_IMPORTED_MODULE_2__["default"]();
 
 // Attach click event listener to the image preview
-$('#image-preview').on('click', openImageFileDialog);
-
-// Function to preview the image
-window.previewImage = imageProcessing.previewImage;
+$('#image-preview').on('click', imageProcessing.openImageFileDialog);
 
 // Attach change event listener to the image input field
-$('#image-input').on('change', previewImage);
+$('#image-input').on('change', imageProcessing.previewImage);
+
 
 $('#api-endpoint').on('change', function() {
   var selectedIndex = this.selectedIndex;
 
-  if (selectedIndex === 0 || selectedIndex === 2) {
+  if (selectedIndex === 1) {
     $('.info-option').removeClass('hidden');
     $('.image-option').removeClass('hidden');
   } else {
@@ -227,11 +347,37 @@ function submitWorkplace(url, headers) {
 function submitWorkplaceToTrinaxApi() {
   var url = 'https://arbetsprov.trinax.se/api/v1/workplace';
   var headers = {
-    'Authorization': 'bearer abc123testtoken',
+    'Authorization': `bearer ${_application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getApiAuthorizationKey()}`,
     'Accept': 'application/json'
   };
 
-  submitWorkplace(url, headers);
+  var formData = new FormData();
+  formData.append('name', $('#name').val());
+  formData.append('info', $('#info').val());
+  formData.append('imageFile', $('#image-input')[0].files[0]);
+
+  $.ajax({
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    url: url,
+    headers: headers,
+    data: formData,
+    success: function() {
+      // Handle success
+      $('#name').val('');
+      $('.success').html('Arbetsplatsen har skickats framgångsrikt!');
+      appModalPresenter.showSuccessModal(3000);
+      setTimeout(function() {
+        window.location.reload();
+      }, 3500);
+    },
+    error: function() {
+      // Handle error
+      appModalPresenter.showFailureModal(3000);
+      $('.error').html('Något gick fel. Vänligen försök igen senare.');
+    }
+  });
 }
 
 // Function to submit workplace as a fallback

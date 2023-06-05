@@ -13,13 +13,11 @@ namespace Timereporting.Application.Automapper
             ConfigureServiceToRepositoryMapping();
         }
 
-        // This method configures the mapping from TimereportRequestModel to TimereportDataModel
         public void ConfigureApiToApplicationMapping()
         {
             CreateMap<TimereportRequestModel, TimereportDataModel>().ReverseMap();
         }
 
-        // This method configures the mapping between TimereportDataModel and TimereportEntity in both directions
         public void ConfigureServiceToRepositoryMapping()
         {
             CreateMap<TimereportDataModel, TimereportEntity>().ReverseMap();

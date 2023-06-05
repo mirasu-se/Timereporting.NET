@@ -40,12 +40,11 @@ namespace Timereporting.Infrastructure.Persistence.Migrations
                     b.Property<string>("Info")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("TimereportId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("WorkplaceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("WorkplaceId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -73,6 +72,9 @@ namespace Timereporting.Infrastructure.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid>("WorkplaceId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 

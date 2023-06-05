@@ -22,7 +22,7 @@ namespace Timereporting.Api.Controllers
 
         public WorkplaceController(
             ILogger<WorkplaceController> logger,
-            IMapper mapper, 
+            IMapper mapper,
             IImageFileService imageFileService,
             IOptions<FileHostingOptions> fileHostingOptions,
             IWorkplaceService workplaceService)
@@ -50,12 +50,12 @@ namespace Timereporting.Api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<WorkplaceRequestModel>> GetWorkplace(int id)
+        [HttpGet("{workplaceId}")]
+        public async Task<ActionResult<WorkplaceRequestModel>> GetWorkplace(Guid workplaceId)
         {
             try
             {
-                var workplace = await _workplaceService.GetWorkplaceByIdAsync(id);
+                var workplace = await _workplaceService.GetWorkplaceByIdAsync(workplaceId);
 
                 if (workplace == null)
                     return NotFound();
@@ -65,7 +65,7 @@ namespace Timereporting.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving workplace with workplaceId {workplaceId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -76,61 +76,49 @@ namespace Timereporting.Api.Controllers
             try
             {
                 if (!ModelState.IsValid)
+                {
                     return BadRequest(ModelState);
+                }
 
                 var dataModel = new WorkplaceDataModel
                 {
                     Id = formModel.Id,
+                    WorkplaceId = Guid.NewGuid(),
                     Name = formModel.Name,
                     CreatedTime = DateTime.Now,
                     Info = formModel.Info,
                     ImageFile = formModel.ImageFile
                 };
 
-                await _workplaceService.CreateWorkplaceAsync(dataModel);
+                if (dataModel.ImageFile != null)
+                {
+                    var fileHostingOptions = _fileHostingOptions.Value;
 
-                var fileHostingOptions = _fileHostingOptions.Value;
-                if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.WorkplaceFileDirectory))
-                {
-                    _logger.LogError("File hosting option is not specified.");
-                    throw new Exception();
-                }
-                else
-                {
-                    var storageDirectory = fileHostingOptions.WorkplaceFileDirectory;
-                    if (dataModel.ImageFile != null)
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.WorkplaceFileDirectory))
                     {
-                        await _imageFileService.UploadImageAsync(dataModel.ImageFile, storageDirectory);
+                        _logger.LogError("File hosting option is not specified or WorkplaceFileDirectory is null or empty.");
+                        throw new Exception();
                     }
+
+                    await _imageFileService.UploadWorkplaceImageAsync(dataModel.ImageFile, fileHostingOptions.WorkplaceFileDirectory, dataModel.WorkplaceId);
                 }
 
+                await _workplaceService.CreateWorkplaceAsync(dataModel);
                 return Ok();
             }
-            catch (Exception ex) 
-            { 
-            
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, "Error occurred while creating workplace.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
-        private IFormFile CreateFormFileWithNewName(IFormFile originalFile, string newFileName)
-        {
-            using (var stream = new MemoryStream())
-            {
-                originalFile.CopyTo(stream);
-                stream.Position = 0;
-                return new FormFile(stream, 0, stream.Length, originalFile.Name, newFileName);
-            }
-        }
-
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWorkplace(int id)
+        [HttpDelete("{workplaceId}")]
+        public async Task<IActionResult> DeleteWorkplace(Guid workplaceId)
         {
             try
             {
-                await _workplaceService.DeleteWorkplaceAsync(id);
+                await _workplaceService.DeleteWorkplaceAsync(workplaceId);
 
                 return NoContent();
             }
@@ -140,36 +128,41 @@ namespace Timereporting.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while deleting workplace with workplaceId {workplaceId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWorkplace(int id, WorkplaceRequestModel updatedWorkplace)
+        [HttpPut("{workplaceId}")]
+        public async Task<IActionResult> UpdateWorkplace(Guid workplaceId, WorkplaceRequestModel updatedWorkplace)
         {
             try
             {
-                var existingWorkplace = await _workplaceService.GetWorkplaceByIdAsync(id);
+                var existingWorkplace = await _workplaceService.GetWorkplaceByIdAsync(workplaceId);
 
                 if (existingWorkplace == null)
+                {
                     return NotFound();
+                }
 
-                existingWorkplace.Name = updatedWorkplace.Name;
-                existingWorkplace.CreatedTime = updatedWorkplace.CreatedTime;
-                existingWorkplace.Info = updatedWorkplace.Info;
+                var updatedWorkplaceModel = _mapper.Map<WorkplaceRequestModel>(existingWorkplace);
 
                 if (updatedWorkplace.ImageFile != null)
                 {
-                    var storageDirectory = "/Resources/Images/Workplace";
-                    var fileName = await _imageFileService.UploadImageAsync(updatedWorkplace.ImageFile, storageDirectory);
+                    var fileHostingOptions = _fileHostingOptions.Value;
+
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.WorkplaceFileDirectory))
+                    {
+                        _logger.LogError("File hosting option is not specified or WorkplaceFileDirectory is null or empty.");
+                        throw new Exception();
+                    }
+
+                    await _imageFileService.UploadWorkplaceImageAsync(updatedWorkplace.ImageFile, fileHostingOptions.WorkplaceFileDirectory, workplaceId);
                 }
 
-                await _workplaceService.UpdateWorkplaceAsync(id, existingWorkplace);
-
-                var updatedWorkplaceModel = _mapper.Map<WorkplaceRequestModel>(existingWorkplace);
-                return Ok(updatedWorkplaceModel);
+                await _workplaceService.UpdateWorkplaceAsync(workplaceId, existingWorkplace);
+                return Ok();
             }
             catch (NotFoundException)
             {
@@ -177,32 +170,43 @@ namespace Timereporting.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while updating workplace with workplaceId {workplaceId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
-        [HttpPost("{id}/image")]
-        public async Task<IActionResult> UploadImage(int id, IFormFile imageFile)
+        [HttpPost("{workplaceId}/image")]
+        public async Task<IActionResult> UploadImage(Guid workplaceId, IFormFile imageFile)
         {
             try
             {
-                var workplace = await _workplaceService.GetWorkplaceByIdAsync(id);
+                var workplace = await _workplaceService.GetWorkplaceByIdAsync(workplaceId);
+
                 if (workplace == null)
+                {
                     return NotFound();
+                }
 
-                var storageDirectory = "/Resources/Images/Workplace";
+                if (imageFile != null)
+                {
+                    var fileHostingOptions = _fileHostingOptions.Value;
 
-                var fileName = await _imageFileService.UploadImageAsync(imageFile, storageDirectory);
+                    if (fileHostingOptions == null || string.IsNullOrEmpty(fileHostingOptions.WorkplaceFileDirectory))
+                    {
+                        _logger.LogError("File hosting option is not specified or WorkplaceFileDirectory is null or empty.");
+                        throw new Exception();
+                    }
 
-                // Update the workplace with the image filename and save changes
-                await _workplaceService.UpdateWorkplaceAsync(id, workplace);
+                    await _imageFileService.UploadWorkplaceImageAsync(imageFile, fileHostingOptions.WorkplaceFileDirectory, workplaceId);
+                }
 
+                await _workplaceService.UpdateWorkplaceAsync(workplaceId, workplace);
                 return Ok();
             }
+
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while uploading image for workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while uploading image for workplace with workplaceId {workplaceId}.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }

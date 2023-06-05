@@ -1,25 +1,21 @@
-﻿import ImageProcessing from "../../../../infrastructure/filesystem/imageProcessing";
+﻿import appConfig from "../../../../application/appConfig";
+import ImageProcessing from "../../../../infrastructure/filesystem/imageProcessing";
 import AppModalPresenter from '../shared/appModalPresenter';
 
 const imageProcessing = new ImageProcessing();
 const appModalPresenter = new AppModalPresenter();
 
-// Function to open the image file dialog
-window.openImageFileDialog = imageProcessing.openImageFileDialog;
-
 // Attach click event listener to the image preview
-$('#image-preview').on('click', openImageFileDialog);
-
-// Function to preview the image
-window.previewImage = imageProcessing.previewImage;
+$('#image-preview').on('click', imageProcessing.openImageFileDialog);
 
 // Attach change event listener to the image input field
-$('#image-input').on('change', previewImage);
+$('#image-input').on('change', imageProcessing.previewImage);
+
 
 $('#api-endpoint').on('change', function() {
   var selectedIndex = this.selectedIndex;
 
-  if (selectedIndex === 0 || selectedIndex === 2) {
+  if (selectedIndex === 1) {
     $('.info-option').removeClass('hidden');
     $('.image-option').removeClass('hidden');
   } else {
@@ -88,11 +84,37 @@ function submitWorkplace(url, headers) {
 function submitWorkplaceToTrinaxApi() {
   var url = 'https://arbetsprov.trinax.se/api/v1/workplace';
   var headers = {
-    'Authorization': 'bearer abc123testtoken',
+    'Authorization': `bearer ${appConfig.getApiAuthorizationKey()}`,
     'Accept': 'application/json'
   };
 
-  submitWorkplace(url, headers);
+  var formData = new FormData();
+  formData.append('name', $('#name').val());
+  formData.append('info', $('#info').val());
+  formData.append('imageFile', $('#image-input')[0].files[0]);
+
+  $.ajax({
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    url: url,
+    headers: headers,
+    data: formData,
+    success: function() {
+      // Handle success
+      $('#name').val('');
+      $('.success').html('Arbetsplatsen har skickats framgångsrikt!');
+      appModalPresenter.showSuccessModal(3000);
+      setTimeout(function() {
+        window.location.reload();
+      }, 3500);
+    },
+    error: function() {
+      // Handle error
+      appModalPresenter.showFailureModal(3000);
+      $('.error').html('Något gick fel. Vänligen försök igen senare.');
+    }
+  });
 }
 
 // Function to submit workplace as a fallback

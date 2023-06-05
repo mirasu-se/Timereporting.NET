@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Mysqlx.Crud;
 using OpenQA.Selenium;
 using Timereporting.Infrastructure.Persistence.Entities;
 using Timereporting.Infrastructure.Repositories;
@@ -13,18 +14,15 @@ namespace Timereporting.Application.Services
     {
         private readonly ILogger<WorkplaceService> _logger;
         private readonly IWorkplaceRepository _workplaceRepository;
-        private readonly IImageFileService _imageService;
         private readonly IMapper _mapper;
 
         public WorkplaceService(
             ILogger<WorkplaceService> logger,
             IWorkplaceRepository workplaceRepository,
-            IImageFileService imageService,
             IMapper mapper)
         {
             _logger = logger;
             _workplaceRepository = workplaceRepository;
-            _imageService = imageService;
             _mapper = mapper;
         }
 
@@ -43,32 +41,32 @@ namespace Timereporting.Application.Services
             }
         }
 
-        public async Task<WorkplaceDataModel> GetWorkplaceByIdAsync(int id)
+        public async Task<WorkplaceDataModel> GetWorkplaceByIdAsync(Guid workplaceId)
         {
             try
             {
-                var workplace = await _workplaceRepository.GetWorkplaceByIdAsync(id);
+                var workplace = await _workplaceRepository.GetWorkplaceByIdAsync(workplaceId);
                 var workplaceDataModel = _mapper.Map<WorkplaceDataModel>(workplace);
                 return workplaceDataModel;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }
 
-        public async Task CreateWorkplaceAsync(WorkplaceDataModel workplaceDataModel)
+        public async Task CreateWorkplaceAsync(WorkplaceDataModel dataModel)
         {
             try
             {
-                var workplaceEntity = _mapper.Map<WorkplaceEntity>(workplaceDataModel);
+                var workplaceEntity = _mapper.Map<WorkplaceEntity>(dataModel);
 
-                if (workplaceDataModel.ImageFile != null)
+                if (dataModel.ImageFile != null)
                 {
-                    workplaceEntity.ImageUrl = workplaceDataModel.ImageFile.FileName;
+                    workplaceEntity.ImageUrl = $"img/workplace/WP_ID_{dataModel.WorkplaceId}{Path.GetExtension(dataModel.ImageFile.FileName)}";
                     using var memoryStream = new MemoryStream();
-                    await workplaceDataModel.ImageFile.CopyToAsync(memoryStream);
+                    await dataModel.ImageFile.CopyToAsync(memoryStream);
                     workplaceEntity.ImageData = memoryStream.ToArray();
                 }
 
@@ -81,22 +79,22 @@ namespace Timereporting.Application.Services
             }
         }
 
-        public async Task UpdateWorkplaceAsync(int id, WorkplaceDataModel updatedWorkplaceDataModel)
+        public async Task UpdateWorkplaceAsync(Guid workplaceId, WorkplaceDataModel updatedDataModel)
         {
             try
             {
-                var existingWorkplace = await _workplaceRepository.GetWorkplaceByIdAsync(id);
+                var existingWorkplace = await _workplaceRepository.GetWorkplaceByIdAsync(workplaceId);
                 if (existingWorkplace == null)
-                    throw new NotFoundException($"Workplace with ID {id} not found.");
+                    throw new NotFoundException($"Workplace with workplaceId {workplaceId} not found.");
 
-                _mapper.Map(updatedWorkplaceDataModel, existingWorkplace);
+                _mapper.Map(updatedDataModel, existingWorkplace);
 
-                if (updatedWorkplaceDataModel.ImageFile != null)
+                if (updatedDataModel.ImageFile != null)
                 {
-                    existingWorkplace.ImageUrl = updatedWorkplaceDataModel.ImageFile.FileName;
+                    existingWorkplace.ImageUrl = $"img/workplace/WP_ID_{updatedDataModel.WorkplaceId}{Path.GetExtension(updatedDataModel.ImageFile.FileName)}";
 
                     using var memoryStream = new MemoryStream();
-                    await updatedWorkplaceDataModel.ImageFile.CopyToAsync(memoryStream);
+                    await updatedDataModel.ImageFile.CopyToAsync(memoryStream);
                     existingWorkplace.ImageData = memoryStream.ToArray();
                 }
 
@@ -104,44 +102,24 @@ namespace Timereporting.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating workplace with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while updating workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }
 
-        public async Task DeleteWorkplaceAsync(int id)
+        public async Task DeleteWorkplaceAsync(Guid workplaceId)
         {
             try
             {
-                var workplace = await _workplaceRepository.GetWorkplaceByIdAsync(id);
+                var workplace = await _workplaceRepository.GetWorkplaceByIdAsync(workplaceId);
                 if (workplace == null)
-                    throw new NotFoundException($"Workplace with ID {id} not found.");
+                    throw new NotFoundException($"Workplace with workplaceId {workplaceId} not found.");
 
                 await _workplaceRepository.DeleteWorkplaceAsync(workplace);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting workplace with ID {id}.");
-                throw;
-            }
-        }
-
-        public async Task<string> UploadImageAsync(int id, IFormFile file, string storageDirectory)
-        {
-            try
-            {
-                storageDirectory = "Workplaces";
-                var workplace = await _workplaceRepository.GetWorkplaceByIdAsync(id);
-                if (workplace == null)
-                    throw new NotFoundException($"Workplace with ID {id} not found.");
-
-                var fileName = await _imageService.UploadImageAsync(file, storageDirectory);
-
-                return fileName;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error occurred while uploading image for timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while deleting workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }

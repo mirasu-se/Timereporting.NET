@@ -1,10 +1,19 @@
 ﻿@model WorkplacePreviewModel
 
+<div class="justify-content-center text-center">
+    <div class="m-2">
+        <label class="d-block p-2 m-2">Välj API-alternativ:</label>
+        <select class="api-select" id="api-endpoint">
+            <option value="https://arbetsprov.trinax.se/api/v1" selected>Trinax Web API</option>
+            <option value="http://localhost:5000/api/v1">Fallback API</option>
+        </select>
+    </div>
+</div>
 
 <section id="filters" class="row">
     <div class="btn-group d-block">
         <div class="mt-4 mb-4 float-start">
-            <button id="getWorkplacesButton" class="btn btn-secondary" onclick="fetchWorkplaces(event)"><span>VISA PLATSER<i class="bi bi-search m-2"></i></span></button>
+            <button id="get-workplaces" class="btn btn-secondary"><span>VISA PLATSER<i class="bi bi-search m-2"></i></span></button>
         </div>
         <a class="btn btn-secondary float-end mt-4 mb-4" asp-controller="Workplace" asp-action="CreateWorkplace">
             <span>LÄGG TILL ARBETSPLATS</span>
@@ -15,71 +24,21 @@
 
 
 
-<table class="table table-striped mt-4">
+<table id="workplace-table" class="table table-striped mt-4">
     <thead>
         <tr>
             <th scope="col" class="col-2">Id</th>
-            <th scope="col" class="col-4">Name</th>
-            <th scope="col" class="col-4">Time</th>
-            <th scope="col" class="col-2">Actions</th>
+            <th scope="col" class="col-4">Arbetsplatsnamn</th>
+            <th scope="col" class="col-4">Skapade tid</th>
+            <th scope="col" class="col-2">Handlingar</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.Workplaces != null)
-        {
-            foreach (var workplace in Model.Workplaces)
-            {
-                <tr>
-                    <td>@workplace.Id</td>
-                    <td>@workplace.Name</td>
-                    <td>@workplace.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>
-                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#workplaceDetails_@workplace.Id">
-                            <i class="btn btn-secondary bi bi-info-circle m-0"></i>
-                        </button>
-                    </td>
-                </tr>
-            }
-        }
+
     </tbody>
 </table>
 <div id="modal-container"></div>
 
-@if (Model.Workplaces != null)
-{
-    foreach (var workplace in Model.Workplaces)
-    {
-        <div class="modal fade" id="workplaceDetails_@workplace.Id" tabindex="-1" aria-labelledby="workplaceModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="workplaceModalLabel">
-                            Arbetsplats Info
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <p><strong>ARBETSPLATS ID:</strong> @workplace.Id</p>
-                            <p><strong>Name:</strong> @workplace.Name</p>
-                            <p><strong>Time:</strong> @workplace.CreatedTime</p>
-                            <div class="text-center">
-                                @if (workplace.ImageFile != null)
-                                {
-                                    <img src="@workplace.ImageFile.FileName" alt="Workplace Image" class="img-fluid">
-                                }
-                                else
-                                {
-                                    <img src="~/img/default/workplace/no_workplace_image.png" alt="Workplace Image" class="img-fluid">
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-}
 
 
 <!-- Include required JS modules based on environment -->

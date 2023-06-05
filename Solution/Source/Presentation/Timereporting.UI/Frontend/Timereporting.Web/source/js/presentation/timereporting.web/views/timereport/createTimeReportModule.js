@@ -1,64 +1,39 @@
 ﻿
 import appConfig from '../../../../application/appConfig';
-import ImageProcessing from "../../../../infrastructure/filesystem/imageProcessing";
+import SelectedApiEndpointHandler from '../../../timereporting.api/handlers/selectedApiEndpointHandler';
+import ImageProcessing from '../../../../infrastructure/filesystem/imageProcessing';
 import AppModalPresenter from '../shared/appModalPresenter';
 
-let apiEndpoint = document.getElementById('api-endpoint').value;
+const endpointElementId = 'api-endpoint';
 
-async function fetchAllWorkplaces() {
-  try {
-    const workplaceFilter = $('#workplace-filter');
-    // Fetch workplaces and fill the combo box
-    const response = await fetch(`${apiEndpoint}/workplace`);
-    const data = await response.json();
-
-    // Clear existing options
-    workplaceFilter.empty();
-
-    // Add the "Get all tidrapporter" option
-    const getAllOptionHTML = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
-    workplaceFilter.append(getAllOptionHTML);
-
-    // Add other workplace options
-    data.forEach(workplace => {
-      const optionHTML = `<option value="${workplace.id}">${workplace.name}</option>`;
-      workplaceFilter.append(optionHTML);
-    });
-  } catch (error) {
-    console.error('Error:', error);
-  }
+function getApiEndpoint() {
+  return document.getElementById(endpointElementId).value;
 }
+
+$(`#${endpointElementId}`).on('change', async function() {
+  const newApiEndpoint = getApiEndpoint();
+  selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
+});
+
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 const imageProcessing = new ImageProcessing();
 const appModalPresenter = new AppModalPresenter();
 
-const selectedApiEndpoint = document.getElementById('api-endpoint').value;
-const authorizationKey= `${appConfig.getApiAuthorizationKey()}`;
-
-// Function to open the image file dialog
-window.openImageFileDialog = imageProcessing.openImageFileDialog;
-
 // Attach click event listener to the image preview
-$('#image-preview').on('click', openImageFileDialog);
-
-// Function to preview the image
-window.previewImage = imageProcessing.previewImage;
+$('#image-preview').on('click', imageProcessing.openImageFileDialog);
 
 // Attach change event listener to the image input field
-$('#image-input').on('change', previewImage);
+$('#image-input').on('change', imageProcessing.previewImage);
 
 $('#api-endpoint').on('change', function() {
-  const selectedIndex = this.selectedIndex;
-  const workplaceFilter = $('#workplace-filter');
-  
-  if (selectedIndex !== 0) {
-    apiEndpoint = document.getElementById('api-endpoint').value;
-    const timereportingHTMLOptions = '<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>';
-    workplaceFilter.prepend(timereportingHTMLOptions);
-    fetchAllWorkplaces();
+  var selectedIndex = this.selectedIndex;
+
+  if (selectedIndex === 1) {
+    $('.image-option').removeClass('hidden');
   } else {
-    apiEndpoint = document.getElementById('api-endpoint').value;
-    window.location.reload();
+    $('.image-option').addClass('hidden');
   }
 });
 
@@ -79,7 +54,7 @@ function submitTimereportForm(event) {
     if (shouldSubmitToTrinaxApi()) {
       submitTimereportToTrinaxApi();
     } else {
-      submitTimereportToEnhancedApi();
+      submitTimereportToFallbackApi();
     }
   }
 }
@@ -122,23 +97,56 @@ function submitTimereport(url, headers) {
 }
 
 // Function to submit timereport to Trinax API
+// Function to submit time report to Trinax API
 function submitTimereportToTrinaxApi() {
-  var url = `${apiEndpoint}/timereport`;
+  var url = 'https://arbetsprov.trinax.se/api/v1/timereport';
   var headers = {
-    'Authorization': `bearer ${authorizationKey}`,
+    'Authorization': 'bearer abc123testtoken',
     'Accept': 'application/json'
   };
 
-  submitTimereport(url, headers);
+  var formData = new FormData();
+  formData.append('workplace_id', $('#workplace_id').val());
+  formData.append('date', $('#date').val());
+  formData.append('hours', $('#hours').val());
+  formData.append('info', $('#info').val());
+
+  $.ajax({
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    url: url,
+    headers: headers,
+    data: formData,
+    success: function(response) {
+      // Handle success
+      $('#workplace_id').val('');
+      $('#date').val('');
+      $('#hours').val('');
+      $('#info').val('');
+      $('.success').html('Time report has been submitted successfully!');
+      appModalPresenter.showSuccessModal(3000);
+      setTimeout(function() {
+        window.location.reload();
+      }, 3500);
+    },
+    error: function() {
+      // Handle error
+      appModalPresenter.showFailureModal(3000);
+      $('.error').html('Something went wrong. Please try again later.');
+    }
+  });
 }
 
-// Function to submit timereport as a Enhanced
-function submitTimereportToEnhancedApi() {
-  var url = `${apiEndpoint}/timereport`;
+
+// Function to submit timereport as a Fallback
+function submitTimereportToFallbackApi() {
+  var url = `http://localhost:5000/api/v1/timereport`;
   var headers = {};
 
   submitTimereport(url, headers);
 }
+
 
 // Event listener for submit button click
 $('#submit-button').on('click', submitTimereportForm);

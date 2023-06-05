@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using Timereporting.Infrastructure.Persistence.Entities;
@@ -29,21 +28,21 @@ namespace Timereporting.Application.Services
         }
 
 
-        public async Task<IEnumerable<TimereportDataModel>> GetTimeReportsAsync(int workplaceId, DateTime? fromDate, DateTime? toDate)
+        public async Task<IEnumerable<TimereportDataModel>> GetTimeReportsAsync(Guid workplaceId, DateTime? fromDate, DateTime? toDate)
         {
-            if (workplaceId != 0 && fromDate != null && toDate != null)
+            if (workplaceId != Guid.Empty && fromDate != null && toDate != null)
             {
                 return await GetTimereportsBetweenDatesAsync(workplaceId, fromDate.Value, toDate.Value);
             }
-            else if (workplaceId != 0 && fromDate != null)
+            else if (workplaceId != Guid.Empty && fromDate != null)
             {
                 return await GetTimereportsByStartDateAsync(workplaceId, fromDate.Value);
             }
-            else if (workplaceId != 0 && toDate != null)
+            else if (workplaceId != Guid.Empty && toDate != null)
             {
                 return await GetTimereportsByEndDateAsync(workplaceId, toDate.Value);
             }
-            else if (workplaceId != 0)
+            else if (workplaceId != Guid.Empty)
             {
                 return await GetTimereportsByWorkplaceAsync(workplaceId);
             }
@@ -65,13 +64,13 @@ namespace Timereporting.Application.Services
             }
         }
 
-        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByEndDateAsync(int workplaceId, DateTime toDate)
+        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByEndDateAsync(Guid workplaceId, DateTime toDate)
         {
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsByEndDateAsync(workplaceId, toDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
@@ -85,8 +84,8 @@ namespace Timereporting.Application.Services
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsBetweenDatesForAllWorkplacesAsync(fromDate, toDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
@@ -100,8 +99,8 @@ namespace Timereporting.Application.Services
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsByStartDateForAllWorkplacesAsync(fromDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
@@ -115,8 +114,8 @@ namespace Timereporting.Application.Services
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsByEndDateForAllWorkplacesAsync(toDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
@@ -126,47 +125,47 @@ namespace Timereporting.Application.Services
         }
 
 
-        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsBetweenDatesAsync(int workplaceId, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsBetweenDatesAsync(Guid workplaceId, DateTime fromDate, DateTime toDate)
         {
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsBetweenDatesAsync(workplaceId, fromDate, toDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId} between start date {fromDate} and end date {toDate}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId} between start date {fromDate} and end date {toDate}.");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByStartDateAsync(int workplaceId, DateTime fromDate)
+        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByStartDateAsync(Guid workplaceId, DateTime fromDate)
         {
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsByStartDateAsync(workplaceId, fromDate);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId} and start date {fromDate}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId} and start date {fromDate}.");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByWorkplaceAsync(int workplaceId)
+        public async Task<IEnumerable<TimereportDataModel>> GetTimereportsByWorkplaceAsync(Guid workplaceId)
         {
             try
             {
                 var timereports = await _timereportRepository.GetTimereportsByWorkplaceAsync(workplaceId);
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with ID {workplaceId}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereports for workplace with workplaceId {workplaceId}.");
                 throw;
             }
         }
@@ -176,8 +175,8 @@ namespace Timereporting.Application.Services
             try
             {
                 var timereports = await _timereportRepository.GetAllTimereportsAsync();
-                var timereportDataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
-                return timereportDataModels;
+                var dataModels = _mapper.Map<IEnumerable<TimereportDataModel>>(timereports);
+                return dataModels;
             }
             catch (Exception ex)
             {
@@ -186,31 +185,32 @@ namespace Timereporting.Application.Services
             }
         }
 
-        public async Task<TimereportDataModel> GetTimereportByIdAsync(int id)
+        public async Task<TimereportDataModel> GetTimereportByIdAsync(Guid workplaceId)
         {
             try
             {
-                var timereport = await _timereportRepository.GetTimereportByIdAsync(id);
-                var timereportDataModel = _mapper.Map<TimereportDataModel>(timereport);
-                return timereportDataModel;
+                var timereport = await _timereportRepository.GetTimereportByIdAsync(workplaceId);
+                var dataModel = _mapper.Map<TimereportDataModel>(timereport);
+                return dataModel;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while retrieving timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while retrieving timereport with workplaceId {workplaceId}.");
                 throw;
             }
         }
 
-        public async Task CreateTimereportAsync(TimereportDataModel timereportDataModel)
+        public async Task CreateTimereportAsync(TimereportDataModel dataModel)
         {
             try
             {
-                var timereportEntity = _mapper.Map<TimereportEntity>(timereportDataModel);
-                if (timereportDataModel.ImageFile != null)
+                var timereportEntity = _mapper.Map<TimereportEntity>(dataModel);
+
+                if (dataModel.ImageFile != null)
                 {
-                    timereportEntity.ImageUrl = timereportDataModel.ImageFile.FileName;
+                    timereportEntity.ImageUrl = $"img/timereport/TR_ID_{dataModel.TimereportId}{Path.GetExtension(dataModel.ImageFile.FileName)}";
                     using var memoryStream = new MemoryStream();
-                    await timereportDataModel.ImageFile.CopyToAsync(memoryStream);
+                    await dataModel.ImageFile.CopyToAsync(memoryStream);
                     timereportEntity.ImageData = memoryStream.ToArray();
                 }
 
@@ -223,19 +223,19 @@ namespace Timereporting.Application.Services
             }
         }
 
-        public async Task UpdateTimereportAsync(int id, TimereportDataModel updatedTimereportDataModel)
+        public async Task UpdateTimereportAsync(Guid timereportId, TimereportDataModel updatedTimereportDataModel)
         {
             try
             {
-                var existingTimereport = await _timereportRepository.GetTimereportByIdAsync(id);
+                var existingTimereport = await _timereportRepository.GetTimereportByIdAsync(timereportId);
                 if (existingTimereport == null)
-                    throw new NotFoundException($"Timereport with ID {id} not found.");
+                    throw new NotFoundException($"Timereport with timereportId {timereportId} not found.");
 
                 _mapper.Map(updatedTimereportDataModel, existingTimereport);
 
                 if (updatedTimereportDataModel.ImageFile != null)
                 {
-                    existingTimereport.ImageUrl = updatedTimereportDataModel.ImageFile.FileName;
+                    existingTimereport.ImageUrl = $"img/timereport/TR_ID_{updatedTimereportDataModel.TimereportId}{Path.GetExtension(updatedTimereportDataModel.ImageFile.FileName)}";
                     using var memoryStream = new MemoryStream();
                     await updatedTimereportDataModel.ImageFile.CopyToAsync(memoryStream);
                     existingTimereport.ImageData = memoryStream.ToArray();
@@ -245,44 +245,24 @@ namespace Timereporting.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while updating timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while updating timereport with timereportId {timereportId}.");
                 throw;
             }
         }
 
-        public async Task DeleteTimereportAsync(int id)
+        public async Task DeleteTimereportAsync(Guid timereportId)
         {
             try
             {
-                var timereport = await _timereportRepository.GetTimereportByIdAsync(id);
+                var timereport = await _timereportRepository.GetTimereportByIdAsync(timereportId);
                 if (timereport == null)
-                    throw new NotFoundException($"Timereport with ID {id} not found.");
+                    throw new NotFoundException($"Timereport with timereportId {timereportId} not found.");
 
                 await _timereportRepository.DeleteTimereportAsync(timereport);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred while deleting timereport with ID {id}.");
-                throw;
-            }
-        }
-
-        public async Task<string> UploadImageAsync(int id, IFormFile file, string storageDirectory)
-        {
-            try
-            {
-                storageDirectory = "Timereports";
-                var timereport = await _timereportRepository.GetTimereportByIdAsync(id);
-                if (timereport == null)
-                    throw new NotFoundException($"Timereport with ID {id} not found.");
-
-                var fileName = await _imageService.UploadImageAsync(file, storageDirectory);
-
-                return fileName;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error occurred while uploading image for timereport with ID {id}.");
+                _logger.LogError(ex, $"Error occurred while deleting timereport with timereportId {timereportId}.");
                 throw;
             }
         }

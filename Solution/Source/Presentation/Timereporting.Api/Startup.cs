@@ -127,6 +127,8 @@ namespace Timereporting.Api
 
             app.UseRouting();
 
+            app.UseStaticFiles(); // Enable serving of static files
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

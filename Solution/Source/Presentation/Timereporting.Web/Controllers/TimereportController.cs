@@ -22,29 +22,11 @@ namespace Timereporting.Web.Controllers
         {
             try
             {
-                using HttpClient httpClient = new();
-
-                // Set the authorization header
-                httpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {_appConfig.Value.ApiAuthorizationKey}");
-
-                // Call the API to get workplaces
-                var workplaceResponse = await httpClient.GetAsync("https://arbetsprov.trinax.se/api/v1/workplace");
-                var workplaceContent = await workplaceResponse.Content.ReadAsStringAsync();
-                var workplaceData = JsonConvert.DeserializeObject<IEnumerable<dynamic>>(workplaceContent);
-
-                // Create the view model and populate the data
                 var viewModel = new TimereportPreviewModel
                 {
-                    Workplaces = workplaceData != null
-                        ? workplaceData.Select(workplace => new WorkplaceDataModel
-                        {
-                            Id = (int)workplace.id,
-                            Name = (string)workplace.name,
-                            CreatedTime = DateTime.Parse((string)workplace.created_time)
-                        })
-                        : Enumerable.Empty<WorkplaceDataModel>(), // Use an empty list if workplaceData is null
-                    Timereports = Enumerable.Empty<TimereportDataModel>(), // Use an empty list for timereports
-                    ReportDetails = null // Set initial value to null
+                    Workplaces = Enumerable.Empty<WorkplaceDataModel>(), 
+                    Timereports = Enumerable.Empty<TimereportDataModel>(), 
+                    ReportDetails = null 
                 };
 
                 return View(viewModel);
@@ -62,26 +44,16 @@ namespace Timereporting.Web.Controllers
         {
             try
             {
-                using HttpClient httpClient = new();
-
-                // Set the authorization header
-                httpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {_appConfig.Value.ApiAuthorizationKey}");
-
-                // Call the API to get workplaces
-                var workplaceResponse = await httpClient.GetAsync("https://arbetsprov.trinax.se/api/v1/workplace");
-                var workplaceContent = await workplaceResponse.Content.ReadAsStringAsync();
-                var workplaceModels = JsonConvert.DeserializeObject<IEnumerable<WorkplaceDataModel>>(workplaceContent);
-
                 var viewModel = new CreateTimereportFormModel
                 {
-                    Workplaces = workplaceModels
+                    Workplaces = Enumerable.Empty<WorkplaceDataModel>(),
                 };
 
                 return View(viewModel);
             }
-            catch
+            catch (Exception ex)
             {
-                // Handle exceptions
+                _logger.LogError(ex, "Error occurred while retrieving data.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }

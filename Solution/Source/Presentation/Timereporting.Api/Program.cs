@@ -14,7 +14,6 @@ namespace Timereporting.Api
                 var environment = hostingContext.HostingEnvironment;
 
                 config.SetBasePath(environment.ContentRootPath)
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                     .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
                 if (environment.IsDevelopment())
