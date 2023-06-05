@@ -1,20 +1,7 @@
 class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
-    if (data != null) {
+    if(data != null){
       selectElement.empty();
-      const defaultOption = $('<option>', {
-        value: '0',
-        class: 'get-all-option',
-        selected: 'selected',
-        text: 'Få alla tidrapporter'
-      });
-
-      selectElement.append(defaultOption);
-  
-      if (window.location.pathname === '/timereport/create' || window.location.pathname === '/workplace/create') {
-        selectElement.find('.get-all-option').remove();
-      }
-  
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -22,10 +9,6 @@ class TrinaxWorkplaceDataPresenter {
           text: workplace.name,
         }));
       }
-    } else {
-      // Generate similar content when data is null
-      selectElement.empty();
-      selectElement.append('<option value="" disabled selected>Tyvärr finns inga alternativ att välja bland.</option>');
     }
   }
   
