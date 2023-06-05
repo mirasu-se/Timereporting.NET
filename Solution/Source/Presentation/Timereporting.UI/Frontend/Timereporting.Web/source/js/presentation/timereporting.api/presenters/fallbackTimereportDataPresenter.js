@@ -36,7 +36,7 @@ class FallbackTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#time-report-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
   
@@ -62,7 +62,7 @@ class FallbackTimereportDataPresenter {
                 <div class="card">
                   <div class="card-body">
                     <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                    <p id="workplace"><strong>Arbetsplats Id:</strong> ${report.workplaceId}</p>
+                    <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${report.workplaceId}</p>
                     <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
                     <p id="date"><strong>Datum:</strong> ${new Date(report.date).toISOString().split('T')[0]}</p>
                     <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours.toFixed(2)}</p>
@@ -81,7 +81,7 @@ class FallbackTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }

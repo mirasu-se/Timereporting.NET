@@ -37,7 +37,7 @@ class TrinaxTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#time-report-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
   
@@ -63,7 +63,7 @@ class TrinaxTimereportDataPresenter {
                   <div class="card">
                     <div class="card-body">
                       <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace ? workplace.id : 'N/A'}</p>
+                      <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${workplace ? workplace.id : 'N/A'}</p>
                       <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace ? workplace.name : 'N/A'}</p>
                       <p id="date"><strong>Datum:</strong> ${report.date}</p>
                       <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours}</p>
@@ -82,7 +82,7 @@ class TrinaxTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }

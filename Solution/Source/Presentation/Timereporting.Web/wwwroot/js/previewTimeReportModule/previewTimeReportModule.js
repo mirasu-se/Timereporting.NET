@@ -768,7 +768,7 @@ class FallbackTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#time-report-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
   
@@ -794,7 +794,7 @@ class FallbackTimereportDataPresenter {
                 <div class="card">
                   <div class="card-body">
                     <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                    <p id="workplace"><strong>Arbetsplats Id:</strong> ${report.workplaceId}</p>
+                    <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${report.workplaceId}</p>
                     <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
                     <p id="date"><strong>Datum:</strong> ${new Date(report.date).toISOString().split('T')[0]}</p>
                     <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours.toFixed(2)}</p>
@@ -813,7 +813,7 @@ class FallbackTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }
@@ -840,7 +840,19 @@ class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if (data != null) {
       selectElement.empty();
-      selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
+      const defaultOption = $('<option>', {
+        value: '00000000-0000-0000-0000-000000000000',
+        class: 'get-all-option',
+        selected: 'selected',
+        text: 'Få alla tidrapporter'
+      });
+
+      selectElement.append(defaultOption);
+  
+      if (window.location.pathname === '/timereport/create' || window.location.pathname === '/workplace/create') {
+        selectElement.find('.get-all-option').remove();
+      }
+  
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -851,7 +863,7 @@ class FallbackWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       selectElement.empty();
-      selectElement.append('<option value="" disabled selected>No options available</option>');
+      selectElement.append('<option value="" disabled selected>Tyvärr finns inga alternativ att välja bland.</option>');
     }
   }
 
@@ -883,7 +895,7 @@ class FallbackWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#workplace-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
 
@@ -907,8 +919,8 @@ class FallbackWorkplaceDataPresenter {
                   </div>
                   <div class="card">
                     <div class="card-body">
-                      <p id="workplace"><strong>Arbetsplats Seq:</strong> ${workplace.id}</p>
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace.workplaceId}</p>
+                      <p id="workplace"><strong>ARBETSPLATSSEKVENS:</strong> ${workplace.id}</p>
+                      <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${workplace.workplaceId}</p>
                       <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
                       <p id="date"><strong>Skapade tid:</strong> ${workplace.createdTimeString}</p>
                       <div class="text-center">
@@ -925,7 +937,7 @@ class FallbackWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }
@@ -986,7 +998,7 @@ class TrinaxTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#time-report-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
   
@@ -1012,7 +1024,7 @@ class TrinaxTimereportDataPresenter {
                   <div class="card">
                     <div class="card-body">
                       <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace ? workplace.id : 'N/A'}</p>
+                      <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${workplace ? workplace.id : 'N/A'}</p>
                       <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace ? workplace.name : 'N/A'}</p>
                       <p id="date"><strong>Datum:</strong> ${report.date}</p>
                       <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours}</p>
@@ -1031,7 +1043,7 @@ class TrinaxTimereportDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }
@@ -1055,7 +1067,19 @@ class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if (data != null) {
       selectElement.empty();
-      selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
+      const defaultOption = $('<option>', {
+        value: '0',
+        class: 'get-all-option',
+        selected: 'selected',
+        text: 'Få alla tidrapporter'
+      });
+
+      selectElement.append(defaultOption);
+  
+      if (window.location.pathname === '/timereport/create' || window.location.pathname === '/workplace/create') {
+        selectElement.find('.get-all-option').remove();
+      }
+  
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -1066,10 +1090,10 @@ class TrinaxWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       selectElement.empty();
-      selectElement.append('<option value="" disabled selected>No options available</option>');
+      selectElement.append('<option value="" disabled selected>Tyvärr finns inga alternativ att välja bland.</option>');
     }
   }
-
+  
   async presentTableRows(data) {
     if (data != null) {
       console.log("[API RESPONSE]:", data);
@@ -1098,7 +1122,7 @@ class TrinaxWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       const tableBody = document.querySelector("#workplace-table tbody");
-      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
+      tableBody.innerHTML = "<tr><td colspan='4'>Ingen information tillgänglig för tillfället.</td></tr>";
     }
   }
 
@@ -1121,7 +1145,7 @@ class TrinaxWorkplaceDataPresenter {
                   </div>
                   <div class="card">
                     <div class="card-body">
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace.id}</p>
+                      <p id="workplace"><strong>ARBETSPLATS ID:</strong> ${workplace.id}</p>
                       <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
                       <p id="date"><strong>Skapade tid:</strong> ${workplace.created_time}</p>
                     </div>
@@ -1135,7 +1159,7 @@ class TrinaxWorkplaceDataPresenter {
     } else {
       // Generate similar content when data is null
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "<p>No details available.</p>";
+      modalContainer.innerHTML = "<p>Ingen information tillgänglig för tillfället.</p>";
     }
   }
 }
