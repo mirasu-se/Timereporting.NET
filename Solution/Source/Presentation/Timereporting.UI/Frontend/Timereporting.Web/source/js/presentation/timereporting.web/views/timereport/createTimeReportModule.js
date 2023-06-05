@@ -59,10 +59,60 @@ function submitTimereportForm(event) {
   }
 }
 
-// Function to submit the timereport
-function submitTimereport(url, headers) {
+// Function to submit timereport to Trinax API
+function submitTimereportToTrinaxApi() {
+  var url = 'https://arbetsprov.trinax.se/api/v1/timereport';
+  var headers = {
+    'Authorization': `bearer ${appConfig.getApiAuthorizationKey()}`,
+    'Accept': 'application/json'
+  };
+
   var formData = new FormData();
-  formData.append('workplaceId', $('#workplace-filter').val());
+  formData.append('workplace_id', $('#workplace-filter').val());
+  formData.append('date', $('#date').val());
+  formData.append('hours', $('#hours').val());
+  formData.append('info', $('#info').val());
+
+  $.ajax({
+    type: 'POST',
+    contentType: false,
+    processData: false,
+    url: url,
+    headers: headers,
+    data: formData,
+    success: function(response) {
+      // Log response data to console
+      console.log(response.id);
+      submitTimereportToFallbackApi(response.id);
+
+      // Handle success
+      $('#workplace-filter').val('');
+      $('#date').val('');
+      $('#hours').val('');
+      $('#info').val('');
+      $('.success').html('Time report has been submitted successfully!');
+      appModalPresenter.showSuccessModal(3000);
+      setTimeout(function() {
+        window.location.reload();
+      }, 3500);
+    },
+    error: function() {
+      // Handle error
+      appModalPresenter.showFailureModal(3000);
+      $('.error').html('Something went wrong. Please try again later.');
+    }
+  });
+}
+
+
+
+// Function to submit timereport as a Fallback
+function submitTimereportToFallbackApi(timereportId) {
+  var url = `http://localhost:5000/api/v1/timereport`;
+  var headers = {};
+
+  var formData = new FormData();
+  formData.append('id', timereportId);
   formData.append('date', $('#date').val());
   formData.append('hours', $('#hours').val());
   formData.append('info', $('#info').val());
@@ -94,57 +144,6 @@ function submitTimereport(url, headers) {
       $('.error').html('Något gick fel. Vänligen försök igen senare.');
     }
   });
-}
-
-// Function to submit timereport to Trinax API
-// Function to submit time report to Trinax API
-function submitTimereportToTrinaxApi() {
-  var url = 'https://arbetsprov.trinax.se/api/v1/timereport';
-  var headers = {
-    'Authorization': 'bearer abc123testtoken',
-    'Accept': 'application/json'
-  };
-
-  var formData = new FormData();
-  formData.append('workplace_id', $('#workplace_id').val());
-  formData.append('date', $('#date').val());
-  formData.append('hours', $('#hours').val());
-  formData.append('info', $('#info').val());
-
-  $.ajax({
-    type: 'POST',
-    contentType: false,
-    processData: false,
-    url: url,
-    headers: headers,
-    data: formData,
-    success: function(response) {
-      // Handle success
-      $('#workplace_id').val('');
-      $('#date').val('');
-      $('#hours').val('');
-      $('#info').val('');
-      $('.success').html('Time report has been submitted successfully!');
-      appModalPresenter.showSuccessModal(3000);
-      setTimeout(function() {
-        window.location.reload();
-      }, 3500);
-    },
-    error: function() {
-      // Handle error
-      appModalPresenter.showFailureModal(3000);
-      $('.error').html('Something went wrong. Please try again later.');
-    }
-  });
-}
-
-
-// Function to submit timereport as a Fallback
-function submitTimereportToFallbackApi() {
-  var url = `http://localhost:5000/api/v1/timereport`;
-  var headers = {};
-
-  submitTimereport(url, headers);
 }
 
 

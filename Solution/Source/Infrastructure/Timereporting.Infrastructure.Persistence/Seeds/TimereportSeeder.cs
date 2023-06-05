@@ -23,20 +23,30 @@ namespace Timereporting.Infrastructure.Persistence.Seeds
             {
                 new TimereportEntity
                 {
-                    WorkplaceId = WorkplaceSeeder.WorkplaceId1,
+                    WorkplaceId = WorkplaceSeeder.WorkplaceId2,
                     TimereportId = TimereportId1,
-                    Date = new DateTime(2010, 9, 5, 10, 30, 0),
-                    Hours = 4.5m,
+                    Date = new DateTime(2017, 10, 27, 0, 0, 0),
+                    Hours = 5.50m,
                     Info = "Rivning av befintliga ytor, inklusive borttagning av köksskåp, golvbeläggning och väggmaterial.",
                     ImageUrl = "img/timereport/TR_ID_c6eb15ae-187d-45c6-a810-091c41ebefc4.png",
                     ImageData = null
                 },
                 new TimereportEntity
                 {
-                    WorkplaceId = WorkplaceSeeder.WorkplaceId2,
+                    WorkplaceId = WorkplaceSeeder.WorkplaceId1,
                     TimereportId = TimereportId2,
-                    Date = new DateTime(2011, 3, 12, 8, 0, 0),
-                    Hours = 7.25m,
+                    Date = new DateTime(2017, 10, 28, 0, 0, 0),
+                    Hours = 2.00m,
+                    Info = "Bedömning av befintligt tak och identifiering av eventuella skador eller läckage.",
+                    ImageUrl = "img/timereport/TR_ID_9c8b5cd4-3fe3-4ed0-92e3-8d3f74f9a7c3.png",
+                    ImageData = null
+                },
+                new TimereportEntity
+                {
+                    WorkplaceId = WorkplaceSeeder.WorkplaceId1,
+                    TimereportId = TimereportId2,
+                    Date = new DateTime(2017, 10, 29, 0, 0, 0),
+                    Hours = 2.00m,
                     Info = "Bedömning av befintligt tak och identifiering av eventuella skador eller läckage.",
                     ImageUrl = "img/timereport/TR_ID_9c8b5cd4-3fe3-4ed0-92e3-8d3f74f9a7c3.png",
                     ImageData = null

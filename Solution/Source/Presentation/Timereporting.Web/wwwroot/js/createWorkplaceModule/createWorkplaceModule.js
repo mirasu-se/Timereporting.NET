@@ -354,7 +354,6 @@ function submitWorkplaceToTrinaxApi() {
   var formData = new FormData();
   formData.append('name', $('#name').val());
   formData.append('info', $('#info').val());
-  formData.append('imageFile', $('#image-input')[0].files[0]);
 
   $.ajax({
     type: 'POST',
@@ -366,6 +365,7 @@ function submitWorkplaceToTrinaxApi() {
     success: function() {
       // Handle success
       $('#name').val('');
+      $('#info').val('');
       $('.success').html('Arbetsplatsen har skickats framgångsrikt!');
       appModalPresenter.showSuccessModal(3000);
       setTimeout(function() {
