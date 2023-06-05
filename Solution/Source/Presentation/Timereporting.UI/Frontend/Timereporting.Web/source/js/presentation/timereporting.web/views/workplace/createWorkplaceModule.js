@@ -1,13 +1,24 @@
-﻿import appConfig from "../../../../application/appConfig";
-import ImageProcessing from "../../../../infrastructure/filesystem/imageProcessing";
+﻿import appConfig from '../../../../application/appConfig';
+import SelectedApiEndpointHandler from '../../../timereporting.api/handlers/selectedApiEndpointHandler';
+import ImageProcessing from '../../../../infrastructure/filesystem/imageProcessing';
 import AppModalPresenter from '../shared/appModalPresenter';
-const appModalPresenter = new AppModalPresenter();
 
 const endpointElementId = 'api-endpoint';
 
 function getApiEndpoint() {
   return document.getElementById(endpointElementId).value;
 }
+
+$(`#${endpointElementId}`).on('change', async function() {
+  const newApiEndpoint = getApiEndpoint();
+  selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
+});
+
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
+
+const imageProcessing = new ImageProcessing();
+const appModalPresenter = new AppModalPresenter();
 
 $(`#${endpointElementId}`).on('change', async function() {
   if (getApiEndpoint() === appConfig.getApiBaseUrl()) {
@@ -19,14 +30,12 @@ $(`#${endpointElementId}`).on('change', async function() {
   }
 });
 
-$('#image-preview').on('click', new ImageProcessing().openImageFileDialog);
-$('#image-input').on('change', new ImageProcessing().previewImage);
+$('#image-preview').on('click', imageProcessing.openImageFileDialog);
+$('#image-input').on('change', imageProcessing.previewImage);
 
 function shouldSubmitToTrinaxApi() {
   return $('#api-endpoint')[0].selectedIndex === 0;
 }
-
-shouldSubmitToTrinaxApi();
 
 // Function to handle form submission
 function submitWorkplaceForm(event) {

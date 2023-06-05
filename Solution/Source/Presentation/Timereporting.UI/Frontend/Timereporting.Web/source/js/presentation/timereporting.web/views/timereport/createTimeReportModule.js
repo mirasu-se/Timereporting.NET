@@ -5,6 +5,8 @@ import ImageProcessing from '../../../../infrastructure/filesystem/imageProcessi
 import AppModalPresenter from '../shared/appModalPresenter';
 
 const endpointElementId = 'api-endpoint';
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 function getApiEndpoint() {
   return document.getElementById(endpointElementId).value;
@@ -14,9 +16,6 @@ $(`#${endpointElementId}`).on('change', async function() {
   const newApiEndpoint = getApiEndpoint();
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
 });
-
-const workplaceFilterElementId = 'workplace-filter';
-const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 const imageProcessing = new ImageProcessing();
 const appModalPresenter = new AppModalPresenter();
@@ -81,7 +80,10 @@ function submitTimereportToTrinaxApi() {
     headers: headers,
     data: formData,
     success: function(response) {
+      // Log response data to console
+      console.log(response.id);
       submitTimereportToFallbackApi(response.id);
+
       // Handle success
       $('#workplace-filter').val('');
       $('#date').val('');
@@ -142,6 +144,7 @@ function submitTimereportToFallbackApi(timereportId) {
         window.location.reload();
       }, 5000);
     }
+  });
 }
 
 

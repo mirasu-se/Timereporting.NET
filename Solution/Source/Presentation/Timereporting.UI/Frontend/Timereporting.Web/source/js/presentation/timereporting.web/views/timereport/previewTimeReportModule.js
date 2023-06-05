@@ -5,6 +5,8 @@ import TrinaxTimereportDataPresenter from '../../../timereporting.api/presenters
 import FallbackTimereportDataPresenter from '../../../timereporting.api/presenters/fallbackTimereportDataPresenter';
 
 const endpointElementId = 'api-endpoint';
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 function getApiEndpoint() {
   return document.getElementById(endpointElementId).value;
@@ -13,11 +15,9 @@ function getApiEndpoint() {
 $(`#${endpointElementId}`).on('change', async function() {
   const newApiEndpoint = getApiEndpoint();
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
-  getTimereports();
 });
 
-const workplaceFilterElementId = 'workplace-filter';
-const selectedApiEndpointHandler = new SelectedApiEndpointHandler(getApiEndpoint(), endpointElementId, workplaceFilterElementId);
+ getTimereports();
 
 async function getTimereports() {
   console.log(`We are fetching from ${getApiEndpoint()}`);

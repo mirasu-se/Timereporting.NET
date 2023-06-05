@@ -751,6 +751,7 @@ class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
+      //  selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -948,6 +949,7 @@ class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
     if(data != null){
       selectElement.empty();
+      // selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -1309,6 +1311,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const endpointElementId = 'api-endpoint';
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new _timereporting_api_handlers_selectedApiEndpointHandler__WEBPACK_IMPORTED_MODULE_1__["default"](getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 function getApiEndpoint() {
   return document.getElementById(endpointElementId).value;
@@ -1317,11 +1321,9 @@ function getApiEndpoint() {
 $(`#${endpointElementId}`).on('change', async function() {
   const newApiEndpoint = getApiEndpoint();
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
-  getTimereports();
 });
 
-const workplaceFilterElementId = 'workplace-filter';
-const selectedApiEndpointHandler = new _timereporting_api_handlers_selectedApiEndpointHandler__WEBPACK_IMPORTED_MODULE_1__["default"](getApiEndpoint(), endpointElementId, workplaceFilterElementId);
+ getTimereports();
 
 async function getTimereports() {
   console.log(`We are fetching from ${getApiEndpoint()}`);

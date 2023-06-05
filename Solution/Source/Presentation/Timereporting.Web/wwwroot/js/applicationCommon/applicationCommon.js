@@ -821,8 +821,6 @@ function scrollToTop() {
 
 // Add click event listener to the button
 scrollToTopBtn.addEventListener("click", scrollToTop);
-
-
 })();
 
 /******/ })()
