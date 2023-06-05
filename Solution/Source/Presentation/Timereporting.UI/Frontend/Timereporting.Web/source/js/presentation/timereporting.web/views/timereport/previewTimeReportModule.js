@@ -17,8 +17,6 @@ $(`#${endpointElementId}`).on('change', async function() {
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
 });
 
- getTimereports();
-
 async function getTimereports() {
   console.log(`We are fetching from ${getApiEndpoint()}`);
   try {

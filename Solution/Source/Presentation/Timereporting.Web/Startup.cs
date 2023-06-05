@@ -93,36 +93,6 @@ namespace Timereporting.Web
                     defaults: new { controller = "Workplace", action = "CreateWorkplace" });
 
                 endpoints.MapControllerRoute(
-                    name: "databaseWorks",
-                    pattern: "/docs/database",
-                    defaults: new { controller = "Documentation", action = "DatabaseWorks" });
-
-                endpoints.MapControllerRoute(
-                    name: "apiDocumentation",
-                    pattern: "/docs/api",
-                    defaults: new { controller = "Documentation", action = "ApiDocumentation" });
-
-                endpoints.MapControllerRoute(
-                    name: "dockerCompose",
-                    pattern: "/docs/docker",
-                    defaults: new { controller = "Documentation", action = "DockerCompose" });
-
-                endpoints.MapControllerRoute(
-                    name: "metadataInjection",
-                    pattern: "/docs/metadata",
-                    defaults: new { controller = "Documentation", action = "MetadataInjection" });
-
-                endpoints.MapControllerRoute(
-                    name: "performanceOptimization",
-                    pattern: "/docs/performance",
-                    defaults: new { controller = "Documentation", action = "PerformanceOptimization" });
-
-                endpoints.MapControllerRoute(
-                    name: "webpackBundling",
-                    pattern: "/docs/webpack",
-                    defaults: new { controller = "Documentation", action = "WebpackBundling" });
-
-                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
