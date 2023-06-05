@@ -8,16 +8,16 @@ const fallbackWorkplaceApi = new FallbackWorkplaceApi(fallbackApiClient);
 
 class FallbackTimereportDataPresenter {
   presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by report.id in descending order
       // Last report should be displayed at the top for better UI/UX functionality
       data.sort((b, a) => a.id - b.id);
-    
+  
       // Clean the time-report-table by removing all existing rows
       const tableBody = document.querySelector("#time-report-table tbody");
       tableBody.innerHTML = "";
-    
+  
       // create new table rows based on the fetched data
       data.forEach(async (report) => {
         const workplace = await fallbackWorkplaceApi.getWorkplaceById(report.workplaceId);
@@ -33,11 +33,15 @@ class FallbackTimereportDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       });
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#time-report-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
   
   presentDetailsModal(data) {
-    if(data != null){
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
       modalContainer.innerHTML = "";
     
@@ -74,6 +78,10 @@ class FallbackTimereportDataPresenter {
         </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }

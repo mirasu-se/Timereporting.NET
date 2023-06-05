@@ -22,9 +22,8 @@ class TrinaxApiService {
   }
 
   async handleTrinaxApiWorkplaceRequests() {
-    const trinaxWorkplaceApi = this.trinaxWorkplaceApi;
-    return trinaxWorkplaceApi.getAllWorkplaces();
-  }  
+    return this.trinaxWorkplaceApi.getAllWorkplaces();
+  }
 
   async handleTrinaxApiTimereportRequests(fromDate, toDate, workplaceId) {
     const trinaxTimereportApi = this.trinaxTimereportApi;
@@ -41,13 +40,13 @@ class TrinaxApiService {
       }
     } else {
       if (fromDate && toDate) {
-        return trinaxTimereportApi.getAllTimereports(fromDate, toDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate);
       } else if (fromDate) {
-        return trinaxTimereportApi.getTimereportsFromDate(fromDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndFromDate(fromDate);
       } else if (toDate) {
-        return trinaxTimereportApi.getTimereportsToDate(toDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndToDate(toDate);
       } else {
-        return trinaxTimereportApi.getAllTimereports();
+        return trinaxTimereportApi.getTimereportsByAllWorkplaces();
       }
     }
   }

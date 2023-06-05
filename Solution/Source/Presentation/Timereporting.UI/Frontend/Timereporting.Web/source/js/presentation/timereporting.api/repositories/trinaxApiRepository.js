@@ -11,15 +11,15 @@ class TrinaxApiRepository {
   }
 
   async getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate) {
-    return this.trinaxTimereportApi.getTimereportsFromWorkplaceIdAndDateRange(workplaceId, fromDate, toDate); 
+    return this.trinaxTimereportApi.getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate); 
   }
 
   async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
-    return this.trinaxTimereportApi.getTimereportsFromWorkplaceIdAndFromDate(workplaceId, fromDate); 
+    return this.trinaxTimereportApi.getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate); 
   }
 
   async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
-    return this.trinaxTimereportApi.getTimereportsFromWorkplaceIdAndToDate(workplaceId, toDate); 
+    return this.trinaxTimereportApi.getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate); 
   }
 
   async getTimereportsByWorkplaceId(workplaceId) {
@@ -42,8 +42,20 @@ class TrinaxApiRepository {
     return this.trinaxTimereportApi.getAllTimereports();
   }
 
-  async getAllWorkplaces() {
-    return this.trinaxWorkplaceApi.getAllWorkplaces();
+  async getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate) {
+    return this.trinaxTimereportApi.getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate);
+  }
+
+  async getTimereportsByAllWorkplacesAndFromDate(fromDate) {
+    return this.trinaxTimereportApi.getTimereportsByAllWorkplacesAndFromDate(fromDate);
+  }
+
+  async getTimereportsByAllWorkplacesAndToDate(toDate) {
+    return this.trinaxTimereportApi.getTimereportsByAllWorkplacesAndToDate(toDate);
+  }
+
+  async getTimereportsByAllWorkplaces() {
+    return this.trinaxWorkplaceApi.getTimereportsByAllWorkplaces();
   }
 }
 

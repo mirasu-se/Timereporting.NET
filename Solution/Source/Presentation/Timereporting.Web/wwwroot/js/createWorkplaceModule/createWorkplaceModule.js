@@ -445,6 +445,10 @@ class FallbackTimereportApi {
   }
 
   async getTimereportsByWorkplaceIdBetweenDates(workplaceId, fromDate, toDate) {
+    if (fromDate > toDate) {
+      return null;
+    }
+  
     try {
       const path = "/timereport";
       const queryString = `workplace=${workplaceId}&from_date=${fromDate}&to_date=${toDate}`;
@@ -454,7 +458,7 @@ class FallbackTimereportApi {
       console.error("Error fetching timereports:", error);
       return null;
     }
-  }
+  }  
 
   async getTimereportsByAllWorkplacesBetweenDates(fromDate, toDate) {
     try {
@@ -542,7 +546,7 @@ class TrinaxTimereportApi {
     this.apiClient = apiClient;
   }
 
-  async getAllTimereports() {
+  async getTimereportsByAllWorkplaces() {
     try {
       const path = `/timereport`;
       const response = await this.apiClient.get(path);
@@ -553,35 +557,11 @@ class TrinaxTimereportApi {
     }
   }
 
-  async getTimereportByWorkplaceId(id) {
-    try {
-      const path = `/timereport/${encodeURIComponent(id)}`;
-      const response = await this.apiClient.get(path);
-      return response;
-    } catch (error) {
-      console.error("Error fetching timereport:", error);
+  async getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate) {
+    if (fromDate > toDate) {
       return null;
     }
-  }
-
-  async getTimereportsByWorkplaceId(id) {
-    try {
-      const path = '/timereport';
-      const timereports = await this.apiClient.get(path);
-
-      if (parseInt(id) === 0) {
-        return timereports;
-      }
-      else {
-        return timereports.filter(report => report.workplace_id === parseInt(id));
-      }
-    } catch (error) {
-      console.error("Error fetching timereports by workplace ID:", error);
-      return null;
-    }
-  }
-
-  async getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate) {
+  
     try {
       const filters = {
         from_date: encodeURIComponent(fromDate),
@@ -590,43 +570,144 @@ class TrinaxTimereportApi {
       const queryString = new URLSearchParams(filters).toString();
       const path = `/timereport${queryString ? `?${queryString}` : ''}`;
       const response = await this.apiClient.get(path);
+  
       return response;
     } catch (error) {
       console.error("Error fetching timereports by date range:", error);
       return null;
     }
   }
-
-  async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
+  
+  async getTimereportsByAllWorkplacesAndFromDate(fromDate) {
     try {
       const now = new Date().toISOString().split('T')[0];
-      return await this.getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, now);
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(now)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+  
+      return response;
     } catch (error) {
       console.error("Error fetching timereports from date:", error);
       return null;
     }
   }
-
-  async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
+  
+  async getTimereportsByAllWorkplacesAndToDate(toDate) {
     try {
       const startOfTime = new Date(0).toISOString().slice(0, 10);
-      return await this.getTimereportsByWorkplaceIdAndDateRange(workplaceId, startOfTime, toDate);
+      const filters = {
+        from_date: encodeURIComponent(startOfTime),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+  
+      return response;
     } catch (error) {
       console.error("Error fetching timereports to date:", error);
       return null;
     }
   }
+  
 
-  async createTimereport(data) {
+  async getTimereportByWorkplaceId(workplaceId) {
     try {
-      const path = '/timereport';
-      const response = await this.apiClient.post(path, data);
+      const path = `/timereport/${encodeURIComponent(parseInt(workplaceId))}`;
+      const response = await this.apiClient.get(path);
       return response;
     } catch (error) {
-      console.error("Error creating timereport:", error);
+      console.error("Error fetching timereport:", error);
       return null;
     }
   }
+
+  async getTimereportsByWorkplaceId(workplaceId) {
+    try {
+      const path = '/timereport';
+      const timereports = await this.apiClient.get(path);
+
+      if (parseInt(workplaceId) === 0) {
+        return timereports;
+      }
+      else {
+        return timereports.filter(report => report.workplace_id === parseInt(workplaceId));
+      }
+    } catch (error) {
+      console.error("Error fetching timereports by workplace ID:", error);
+      return null;
+    }
+  }
+
+  async getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate) {
+    if (fromDate > toDate) {
+      return null;
+    }
+  
+    try {
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports by date range:", error);
+      return null;
+    }
+  }  
+  
+  async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
+    try {
+      const now = new Date().toISOString().split('T')[0];
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(now)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports from date:", error);
+      return null;
+    }
+  }
+  
+  async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
+    try {
+      const startOfTime = new Date(0).toISOString().slice(0, 10);
+      const filters = {
+        from_date: encodeURIComponent(startOfTime),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports to date:", error);
+      return null;
+    }
+  }  
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TrinaxTimereportApi);
@@ -686,16 +767,16 @@ const fallbackWorkplaceApi = new _interfaces_fallbackWorkplaceApi__WEBPACK_IMPOR
 
 class FallbackTimereportDataPresenter {
   presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by report.id in descending order
       // Last report should be displayed at the top for better UI/UX functionality
       data.sort((b, a) => a.id - b.id);
-    
+  
       // Clean the time-report-table by removing all existing rows
       const tableBody = document.querySelector("#time-report-table tbody");
       tableBody.innerHTML = "";
-    
+  
       // create new table rows based on the fetched data
       data.forEach(async (report) => {
         const workplace = await fallbackWorkplaceApi.getWorkplaceById(report.workplaceId);
@@ -711,11 +792,15 @@ class FallbackTimereportDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       });
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#time-report-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
   
   presentDetailsModal(data) {
-    if(data != null){
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
       modalContainer.innerHTML = "";
     
@@ -752,6 +837,10 @@ class FallbackTimereportDataPresenter {
         </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
@@ -776,9 +865,9 @@ __webpack_require__.r(__webpack_exports__);
 
 class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
-    if(data != null){
+    if (data != null) {
       selectElement.empty();
-      //  selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
+      selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -786,20 +875,24 @@ class FallbackWorkplaceDataPresenter {
           text: workplace.name,
         }));
       }
+    } else {
+      // Generate similar content when data is null
+      selectElement.empty();
+      selectElement.append('<option value="" disabled selected>No options available</option>');
     }
   }
 
   async presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by workplace.id in descending order
       // Last added workplace should be displayed at the top for better UI/UX functionality
       data.sort((b, a) => a.id - b.id);
-      
+
       // Clean the workplace-table by removing all existing rows
       const tableBody = document.querySelector("#workplace-table tbody");
       tableBody.innerHTML = "";
-      
+
       // Fetch workplace data and create new table rows based on the fetched data
       for (const workplace of data) {
         const row = `<tr>
@@ -814,14 +907,18 @@ class FallbackWorkplaceDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       }
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#workplace-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
-    
+
   presentDetailsModal(data) {
-  if(data != null){
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
       modalContainer.innerHTML = "";
-      
+
       data.forEach(async (workplace) => {
         let imgSrc = workplace.imageUrl ? `${_application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getAppResourceHostingUrl() + workplace.imageUrl}` : "/img/default/workplace/no_workplace_image.png";
         const modal = `
@@ -852,10 +949,14 @@ class FallbackWorkplaceDataPresenter {
           </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
-  
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FallbackWorkplaceDataPresenter);
 
 /***/ }),
@@ -884,7 +985,7 @@ const trinaxWorkplaceApi = new _interfaces_trinaxWorkplaceApi__WEBPACK_IMPORTED_
 
 class TrinaxTimereportDataPresenter {
   async presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by report.id in descending order
       // Last report should be displayed at the top for better UI/UX functionality
@@ -899,7 +1000,7 @@ class TrinaxTimereportDataPresenter {
         const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
         const row = `<tr>
           <td>${report.date}</td>
-          <td>${workplace.name}</td>
+          <td>${workplace ? workplace.name : 'N/A'}</td>
           <td>${report.hours}</td>
           <td>
             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
@@ -909,20 +1010,21 @@ class TrinaxTimereportDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       }
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#time-report-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
   
- presentDetailsModal(data) {
-  if(data != null){
+  presentDetailsModal(data) {
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "";  
+      modalContainer.innerHTML = "";
+    
       data.forEach(async (report) => {
-      // Since Arbetsplatsnamn is required (according to email instructions)  and not avilible by default in direct timereport reponse we will fatch it from workplaceApi
-      // We are here in a forEach loop which means that this will execute asyncronuse calls on workplace endpoint only to get workplace name
-      // This should make a lot of unnecessary requests on our API and in reality we should eather expand table columns in our database 
-      // or if columns already exists we should reconfigure timereport API controller to expose requred data property in the API interface by sql join statement on backend side
-      // or in some other case use caching technology like Redis database to lower down number of requests to our API
-      const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
+        const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
+        const imgSrc = report.imageUrl ? `${_application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getAppResourceHostingUrl() + report.imageUrl}` : "img/default/timereport/no_time_report_image.png";
         const modal = `
           <div id="modal-container"> 
             <div class="modal fade" id="timereportDetails_${report.id}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
@@ -937,13 +1039,13 @@ class TrinaxTimereportDataPresenter {
                   <div class="card">
                     <div class="card-body">
                       <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace.id}</p>
-                      <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
+                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace ? workplace.id : 'N/A'}</p>
+                      <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace ? workplace.name : 'N/A'}</p>
                       <p id="date"><strong>Datum:</strong> ${report.date}</p>
                       <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours}</p>
                       <p id=""><strong>Info:</strong> ${report.info}</p>
                       <div class="text-center">
-                        <img src="${report.imageUrl ? `${_application_appConfig__WEBPACK_IMPORTED_MODULE_0__["default"].getAppResourceHostingUrl() + report.imageUrl}` : "img/default/timereport/no_time_report_image.png"}" alt="Timereport image attachment" class="img-fluid">
+                        <img src="${imgSrc}" alt="Timereport image attachment" class="img-fluid">
                       </div>
                     </div>
                   </div>
@@ -953,6 +1055,10 @@ class TrinaxTimereportDataPresenter {
           </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
@@ -974,9 +1080,9 @@ __webpack_require__.r(__webpack_exports__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 class TrinaxWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
-    if(data != null){
+    if (data != null) {
       selectElement.empty();
-      // selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
+      selectElement.append('<option value="0" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -984,20 +1090,24 @@ class TrinaxWorkplaceDataPresenter {
           text: workplace.name,
         }));
       }
+    } else {
+      // Generate similar content when data is null
+      selectElement.empty();
+      selectElement.append('<option value="" disabled selected>No options available</option>');
     }
   }
 
   async presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by workplace.id in descending order
       // Last added workplace should be displayed at the top for better UI/UX functionality
       data.sort((b, a) => a.id - b.id);
-     
+
       // Clean the workplace-table by removing all existing rows
       const tableBody = document.querySelector("#workplace-table tbody");
       tableBody.innerHTML = "";
-      
+
       // Fetch workplace data and create new table rows based on the fetched data
       for (const workplace of data) {
         const row = `<tr>
@@ -1012,13 +1122,18 @@ class TrinaxWorkplaceDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       }
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#workplace-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
-  
- presentDetailsModal(data) {
-  if(data != null){
+
+  presentDetailsModal(data) {
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "";     
+      modalContainer.innerHTML = "";
+
       data.forEach(async (workplace) => {
         const modal = `
           <div id="modal-container"> 
@@ -1044,6 +1159,10 @@ class TrinaxWorkplaceDataPresenter {
           </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
@@ -1188,9 +1307,8 @@ class TrinaxApiService {
   }
 
   async handleTrinaxApiWorkplaceRequests() {
-    const trinaxWorkplaceApi = this.trinaxWorkplaceApi;
-    return trinaxWorkplaceApi.getAllWorkplaces();
-  }  
+    return this.trinaxWorkplaceApi.getAllWorkplaces();
+  }
 
   async handleTrinaxApiTimereportRequests(fromDate, toDate, workplaceId) {
     const trinaxTimereportApi = this.trinaxTimereportApi;
@@ -1207,13 +1325,13 @@ class TrinaxApiService {
       }
     } else {
       if (fromDate && toDate) {
-        return trinaxTimereportApi.getAllTimereports(fromDate, toDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate);
       } else if (fromDate) {
-        return trinaxTimereportApi.getTimereportsFromDate(fromDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndFromDate(fromDate);
       } else if (toDate) {
-        return trinaxTimereportApi.getTimereportsToDate(toDate);
+        return trinaxTimereportApi.getTimereportsByAllWorkplacesAndToDate(toDate);
       } else {
-        return trinaxTimereportApi.getAllTimereports();
+        return trinaxTimereportApi.getTimereportsByAllWorkplaces();
       }
     }
   }

@@ -62,6 +62,10 @@ class FallbackTimereportApi {
   }
 
   async getTimereportsByWorkplaceIdBetweenDates(workplaceId, fromDate, toDate) {
+    if (fromDate > toDate) {
+      return null;
+    }
+  
     try {
       const path = "/timereport";
       const queryString = `workplace=${workplaceId}&from_date=${fromDate}&to_date=${toDate}`;
@@ -71,7 +75,7 @@ class FallbackTimereportApi {
       console.error("Error fetching timereports:", error);
       return null;
     }
-  }
+  }  
 
   async getTimereportsByAllWorkplacesBetweenDates(fromDate, toDate) {
     try {

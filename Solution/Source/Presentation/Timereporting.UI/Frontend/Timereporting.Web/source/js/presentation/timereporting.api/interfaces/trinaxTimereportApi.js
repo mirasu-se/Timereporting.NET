@@ -3,7 +3,7 @@ class TrinaxTimereportApi {
     this.apiClient = apiClient;
   }
 
-  async getAllTimereports() {
+  async getTimereportsByAllWorkplaces() {
     try {
       const path = `/timereport`;
       const response = await this.apiClient.get(path);
@@ -14,35 +14,11 @@ class TrinaxTimereportApi {
     }
   }
 
-  async getTimereportByWorkplaceId(id) {
-    try {
-      const path = `/timereport/${encodeURIComponent(id)}`;
-      const response = await this.apiClient.get(path);
-      return response;
-    } catch (error) {
-      console.error("Error fetching timereport:", error);
+  async getTimereportsByAllWorkplacesAndDateRange(fromDate, toDate) {
+    if (fromDate > toDate) {
       return null;
     }
-  }
-
-  async getTimereportsByWorkplaceId(id) {
-    try {
-      const path = '/timereport';
-      const timereports = await this.apiClient.get(path);
-
-      if (parseInt(id) === 0) {
-        return timereports;
-      }
-      else {
-        return timereports.filter(report => report.workplace_id === parseInt(id));
-      }
-    } catch (error) {
-      console.error("Error fetching timereports by workplace ID:", error);
-      return null;
-    }
-  }
-
-  async getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate) {
+  
     try {
       const filters = {
         from_date: encodeURIComponent(fromDate),
@@ -51,43 +27,144 @@ class TrinaxTimereportApi {
       const queryString = new URLSearchParams(filters).toString();
       const path = `/timereport${queryString ? `?${queryString}` : ''}`;
       const response = await this.apiClient.get(path);
+  
       return response;
     } catch (error) {
       console.error("Error fetching timereports by date range:", error);
       return null;
     }
   }
-
-  async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
+  
+  async getTimereportsByAllWorkplacesAndFromDate(fromDate) {
     try {
       const now = new Date().toISOString().split('T')[0];
-      return await this.getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, now);
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(now)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+  
+      return response;
     } catch (error) {
       console.error("Error fetching timereports from date:", error);
       return null;
     }
   }
-
-  async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
+  
+  async getTimereportsByAllWorkplacesAndToDate(toDate) {
     try {
       const startOfTime = new Date(0).toISOString().slice(0, 10);
-      return await this.getTimereportsByWorkplaceIdAndDateRange(workplaceId, startOfTime, toDate);
+      const filters = {
+        from_date: encodeURIComponent(startOfTime),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+  
+      return response;
     } catch (error) {
       console.error("Error fetching timereports to date:", error);
       return null;
     }
   }
+  
 
-  async createTimereport(data) {
+  async getTimereportByWorkplaceId(workplaceId) {
     try {
-      const path = '/timereport';
-      const response = await this.apiClient.post(path, data);
+      const path = `/timereport/${encodeURIComponent(parseInt(workplaceId))}`;
+      const response = await this.apiClient.get(path);
       return response;
     } catch (error) {
-      console.error("Error creating timereport:", error);
+      console.error("Error fetching timereport:", error);
       return null;
     }
   }
+
+  async getTimereportsByWorkplaceId(workplaceId) {
+    try {
+      const path = '/timereport';
+      const timereports = await this.apiClient.get(path);
+
+      if (parseInt(workplaceId) === 0) {
+        return timereports;
+      }
+      else {
+        return timereports.filter(report => report.workplace_id === parseInt(workplaceId));
+      }
+    } catch (error) {
+      console.error("Error fetching timereports by workplace ID:", error);
+      return null;
+    }
+  }
+
+  async getTimereportsByWorkplaceIdAndDateRange(workplaceId, fromDate, toDate) {
+    if (fromDate > toDate) {
+      return null;
+    }
+  
+    try {
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports by date range:", error);
+      return null;
+    }
+  }  
+  
+  async getTimereportsByWorkplaceIdAndFromDate(workplaceId, fromDate) {
+    try {
+      const now = new Date().toISOString().split('T')[0];
+      const filters = {
+        from_date: encodeURIComponent(fromDate),
+        to_date: encodeURIComponent(now)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports from date:", error);
+      return null;
+    }
+  }
+  
+  async getTimereportsByWorkplaceIdAndToDate(workplaceId, toDate) {
+    try {
+      const startOfTime = new Date(0).toISOString().slice(0, 10);
+      const filters = {
+        from_date: encodeURIComponent(startOfTime),
+        to_date: encodeURIComponent(toDate)
+      };
+      const queryString = new URLSearchParams(filters).toString();
+      const path = `/timereport${queryString ? `?${queryString}` : ''}`;
+      const response = await this.apiClient.get(path);
+      
+      // Filter the response by workplace_id property
+      const filteredResponse = response.filter((timereport) => timereport.workplace_id === parseInt(workplaceId));
+      
+      return filteredResponse;
+    } catch (error) {
+      console.error("Error fetching timereports to date:", error);
+      return null;
+    }
+  }  
 }
 
 export default TrinaxTimereportApi;

@@ -2,9 +2,9 @@ import appConfig from '../../../application/appConfig';
 
 class FallbackWorkplaceDataPresenter {
   async presentSelectOptions(data, selectElement) {
-    if(data != null){
+    if (data != null) {
       selectElement.empty();
-      //  selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
+      selectElement.append('<option value="00000000-0000-0000-0000-000000000000" class="get-all-option" selected>Få alla tidrapporter</option>');
       // Add options for each workplace
       for (const workplace of data) {
         selectElement.append($('<option>', {
@@ -12,20 +12,24 @@ class FallbackWorkplaceDataPresenter {
           text: workplace.name,
         }));
       }
+    } else {
+      // Generate similar content when data is null
+      selectElement.empty();
+      selectElement.append('<option value="" disabled selected>No options available</option>');
     }
   }
 
   async presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by workplace.id in descending order
       // Last added workplace should be displayed at the top for better UI/UX functionality
       data.sort((b, a) => a.id - b.id);
-      
+
       // Clean the workplace-table by removing all existing rows
       const tableBody = document.querySelector("#workplace-table tbody");
       tableBody.innerHTML = "";
-      
+
       // Fetch workplace data and create new table rows based on the fetched data
       for (const workplace of data) {
         const row = `<tr>
@@ -40,14 +44,18 @@ class FallbackWorkplaceDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       }
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#workplace-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
-    
+
   presentDetailsModal(data) {
-  if(data != null){
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
       modalContainer.innerHTML = "";
-      
+
       data.forEach(async (workplace) => {
         let imgSrc = workplace.imageUrl ? `${appConfig.getAppResourceHostingUrl() + workplace.imageUrl}` : "/img/default/workplace/no_workplace_image.png";
         const modal = `
@@ -78,8 +86,12 @@ class FallbackWorkplaceDataPresenter {
           </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
-  
+
 export default FallbackWorkplaceDataPresenter;

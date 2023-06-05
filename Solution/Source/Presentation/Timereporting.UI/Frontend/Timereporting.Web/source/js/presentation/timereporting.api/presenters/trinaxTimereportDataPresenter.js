@@ -9,7 +9,7 @@ const trinaxWorkplaceApi = new TrinaxWorkplaceApi(trinaxApiClient);
 
 class TrinaxTimereportDataPresenter {
   async presentTableRows(data) {
-    if(data != null){
+    if (data != null) {
       console.log("[API RESPONSE]:", data);
       // Sort the data by report.id in descending order
       // Last report should be displayed at the top for better UI/UX functionality
@@ -24,7 +24,7 @@ class TrinaxTimereportDataPresenter {
         const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
         const row = `<tr>
           <td>${report.date}</td>
-          <td>${workplace.name}</td>
+          <td>${workplace ? workplace.name : 'N/A'}</td>
           <td>${report.hours}</td>
           <td>
             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#timereportDetails_${report.id}">
@@ -34,20 +34,21 @@ class TrinaxTimereportDataPresenter {
         </tr>`;
         tableBody.insertAdjacentHTML("beforeend", row);
       }
+    } else {
+      // Generate similar content when data is null
+      const tableBody = document.querySelector("#time-report-table tbody");
+      tableBody.innerHTML = "<tr><td colspan='4'>No data available.</td></tr>";
     }
   }
   
- presentDetailsModal(data) {
-  if(data != null){
+  presentDetailsModal(data) {
+    if (data != null) {
       const modalContainer = document.querySelector("#modal-container");
-      modalContainer.innerHTML = "";  
+      modalContainer.innerHTML = "";
+    
       data.forEach(async (report) => {
-      // Since Arbetsplatsnamn is required (according to email instructions)  and not avilible by default in direct timereport reponse we will fatch it from workplaceApi
-      // We are here in a forEach loop which means that this will execute asyncronuse calls on workplace endpoint only to get workplace name
-      // This should make a lot of unnecessary requests on our API and in reality we should eather expand table columns in our database 
-      // or if columns already exists we should reconfigure timereport API controller to expose requred data property in the API interface by sql join statement on backend side
-      // or in some other case use caching technology like Redis database to lower down number of requests to our API
-      const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
+        const workplace = await trinaxWorkplaceApi.getWorkplaceById(report.workplace_id);
+        const imgSrc = report.imageUrl ? `${appConfig.getAppResourceHostingUrl() + report.imageUrl}` : "img/default/timereport/no_time_report_image.png";
         const modal = `
           <div id="modal-container"> 
             <div class="modal fade" id="timereportDetails_${report.id}" tabindex="-1" aria-labelledby="timereportModalLabel" aria-hidden="true">
@@ -62,13 +63,13 @@ class TrinaxTimereportDataPresenter {
                   <div class="card">
                     <div class="card-body">
                       <p id="id"><strong>RAPPORT ID -</strong> ${report.id}</p>
-                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace.id}</p>
-                      <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace.name}</p>
+                      <p id="workplace"><strong>Arbetsplats Id:</strong> ${workplace ? workplace.id : 'N/A'}</p>
+                      <p id="name"><strong>Arbetsplatsnamn:</strong> ${workplace ? workplace.name : 'N/A'}</p>
                       <p id="date"><strong>Datum:</strong> ${report.date}</p>
                       <p id="hours"><strong>Arbetstimmar:</strong> ${report.hours}</p>
                       <p id=""><strong>Info:</strong> ${report.info}</p>
                       <div class="text-center">
-                        <img src="${report.imageUrl ? `${appConfig.getAppResourceHostingUrl() + report.imageUrl}` : "img/default/timereport/no_time_report_image.png"}" alt="Timereport image attachment" class="img-fluid">
+                        <img src="${imgSrc}" alt="Timereport image attachment" class="img-fluid">
                       </div>
                     </div>
                   </div>
@@ -78,6 +79,10 @@ class TrinaxTimereportDataPresenter {
           </div>`;
         modalContainer.insertAdjacentHTML("beforeend", modal);
       });
+    } else {
+      // Generate similar content when data is null
+      const modalContainer = document.querySelector("#modal-container");
+      modalContainer.innerHTML = "<p>No details available.</p>";
     }
   }
 }
