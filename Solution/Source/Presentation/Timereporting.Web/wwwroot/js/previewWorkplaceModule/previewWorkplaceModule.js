@@ -1309,6 +1309,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const endpointElementId = 'api-endpoint';
+const workplaceFilterElementId = 'workplace-filter';
+const selectedApiEndpointHandler = new _timereporting_api_handlers_selectedApiEndpointHandler__WEBPACK_IMPORTED_MODULE_1__["default"](getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 function getApiEndpoint() {
   return document.getElementById(endpointElementId).value;
@@ -1317,10 +1319,8 @@ function getApiEndpoint() {
 $(`#${endpointElementId}`).on('change', async function() {
   const newApiEndpoint = getApiEndpoint();
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
+  getWorkplaces();
 });
-
-const workplaceFilterElementId = 'workplace-filter';
-const selectedApiEndpointHandler = new _timereporting_api_handlers_selectedApiEndpointHandler__WEBPACK_IMPORTED_MODULE_1__["default"](getApiEndpoint(), endpointElementId, workplaceFilterElementId);
 
 async function getWorkplaces() {
   console.log(`We are fetching from ${getApiEndpoint()}`);
@@ -1350,8 +1350,7 @@ async function getWorkplaces() {
   }
 }
 
-const button = document.getElementById('get-workplaces');
-button.addEventListener('click', getWorkplaces);
+getWorkplaces();
 })();
 
 /******/ })()

@@ -81,26 +81,23 @@ function submitTimereportToTrinaxApi() {
     headers: headers,
     data: formData,
     success: function(response) {
-      // Log response data to console
-      console.log(response.id);
       submitTimereportToFallbackApi(response.id);
-
       // Handle success
       $('#workplace-filter').val('');
       $('#date').val('');
       $('#hours').val('');
       $('#info').val('');
-      appModalPresenter.showSuccessModal(3000);
+      appModalPresenter.showSuccessModal(5000);
       setTimeout(function() {
-        window.location.reload();
-      }, 8500);
+        window.location.replace('/Timereport/PreviewTimereport');
+      }, 5000);
     },
     error: function() {
       // Handle error
-      appModalPresenter.showFailureModal(3000);
+      appModalPresenter.showFailureModal(5000);
       setTimeout(function() {
         window.location.reload();
-      }, 8500);
+      }, 5000);
     }
   });
 }
@@ -133,19 +130,18 @@ function submitTimereportToFallbackApi(timereportId) {
       $('#hours').val('');
       $('#info').val('');
       $('#image-input').val('');
-      appModalPresenter.showSuccessModal(3000);
+      appModalPresenter.showSuccessModal(5000);
       setTimeout(function() {
-        window.location.reload();
-      }, 8500);
+        window.location.replace('/Timereport/PreviewTimereport');
+      }, 5000);
     },
     error: function() {
       // Handle error
-      appModalPresenter.showFailureModal(3000);
+      appModalPresenter.showFailureModal(5000);
       setTimeout(function() {
         window.location.reload();
-      }, 8500);
+      }, 5000);
     }
-  });
 }
 
 

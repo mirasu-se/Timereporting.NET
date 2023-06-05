@@ -13,6 +13,7 @@ function getApiEndpoint() {
 $(`#${endpointElementId}`).on('change', async function() {
   const newApiEndpoint = getApiEndpoint();
   selectedApiEndpointHandler.updateEndpoint(newApiEndpoint);
+  getTimereports();
 });
 
 const workplaceFilterElementId = 'workplace-filter';

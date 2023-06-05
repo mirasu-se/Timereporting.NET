@@ -331,20 +331,21 @@ function submitWorkplaceToTrinaxApi() {
     success: function() {
       // Handle success
       $('#name').val('');
-      appModalPresenter.showSuccessModal(3000);
+      appModalPresenter.showSuccessModal(5000);
       setTimeout(function() {
-        window.location.reload();
-      }, 8500);
+        window.location.replace('/Workplace/PreviewWorkplace');
+      }, 5000);
     },
     error: function() {
       // Handle error
-      appModalPresenter.showFailureModal(3000);
+      appModalPresenter.showFailureModal(5000);
       setTimeout(function() {
         window.location.reload();
-      }, 8500);
+      }, 5000);
     }
   });
 }
+
 
 // Function to submit workplace as a fallback
 function submitWorkplaceToFallbackApi() {
@@ -369,17 +370,17 @@ function submitWorkplaceToFallbackApi() {
       $('#info').val('');
       $('#image-input').val('');
       $('.success').html('Arbetsplatsen har skickats framgångsrikt!');
-      appModalPresenter.showSuccessModal(3000);
+      appModalPresenter.showSuccessModal(5000);
       setTimeout(function() {
-        window.location.reload();
-      }, 8500);
+        window.location.replace('/Workplace/PreviewWorkplace');
+      }, 5000);
     },
     error: function() {
       // Handle error
-      appModalPresenter.showFailureModal(3000);
+      appModalPresenter.showFailureModal(5000);
       setTimeout(function() {
         window.location.reload();
-      }, 8500);
+      }, 5000);
     }
   });
 }
